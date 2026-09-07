@@ -1,0 +1,87 @@
+{
+  "runAt": "2026-09-08T03:13:03.9043311+08:00",
+  "stats": {
+    "total": 2,
+    "apiOk": 1,
+    "apiErr": 1,
+    "synced": 0,
+    "yes": 1,
+    "uninstalled": 0,
+    "pendingReview": 1,
+    "newReleases": 1,
+    "flips": 1,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "VSCode",
+      "gitVer": "1.136.1",
+      "gitDate": "2026-09-03",
+      "localVer": "1.0.0",
+      "flag": "yes",
+      "prevFlag": "no",
+      "latest": "1.136.1",
+      "publishedUtc": "2026-09-03T15:25:32Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": true,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    },
+    {
+      "repo": "torvalds/linux",
+      "name": "Linux",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "6.5.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "not_found",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "not_found"
+      ],
+      "error": "Response status code does not indicate success: 404 (Not Found)."
+    }
+  ],
+  "review": {
+    "performed": true,
+    "items": [
+      {
+        "repo": "torvalds/linux",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口前1项：|pre=False|draft=False|published= HTML 诊断 HTTP 200；页面标题仅供诊断：Releases · torvalds/linux · GitHub",
+        "conclusion": "pending",
+        "reasons": [
+          "not_found"
+        ],
+        "apiListStatus": "ok",
+        "apiList": [
+          {
+            "tag_name": "",
+            "published_at": "",
+            "prerelease": false,
+            "draft": false
+          }
+        ],
+        "htmlStatus": "200",
+        "htmlTitle": "Releases · torvalds/linux · GitHub"
+      }
+    ]
+  }
+}

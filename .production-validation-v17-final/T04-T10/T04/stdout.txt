@@ -1,0 +1,14 @@
+========== T04 - 403 + X-RateLimit-Remaining=0 (CORE TEST) ==========
+T04: HTTP 403 + X-RateLimit-Remaining=0
+  Expected queryStatus: rate_limited
+  Actual queryStatus: rate_limited
+  RateLimit-Remaining read from response headers: '0'
+  Error message: Response status code does not indicate success: 403 (Forbidden).
+  HTTP code extracted: 403
+  Latest API requests: 1 (expected: 1)
+  Review API requests: 0 (expected: 0)
+  HTML requests: 0 (expected: 0)
+  Retry count: 0 (expected: 0)
+  Verdict: PASS
+
+

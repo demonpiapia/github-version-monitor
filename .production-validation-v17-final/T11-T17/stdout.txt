@@ -1,0 +1,61 @@
+========== T11 - Normal version comparison ==========
+Compare-Ver '1.2.3' '1.2.4' = lt (expected: lt)
+
+========== T12 - Numeric version sort ==========
+Compare-Ver '1.2.10' '1.2.9' = gt (expected: gt, not string sort)
+
+========== T13 - Prerelease < stable ==========
+Compare-Ver '1.2.3-rc1' '1.2.3' = lt (expected: lt, prerelease < stable)
+
+========== T14 - Incomparable + v-prefix normalization ==========
+Compare-Ver 'some-weird-version' '1.2.3' = incomparable (expected: incomparable)
+Compare-Ver 'v1.0' '1.0' = eq (expected: eq, v-prefix stripped)
+
+========== T15 - versionJump boundary tests ==========
+T15a: major 1->2 (diff=1), expected jump=False, actual=False
+T15b: major 1->3 (diff=2), expected jump=True, actual=True
+T15c: minor 9->10 same major (diff=1), expected jump=False, actual=False
+T15d: minor 0->10 same major (diff=10), expected jump=True, actual=True
+T15e: minor 0->9 same major (diff=9), expected jump=False, actual=False
+T15f: patch 49->50 same major+minor (diff=1), expected jump=False, actual=False
+T15g: patch 0->50 same major+minor (diff=50), expected jump=True, actual=True
+T15h: patch 0->49 same major+minor (diff=49), expected jump=False, actual=False
+
+========== T16 - dateSuspicious logic ==========
+T16: publishedUtc='2026-01-01T00:00:00Z' (Beijing date=2026-01-01), prevGitDate='2026-06-01'
+    newDate(2026-01-01) < oldDate(2026-06-01), expected dateSuspicious=True, actual=True
+T16-neg: publishedUtc='2026-06-01T00:00:00Z' (Beijing date=2026-06-01), prevGitDate='2026-01-01'
+    newDate(2026-06-01) > oldDate(2026-01-01), expected dateSuspicious=False, actual=False
+
+========== T17 - isFlip logic ==========
+T17: prevFlag='no', localVer='1.0.0', latest='1.0.1'
+    Compare-Ver('1.0.0','1.0.1')=lt -> newFlag='yes', prevFlag='no' -> isFlip=True, actual=True
+T17-neg: prevFlag='yes', localVer='1.0.0', latest='1.0.1'
+    Compare-Ver('1.0.0','1.0.1')=lt -> newFlag='yes', but prevFlag='yes' -> isFlip=False, actual=False
+T17-neg2: prevFlag='no', localVer='1.0.1', latest='1.0.0'
+    Compare-Ver('1.0.1','1.0.0')=gt -> newFlag='no', prevFlag='no' -> isFlip=False, actual=False
+
+========== SUMMARY ==========
+Total: 18 | PASS: 18 | FAIL: 0
+  [PASS] T11: expected=lt, actual=lt
+  [PASS] T12: expected=gt, actual=gt
+  [PASS] T13: expected=lt, actual=lt
+  [PASS] T14a: expected=incomparable, actual=incomparable
+  [PASS] T14b: expected=eq, actual=eq
+  [PASS] T15a: expected=False, actual=False
+  [PASS] T15b: expected=True, actual=True
+  [PASS] T15c: expected=False, actual=False
+  [PASS] T15d: expected=True, actual=True
+  [PASS] T15e: expected=False, actual=False
+  [PASS] T15f: expected=False, actual=False
+  [PASS] T15g: expected=True, actual=True
+  [PASS] T15h: expected=False, actual=False
+  [PASS] T16: expected=True, actual=True
+  [PASS] T16-neg: expected=False, actual=False
+  [PASS] T17: expected=True, actual=True
+  [PASS] T17-neg: expected=False, actual=False
+  [PASS] T17-neg2: expected=False, actual=False
+
+Report saved to: D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v17-final\T11-T17\test-report.md
+
+ALL TESTS PASSED

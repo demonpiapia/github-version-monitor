@@ -1,0 +1,2 @@
+PARSE_ERROR|状态文件 schema 校验失败，本轮终止，不写回主 md。
+  问题：第 1 列序号非法：| abc | [test-repo](https://github.com/octocat/Hello-World/releases) | v1.0.0 | 2026-01-01 | 1.0.0 | no |

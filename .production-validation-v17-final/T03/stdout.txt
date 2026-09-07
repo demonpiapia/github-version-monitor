@@ -1,0 +1,41 @@
+=== T03 - 401 auth_error ===
+Original GITHUB_TOKEN: set (value not shown)
+
+Set GITHUB_TOKEN to invalid fake token for this test
+Repo: octocat/Hello-World
+PrevGitVer: v1.5.0
+PrevGitDate: 2026-03-20
+LocalVer: v1.5.0
+PrevFlag: no
+
+[API CALL] GET https://api.github.com/repos/octocat/Hello-World/releases/latest (with invalid token)
+[API ERROR] HTTP 401 → status=auth_error, error=Response status code does not indicate success: 401 (Unauthorized).
+
+=== State Machine Output ===
+queryStatus: auth_error
+latest (tag_name): ''
+publishedUtc: ''
+error: Response status code does not indicate success: 401 (Unauthorized).
+rateRemaining: ''
+actualHttpCode: 401
+
+=== Comparison + Review Output ===
+gitVer (newGitVer): 'v1.5.0'
+gitDate (newGitDate): '2026-03-20'
+flag (newFlag): 'no'
+prevFlag: 'no'
+review: True
+reviewReasons: api_failure
+
+=== Verification ===
+queryStatus=auth_error: True (actual: auth_error)
+gitVer preserved: True (actual: 'v1.5.0' vs prev 'v1.5.0')
+gitDate preserved: True (actual: '2026-03-20' vs prev '2026-03-20')
+flag preserved: True (actual: 'no' vs prev 'no')
+review=true: True (actual: True)
+
+VERDICT: PASS
+
+=== Restoring original GITHUB_TOKEN ===
+GITHUB_TOKEN restored to original value
+GITHUB_TOKEN after restore: set

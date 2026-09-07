@@ -1,0 +1,70 @@
+========== Production Validation v1.7 Final - Tests T04-T10 ==========
+Runtime: PowerShell 7.6.4
+PID: 27668
+Date: 2026-09-07 15:08:27 +08:00
+
+HTTP listener started on port 18345
+
+========== T04 - 403 + X-RateLimit-Remaining=0 (CORE TEST) ==========
+T04: HTTP 403 + X-RateLimit-Remaining=0
+  Expected queryStatus: rate_limited
+  Actual queryStatus: rate_limited
+  RateLimit-Remaining read from response headers: '0'
+  Error message: Response status code does not indicate success: 403 (Forbidden).
+  HTTP code extracted: 403
+  Latest API requests: 1 (expected: 1)
+  Review API requests: 0 (expected: 0)
+  HTML requests: 0 (expected: 0)
+  Retry count: 0 (expected: 0)
+  Verdict: PASS
+
+========== T05 - 403 + X-RateLimit-Remaining>0 ==========
+T05: HTTP 403 + X-RateLimit-Remaining=50
+  Expected queryStatus: forbidden
+  Actual queryStatus: forbidden
+  RateLimit-Remaining read from response headers: '50'
+  Error message: Response status code does not indicate success: 403 (Forbidden).
+  Verdict: PASS
+
+========== T06 - 429 => rate_limited ==========
+T06: HTTP 429
+  Expected queryStatus: rate_limited
+  Actual queryStatus: rate_limited
+  Error message: Response status code does not indicate success: 429 (Too Many Requests).
+  Verdict: PASS
+
+========== T07 - 500 => server_error ==========
+T07: HTTP 500
+  Expected queryStatus: server_error
+  Actual queryStatus: server_error
+  Error message: Response status code does not indicate success: 500 (Internal Server Error).
+  Verdict: PASS
+
+========== T09 - 200 + no tag_name => invalid_response ==========
+T09: HTTP 200 + JSON body without tag_name
+  Body sent: {"id": 1, "name": "test"}
+  Expected queryStatus: invalid_response
+  Actual queryStatus: invalid_response
+  Error message: 200 but empty tag_name
+  Verdict: PASS
+
+========== T10 - 200 + tag_name present, published_at missing => metadata_incomplete ==========
+T10: HTTP 200 + JSON body with tag_name but no published_at
+  Body sent: {"tag_name": "v1.0.0"}
+  Expected queryStatus: metadata_incomplete
+  Actual queryStatus: metadata_incomplete
+  Error message: tag_name present but published_at missing
+  Verdict: PASS
+
+HTTP listener stopped.
+
+========== SUMMARY ==========
+Total: 6 | PASS: 6 | FAIL: 0
+  [PASS] T04: expected=rate_limited, actual=rate_limited
+  [PASS] T05: expected=forbidden, actual=forbidden
+  [PASS] T06: expected=rate_limited, actual=rate_limited
+  [PASS] T07: expected=server_error, actual=server_error
+  [PASS] T09: expected=invalid_response, actual=invalid_response
+  [PASS] T10: expected=metadata_incomplete, actual=metadata_incomplete
+
+

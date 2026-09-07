@@ -1,0 +1,9 @@
+LOCKED|另一轮监测持有运行锁（或陈锁判定不确定，保守不抢），本轮直接退出。
+
+Pre-created lock with live PID=18332, LastWriteTime=31min ago
+Step 1 output: LOCKED|另一轮监测持有运行锁（或陈锁判定不确定，保守不抢），本轮直接退出。
+Got LOCKED: True
+No takeover: True
+Lock PID still matches: True
+Lock content after: pid=18332;start=2026-09-07T08:04:49.8728474+00:00;step=1;beat=2026-09-07T08:04:49.8728474+00:00
+

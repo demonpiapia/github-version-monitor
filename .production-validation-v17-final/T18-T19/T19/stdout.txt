@@ -1,0 +1,47 @@
+========== T19 - 未安装 (Uninstalled) Scenario ==========
+Repo: microsoft/vscode
+PrevGitVer: v1.90.0
+PrevGitDate: 2024-06-01
+LocalVer: 未安装
+PrevFlag: no
+Token: set
+
+[API CALL] GET https://api.github.com/repos/microsoft/vscode/releases/latest
+[API RESPONSE] tag_name=1.136.1 published_at=09/03/2026 15:25:32
+
+=== State Machine Output ===
+queryStatus: ok
+latest (tag_name): 1.136.1
+publishedUtc: 2026-09-03T15:25:32Z
+pubDate (UTC+8): 2026-09-03
+error: 
+
+=== Comparison + Review Output ===
+gitVer (newGitVer): 1.136.1
+gitDate (newGitDate): 2026-09-03
+flag (newFlag): no
+prevFlag: no
+cmp: 
+isNew: True
+isFlip: False
+versionJump: True
+dateSuspicious: False
+review: True
+reviewReasons: version_jump
+
+=== Verification ===
+flag=no (because localVer='未安装'): True (actual: 'no')
+gitVer refreshed from API (=1.136.1, !=prev v1.90.0): True
+gitDate refreshed from API (=pubDate 2026-09-03): True
+ConvertTo-NormVer('未安装')=null: True
+Compare-Ver('未安装', '1.136.1')=incomparable: True (actual: 'incomparable')
+
+========== SUMMARY ==========
+Total: 5 | PASS: 5 | FAIL: 0
+  [PASS] T19a: flag should be 'no' when localVer='未安装' (not installed, nothing to compare)
+  [PASS] T19b: gitVer should be refreshed to latest API tag_name when API returns 200
+  [PASS] T19c: gitDate should be refreshed to API published date when API returns 200
+  [PASS] T19d: ConvertTo-NormVer should return null for '未安装'
+  [PASS] T19e: Compare-Ver should return 'incomparable' when localVer='未安装' (null normalization)
+
+Report saved to: D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v17-final\T18-T19\T19\test-report.md

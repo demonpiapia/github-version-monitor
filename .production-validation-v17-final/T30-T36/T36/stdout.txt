@@ -1,0 +1,17 @@
+LOCKED|另一轮监测持有运行锁（或陈锁判定不确定，保守不抢），本轮直接退出。
+
+BACKUP_OK|20260907-160454729 PID=31968
+
+Killed process PID: 29272
+Lock exists after kill: True
+Backup exists after kill: True
+Main md unchanged: True
+Re-run with fresh heartbeat got LOCKED: True
+No takeover with fresh heartbeat: True
+Lock still has dead PID after fresh re-run: True
+Re-run after stale got BACKUP_OK: BACKUP_OK|20260907-160454729
+Lock has new PID after stale re-run (takeover): True
+Hold output: BACKUP_OK|20260907-160452507
+PID=29272
+STEP1_DONE|Lock created, now holding (sleeping to simulate Step 2 work)...
+

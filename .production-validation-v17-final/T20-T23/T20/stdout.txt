@@ -1,0 +1,16 @@
+========== T20 - result.json atomicity ==========
+Base dir: D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v17-final\T20-T23\T20\test-base
+result.json SHA256 (before): DCC8810A54CA5384F8777E9F8A8FE60E8972E85364B257A0A78CEADA43F0E209
+Locked result.json with FileShare::None
+Wrote result.fetch.tmp (new fetch result)
+Caught Move-Item error: 当文件已存在时，无法创建该文件。
+SKILL output: RUNTIME_ERROR|result.json 原子替换失败：当文件已存在时，无法创建该文件。
+Released lock on result.json
+result.json SHA256 (after):  DCC8810A54CA5384F8777E9F8A8FE60E8972E85364B257A0A78CEADA43F0E209
+SHA256 unchanged: True
+result.json still valid JSON: True
+result.fetch.tmp still exists: False (expected: False)
+Output starts with RUNTIME_ERROR: True
+
+Verdict: PASS
+

@@ -1,0 +1,149 @@
+=== T44 — v1.6 → v1.7 Diff Integrity ===
+
+--- Step 1: SHA256 Verification ---
+V16_SHA256_FILE_EXISTS=True
+V17_SHA256_FILE_EXISTS=True
+V16_ACTUAL=7480B6B5E34BDD8B2F07552F8B174F41421BB7BF3537A8486DF35A9BC3F55CD7
+V16_STORED=7480B6B5E34BDD8B2F07552F8B174F41421BB7BF3537A8486DF35A9BC3F55CD7
+V16_MATCH=True
+V17_ACTUAL=F386879CCB1CA4C88D6DDBC5D9057D906913897C743F03151ABE164108B97DDC
+V17_STORED=F386879CCB1CA4C88D6DDBC5D9057D906913897C743F03151ABE164108B97DDC
+V17_MATCH=True
+
+--- Step 2: Diff File Verification ---
+DIFF_FILE_EXISTS=True
+DIFF_LINES=931
+DIFF_FORMAT=git diff (unified format)
+
+--- Step 3: UNEXPECTED_DELETIONS Check ---
+Checking v1.6 capabilities in v1.7:
+
+1. versionJump
+   - Schema (line 107): PRESENT in result.json schema
+   - Code (line 380): PRESENT - $versionJump=$true;$reasons+='version_jump'
+   - Contract (line 118): PRESENT - thresholds defined
+   - Status (line 681): PRESENT - review trigger
+   RESULT=PRESENT
+
+2. dateSuspicious
+   - Schema (line 107): PRESENT in result.json schema
+   - Code (line 380): PRESENT - $dateSuspicious=$true;$reasons+='date_suspicious'
+   - Contract (line 119): PRESENT - definition present
+   - Status (line 681): PRESENT - review trigger
+   RESULT=PRESENT
+
+3. reviewReasons
+   - Schema (line 107): PRESENT in result.json schema
+   - Code (line 380): PRESENT - reviewReasons=@($reasons)
+   - Step 4 (line 478): PRESENT - reasons=@($it.reviewReasons)
+   RESULT=PRESENT
+
+4. result.fetch.tmp
+   - Code (line 397): PRESENT - $tmpResult=Join-Path $monitorDir 'result.fetch.tmp'
+   - Error msg (line 403): PRESENT - 'RUNTIME_ERROR|result.fetch.tmp JSON...'
+   - Changelog (line 715): PRESENT - mentioned as preserved capability
+   RESULT=PRESENT
+
+5. result.review.tmp
+   - Code (line 474): PRESENT - $tmpPath=Join-Path $monitorDir 'result.review.tmp'
+   - Docs (line 468): PRESENT - atomic write description
+   - Table (line 671): PRESENT - in .monitor products table
+   RESULT=PRESENT
+
+6. schema validation
+   - Invariant (line 51): PRESENT - 'schema validation / atomic commit'
+   - Parse (line 319): PRESENT - PARSE_ERROR on schema failure
+   - Contract (line 91): PRESENT - schema contract defined
+   RESULT=PRESENT
+
+7. RUN_STATUS|success|
+   - Code (line 598): PRESENT - Write-Output 'RUN_STATUS|success|...'
+   - Contract (line 123): PRESENT
+   RESULT=PRESENT
+
+8. RUN_STATUS|failed|
+   - Code (lines 596, 600): PRESENT - Write-Output 'RUN_STATUS|failed|...'
+   - Contract (line 123): PRESENT
+   RESULT=PRESENT
+
+9. 404 -> not_found
+   - State machine (line 132): PRESENT - 404 maps to not_found
+   - Code (line 361): PRESENT - elseif ($code -eq 404) { $status = 'not_found' }
+   - Status (line 680): PRESENT - not_found semantics
+   RESULT=PRESENT
+
+10. lock heartbeat
+    - Step 1 (line 190-191): PRESENT - heartbeat model
+    - Step 2 (line 249-267): PRESENT - heartbeat refresh
+    - Step 3 (line 435-443): PRESENT - heartbeat refresh
+    - Step 4 (line 476): PRESENT - heartbeat refresh
+    RESULT=PRESENT
+
+11. lock ownership
+    - Step 2 (line 439): PRESENT - '运行锁 ownership 不属于当前进程'
+    - Step 5 (line 584-595): PRESENT - ownership check before release
+    RESULT=PRESENT
+
+12. atomic md commit
+    - Code (line 578): PRESENT - Move-Item -Path $tmp -Destination $md -Force
+    - Contract (line 75): PRESENT - '临时文件 → 结构校验 → 原子替换'
+    RESULT=PRESENT
+
+13. atomic result persistence
+    - Code (line 407): PRESENT - Move-Item -Path $tmpResult -Destination $resultPath -Force
+    - Code (line 479): PRESENT - Move-Item $tmpPath $resultPath -Force (review)
+    RESULT=PRESENT
+
+14. strict lowercase yes/no
+    - Parse (line 318): PRESENT - $c[5]-cnotmatch '^(yes|no)$' (case-sensitive)
+    - Stats (line 388): PRESENT - $_.flag -ceq 'yes' (case-sensitive)
+    - Validate (line 565): PRESENT - $cells[5] -cnotmatch '^(yes|no)$'
+    - Header (line 576): PRESENT - -ceq $header (case-sensitive)
+    RESULT=PRESENT
+
+UNEXPECTED_DELETIONS: NONE
+
+--- Step 4: UNEXPECTED_ADDITIONS (ALLOWED) Check ---
+1. Get-ResponseHeaderValue
+   - Code (line 323-329): PRESENT - function definition
+   - Usage (line 357): PRESENT - called for X-RateLimit-Remaining
+   RESULT=PRESENT (ALLOWED)
+
+2. PS5.1 / PS7 HTTP header compatibility
+   - Line 9: PRESENT - 'PowerShell 5.1 仅作兼容性验证环境'
+   - Line 323-329: PRESENT - Get-ResponseHeaderValue handles WebHeaderCollection + dict
+   RESULT=PRESENT (ALLOWED)
+
+3. T04 rate_limited compatibility fix
+   - Changelog (line 715): PRESENT - '修复 T04：403 + X-RateLimit-Remaining=0'
+   RESULT=PRESENT (ALLOWED)
+
+4. Production environment description
+   - Line 9: PRESENT - '生产执行基准：PowerShell 7.x'
+   RESULT=PRESENT (ALLOWED)
+
+5. v1.7 changelog
+   - Line 715: PRESENT - full v1.7 changelog entry
+   RESULT=PRESENT (ALLOWED)
+
+UNEXPECTED_ADDITIONS: NONE (all additions are in ALLOWED list)
+
+--- Step 5: FORBIDDEN Patterns Check ---
+Patterns searched in diff:
+- mock URL: NOT FOUND
+- localhost production bypass: NOT FOUND
+- debug bypass: NOT FOUND
+- test-only branch: NOT FOUND
+- hardcoded test repository: NOT FOUND
+- hardcoded token (ghp_/github_pat_): NOT FOUND
+- forced success: NOT FOUND
+- forced rate_limited: NOT FOUND
+- skip schema: NOT FOUND
+- skip lock: NOT FOUND
+- skip review: FALSE POSITIVE (diff line 637 matched 'skip.*review' due to 'skipped_rate_limited' status string in rate_limited handling code - this is correct behavior, not a bypass)
+- skip commit: NOT FOUND
+
+FORBIDDEN_PATTERNS: NONE (1 false positive excluded)
+
+--- Final Result ---
+T44=PASS

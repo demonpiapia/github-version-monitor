@@ -1,0 +1,66 @@
+=== T46 — Production Runtime Contract ===
+
+PS_VERSION=7.6.4
+PS_MAJOR=7
+
+--- T46.1: SKILL-v1.7 declares production runtime = PS7.x ---
+DECLARED_PS7=True
+Evidence: Line 9 — "生产执行基准：PowerShell 7.x；PowerShell 5.1 仅作兼容性验证环境。"
+RESULT=PASS
+
+--- T46.2: Actual runtime is PS7.x ---
+ACTUAL_PS7=True
+PSVersion=7.6.4
+RESULT=PASS
+
+--- T46.3: No PS5.1 requirement for production main flow ---
+PS51_COMPAT_ONLY=True
+Evidence: Line 9 — "PowerShell 5.1 仅作兼容性验证环境" (PS5.1 is compat-only, not production)
+No code path requires PS5.1 for production execution.
+RESULT=PASS
+
+--- T46.4a: Invoke-RestMethod (real GitHub API call) ---
+INVOKE_RESTMETHOD=PASS
+URL=https://api.github.com/repos/microsoft/vscode/releases/latest
+TAG_NAME=1.136.1
+PUBLISHED_AT=09/03/2026 15:25:32 (DateTime object)
+HAS_TAG_NAME=True
+HAS_PUBLISHED_AT=True
+RESULT=PASS
+
+--- T46.4b: Invoke-WebRequest ---
+INVOKE_WEBREQUEST=PASS
+URL=https://api.github.com
+STATUS_CODE=200
+RESULT=PASS
+
+--- T46.4c: ConvertFrom-Json ---
+CONVERTFROM_JSON=PASS
+Input='{"name":"test","version":"1.2.3","active":true}'
+NAME_PROP=True
+VERSION_PROP=True
+ACTIVE_PROP=True
+RESULT=PASS
+
+--- T46.4d: ConvertTo-Json ---
+CONVERTTO_JSON=PASS
+JSON_OUTPUT={"name":"test","version":"1.2.3","active":true}
+VALID=True
+RESULT=PASS
+
+--- T46.4e: Move-Item ---
+MOVE_ITEM=PASS
+Source=move_test_source.txt → Dest=move_test_dest.txt
+DEST_EXISTS=True
+SRC_GONE=True
+CONTENT_MATCH=True
+RESULT=PASS
+
+--- T46.4f: FileMode.CreateNew ---
+FILEMODE_CREATENEW=PASS
+FIRST_CREATE_OK=True (file created successfully)
+SECOND_CREATE_THREW=True (IOException on second attempt — correct exclusivity)
+RESULT=PASS
+
+--- Final Result ---
+T46=PASS (all 9 checks passed)

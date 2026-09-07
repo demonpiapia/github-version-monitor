@@ -1,0 +1,41 @@
+{
+  "runAt": "2026-09-07T10:00:00Z",
+  "stats": {
+    "total": 1,
+    "apiOk": 1,
+    "apiErr": 0,
+    "synced": 1,
+    "yes": 0,
+    "uninstalled": 0,
+    "pendingReview": 0,
+    "newReleases": 0,
+    "flips": 0,
+    "token": "unset"
+  },
+  "items": [
+    {
+      "repo": "octocat/Hello-World",
+      "name": "test-repo",
+      "gitVer": "v1.0.0",
+      "gitDate": "2026-01-01",
+      "localVer": "1.0.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "v1.0.0",
+      "publishedUtc": "2026-01-01T00:00:00Z",
+      "status": "ok",
+      "cmp": "eq",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    }
+  ],
+  "review": {
+    "performed": false,
+    "items": []
+  }
+}

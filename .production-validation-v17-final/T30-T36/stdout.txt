@@ -1,0 +1,88 @@
+
+========== T30 - Concurrency ==========
+Start two real PowerShell 7 processes. Both try to create the lock file.
+Expected: one owner (BACKUP_OK), one LOCKED. No double commit, no mutual lock deletion.
+  Process 1 output: LOCKED|另一轮监测持有运行锁（或陈锁判定不确定，保守不抢），本轮直接退出。
+  Process 2 output: BACKUP_OK|20260907-160447719
+PID=4820
+  [T30] VERDICT: PASS
+
+========== T31 - Heartbeat ==========
+Verify the lock file contains: pid, start, step, beat and that step changes.
+  === T31 Step 1: Create lock ===
+    BACKUP_OK|20260907-160448435
+    [Step1] PASS | pid=2652 step=1 (expected step=1) allFields=True pidMatch=True stepMatch=True
+      raw=pid=2652;start=2026-09-07T08:04:48.4270872+00:00;step=1;beat=2026-09-07T08:04:48.4270872+00:00
+  
+  === T31 Step 2: Heartbeat refresh ===
+    [Step2] PASS | pid=2652 step=2 (expected step=2) allFields=True pidMatch=True stepMatch=True
+      raw=pid=2652;start=2026-09-07T08:04:48.4270872+00:00;step=2;beat=2026-09-07T08:04:48.6157341+00:00
+  === T31 Step 3: Heartbeat refresh with ownership check ===
+    [Step3] PASS | pid=2652 step=3 (expected step=3) allFields=True pidMatch=True stepMatch=True
+      raw=pid=2652;start=2026-09-07T08:04:48.4270872+00:00;step=3;beat=2026-09-07T08:04:48.7418080+00:00
+  === T31 Step 4: Heartbeat refresh with ownership check ===
+    [Step4] PASS | pid=2652 step=4 (expected step=4) allFields=True pidMatch=True stepMatch=True
+      raw=pid=2652;start=2026-09-07T08:04:48.4270872+00:00;step=4;beat=2026-09-07T08:04:48.8469866+00:00
+  === T31 Step 5: Heartbeat + release ===
+    [Step5-pre-release] PASS | pid=2652 step=4 (expected step=4) allFields=True pidMatch=True stepMatch=True
+      raw=pid=2652;start=2026-09-07T08:04:48.4270872+00:00;step=4;beat=2026-09-07T08:04:48.8469866+00:00
+    [Step5-release] PASS: lock released (deleted)
+    [Step5-verify] PASS: lock file deleted after release
+  
+  === T31 SUMMARY ===
+  Step1=True Step2=True Step3=True Step4=True Step5PreRelease=True LockReleased=True LockGone=True
+  OVERALL=PASS
+  [T31] VERDICT: PASS
+
+========== T32 - Fresh/live lock ==========
+Live PID + fresh heartbeat -> LOCKED (no takeover).
+  Pre-created lock: pid=18332, fresh heartbeat
+  Step 1 output: LOCKED|另一轮监测持有运行锁（或陈锁判定不确定，保守不抢），本轮直接退出。
+  [T32] VERDICT: PASS
+
+========== T33 - Stale + alive ==========
+Heartbeat > 30 minutes, PID alive -> LOCKED (no takeover).
+  Pre-created lock: pid=18332 (alive), LastWriteTime set to 31 min ago
+  Step 1 output: LOCKED|另一轮监测持有运行锁（或陈锁判定不确定，保守不抢），本轮直接退出。
+  [T33] VERDICT: PASS
+
+========== T34 - Stale + dead ==========
+Heartbeat > 30 minutes, PID dead -> takeover allowed (BACKUP_OK).
+  Pre-created lock: pid=999999 (dead), LastWriteTime set to 31 min ago
+  PID 999999 alive check: DEAD (correct)
+  Step 1 output: BACKUP_OK|20260907-160451077 PID=28468
+  [T34] VERDICT: PASS
+
+========== T35 - Ownership mismatch ==========
+Foreign PID in lock -> RUNTIME_ERROR, foreign lock retained.
+  Pre-created lock: pid=999998 (foreign/dead), step=4
+  PID 999998 alive check: DEAD
+  Step 5 output: COMMIT_OK|已原子替换主 md（数据行 1，yes/no 校验通过，repo 集合一致）。 RUNTIME_ERROR|释放锁前 ownership 校验失败（锁内 PID 与当前进程不一致或锁不可读），未删除锁文件。 RUN_STATUS|failed|主 md 提交状态不可否认，但运行锁未安全释放。
+  [T35] VERDICT: PASS
+
+========== T36 - Process kill ==========
+Kill process during execution, verify lock/backup handling, then re-run.
+  Started process PID=29272 running step1-and-hold.ps1
+  Lock created: True (after 400ms)
+  Killed process PID=29272
+  Process alive after kill: NO (correct)
+  Lock exists: True
+  Backup exists: True
+  Main md unchanged: True
+  Lock content: pid=29272;start=2026-09-07T08:04:52.4971604+00:00;step=1;beat=2026-09-07T08:04:52.4971604+00:00
+ (dead PID: 29272)
+  --- Re-running Step 1 with fresh heartbeat (expect LOCKED) ---
+  Re-run output: LOCKED|另一轮监测持有运行锁（或陈锁判定不确定，保守不抢），本轮直接退出。
+  --- Setting LastWriteTime to 31 min ago, re-running Step 1 (expect BACKUP_OK/takeover) ---
+  Re-run after stale output: BACKUP_OK|20260907-160454729 PID=31968
+  [T36] VERDICT: PASS
+
+========== FINAL SUMMARY ==========
+Total: 7 | PASS: 7 | FAIL: 0
+  [PASS] T30: Concurrency: one BACKUP_OK, one LOCKED, no double commit
+  [PASS] T31: Heartbeat: lock fields (pid/start/step/beat) present and step changes 1->2->3->4
+  [PASS] T32: Fresh/live lock: live PID + fresh heartbeat -> LOCKED
+  [PASS] T33: Stale + alive: heartbeat >30min, PID alive -> LOCKED
+  [PASS] T34: Stale + dead: heartbeat >30min, PID dead -> takeover
+  [PASS] T35: Ownership mismatch: foreign PID -> RUNTIME_ERROR, lock retained
+  [PASS] T36: Process kill: lock left behind, fresh=LOCKED, stale+dead=takeover

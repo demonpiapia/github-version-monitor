@@ -1,0 +1,23 @@
+=== T31 Step 1: Create lock ===
+  BACKUP_OK|20260907-160448435
+  [Step1] PASS | pid=2652 step=1 (expected step=1) allFields=True pidMatch=True stepMatch=True
+    raw=pid=2652;start=2026-09-07T08:04:48.4270872+00:00;step=1;beat=2026-09-07T08:04:48.4270872+00:00
+
+=== T31 Step 2: Heartbeat refresh ===
+  [Step2] PASS | pid=2652 step=2 (expected step=2) allFields=True pidMatch=True stepMatch=True
+    raw=pid=2652;start=2026-09-07T08:04:48.4270872+00:00;step=2;beat=2026-09-07T08:04:48.6157341+00:00
+=== T31 Step 3: Heartbeat refresh with ownership check ===
+  [Step3] PASS | pid=2652 step=3 (expected step=3) allFields=True pidMatch=True stepMatch=True
+    raw=pid=2652;start=2026-09-07T08:04:48.4270872+00:00;step=3;beat=2026-09-07T08:04:48.7418080+00:00
+=== T31 Step 4: Heartbeat refresh with ownership check ===
+  [Step4] PASS | pid=2652 step=4 (expected step=4) allFields=True pidMatch=True stepMatch=True
+    raw=pid=2652;start=2026-09-07T08:04:48.4270872+00:00;step=4;beat=2026-09-07T08:04:48.8469866+00:00
+=== T31 Step 5: Heartbeat + release ===
+  [Step5-pre-release] PASS | pid=2652 step=4 (expected step=4) allFields=True pidMatch=True stepMatch=True
+    raw=pid=2652;start=2026-09-07T08:04:48.4270872+00:00;step=4;beat=2026-09-07T08:04:48.8469866+00:00
+  [Step5-release] PASS: lock released (deleted)
+  [Step5-verify] PASS: lock file deleted after release
+
+=== T31 SUMMARY ===
+Step1=True Step2=True Step3=True Step4=True Step5PreRelease=True LockReleased=True LockGone=True
+OVERALL=PASS

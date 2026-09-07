@@ -1,0 +1,16 @@
+========== T22 - md temp write failure ==========
+Base dir: D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v17-final\T20-T23\T22\test-base
+Main md SHA256 (before): 80AF89622907CB40F8A10AE211380C903C45E2F10F7C9BD12EC3B63D8CA3ADF9
+Locked main md with FileShare::None
+md.tmp write succeeded: True
+md.tmp validation passed: True (rows=1, items=1, badFlag=0, repoMatch=True, headerOk=True, anchorsOk=True)
+SKILL output: RUNTIME_ERROR|md 原子替换失败：当文件已存在时，无法创建该文件。
+Released lock on main md
+Main md SHA256 (after):  80AF89622907CB40F8A10AE211380C903C45E2F10F7C9BD12EC3B63D8CA3ADF9
+SHA256 unchanged: True
+Main md content unchanged (byte-for-byte): True
+Main md does NOT contain new timestamp '12:01' (no partial write): True
+md.tmp still exists: False (expected: False)
+
+Verdict: PASS
+

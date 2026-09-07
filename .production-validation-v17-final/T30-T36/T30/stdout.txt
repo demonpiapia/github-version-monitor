@@ -1,0 +1,13 @@
+LOCKED|另一轮监测持有运行锁（或陈锁判定不确定，保守不抢），本轮直接退出。
+
+BACKUP_OK|20260907-160447719
+PID=4820
+
+Process 1: LOCKED|另一轮监测持有运行锁（或陈锁判定不确定，保守不抢），本轮直接退出。
+Process 2: BACKUP_OK|20260907-160447719
+PID=4820
+Exactly one BACKUP_OK: True
+Exactly one LOCKED: True
+No double BACKUP_OK: True
+Backup count: 1 (expected 1)
+Lock file exists: True

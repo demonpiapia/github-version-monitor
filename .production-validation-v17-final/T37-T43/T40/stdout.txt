@@ -1,0 +1,8 @@
+===== SCENARIO 1: STATE_MISSING (no md file) =====
+STATE_MISSING|状态文件 GitHub更新监测列表.md 不存在；不创建空清单。需提供初始清单（releases 链接 + 本地版本）后重跑。
+===== END SCENARIO 1 =====
+===== SCENARIO 2: LOCKED (live PID=21032, fresh heartbeat) =====
+Lock file created with pid=21032
+LOCKED|另一轮监测持有运行锁（或陈锁判定不确定，保守不抢），本轮直接退出。
+===== END SCENARIO 2 =====
+

@@ -1,0 +1,56 @@
+===== EXECUTING step1 =====
+BACKUP_OK|20260908-031516412
+===== END step1 =====
+===== EXECUTING step2 =====
+FETCH_COMPLETE|apiOk=1 apiErr=0 total=1
+SUMMARY|total=1 apiOK=1 apiErr=0 synced=0 yes=0 uninstalled=0 pendingReview=1 newReleases=1 flips=0 token=set
+{
+  "stats": {
+    "total": 1,
+    "apiOk": 1,
+    "apiErr": 0,
+    "synced": 0,
+    "yes": 0,
+    "uninstalled": 0,
+    "pendingReview": 1,
+    "newReleases": 1,
+    "flips": 0,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "VSCode",
+      "gitVer": "1.136.1",
+      "gitDate": "2026-09-03",
+      "localVer": "some-weird-string",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "1.136.1",
+      "publishedUtc": "2026-09-03T15:25:32Z",
+      "status": "ok",
+      "cmp": "incomparable",
+      "isNew": true,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "incomparable_version"
+      ],
+      "error": ""
+    }
+  ]
+}
+===== END step2 =====
+===== EXECUTING step3 =====
+===== END step3 =====
+Review items found: 1
+===== FAULT INJECTION: Locking result.json with FileShare::Read =====
+result.json locked for exclusive write access (FileShare::Read)
+===== EXECUTING step4 (with fault) =====
+REVIEW_WRITE_ERROR|review 原子替换失败：当文件已存在时，无法创建该文件。
+True
+===== END step4 =====
+Fault injection handle released
+

@@ -1,0 +1,47 @@
+=== T08 - network_error ===
+Original HTTPS_PROXY: unset
+Original HTTP_PROXY: unset
+
+Set HTTPS_PROXY=http://127.0.0.1:1 (port 1 should be closed = connection refused)
+Repo: octocat/Hello-World
+PrevGitVer: v1.8.0
+PrevGitDate: 2026-06-10
+LocalVer: v1.8.0
+PrevFlag: no
+Token: set
+
+[API CALL] GET https://api.github.com/repos/octocat/Hello-World/releases/latest (proxy=127.0.0.1:1, timeout=1s)
+[API ERROR] HTTP code= → status=network_error
+[ERROR TYPE] OperationCanceledException (timeout)
+[ERROR MESSAGE] The request was canceled due to the configured HttpClient.Timeout of 1 seconds elapsing.
+
+=== State Machine Output ===
+queryStatus: network_error
+latest (tag_name): ''
+publishedUtc: ''
+error: The request was canceled due to the configured HttpClient.Timeout of 1 seconds elapsing.
+rateRemaining: ''
+actualHttpCode: 
+errorType: OperationCanceledException (timeout)
+
+=== Comparison + Review Output ===
+gitVer (newGitVer): 'v1.8.0'
+gitDate (newGitDate): '2026-06-10'
+flag (newFlag): 'no'
+prevFlag: 'no'
+review: True
+reviewReasons: api_failure
+
+=== Verification ===
+queryStatus=network_error: True (actual: network_error)
+gitVer preserved: True (actual: 'v1.8.0' vs prev 'v1.8.0')
+gitDate preserved: True (actual: '2026-06-10' vs prev '2026-06-10')
+flag preserved: True (actual: 'no' vs prev 'no')
+review=true: True (actual: True)
+No HTTP response code (network-level failure): True (actualHttpCode: )
+
+VERDICT: PASS
+
+=== Restoring original proxy env vars ===
+HTTPS_PROXY cleared (was unset)
+HTTP_PROXY cleared (was unset)

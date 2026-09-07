@@ -1,0 +1,42 @@
+=== T01 - Normal 200 (queryStatus=ok) ===
+Repo: microsoft/vscode
+PrevGitVer: v1.90.0
+PrevGitDate: 2024-06-01
+LocalVer: v1.90.0
+PrevFlag: no
+Token: set
+
+[API CALL] GET https://api.github.com/repos/microsoft/vscode/releases/latest
+[API RESPONSE] tag_name=1.136.1 published_at=09/03/2026 15:25:32
+
+=== State Machine Output ===
+queryStatus: ok
+latest (tag_name): 1.136.1
+publishedUtc: 2026-09-03T15:25:32Z
+pubDate (UTC+8): 2026-09-03
+error: 
+rateRemaining: 
+
+=== Comparison + Review Output ===
+gitVer (newGitVer): 1.136.1
+gitDate (newGitDate): 2026-09-03
+flag (newFlag): yes
+prevFlag: no
+cmp: lt
+isNew: True
+isFlip: True
+versionJump: True
+dateSuspicious: False
+review: True
+reviewReasons: version_jump
+
+=== Verification ===
+queryStatus=ok: True (actual: ok)
+latest non-empty: True (actual: '1.136.1')
+publishedUtc non-empty: True (actual: '2026-09-03T15:25:32Z')
+gitVer correct (=latest): True (actual: '1.136.1' vs latest '1.136.1')
+gitDate correct (=pubDate): True (actual: '2026-09-03' vs pubDate '2026-09-03')
+flag correct: True (actual: 'yes', expected: 'yes', cmp: 'lt')
+API call succeeded: True
+
+VERDICT: PASS

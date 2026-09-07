@@ -1,0 +1,56 @@
+GITHUB_TOKEN before pipeline: UNSET
+===== Running full pipeline (Steps 1-5) =====
+===== EXECUTING step1 =====
+BACKUP_OK|20260908-031855625
+===== END step1 =====
+===== EXECUTING step2 =====
+FETCH_COMPLETE|apiOk=1 apiErr=0 total=1
+SUMMARY|total=1 apiOK=1 apiErr=0 synced=0 yes=1 uninstalled=0 pendingReview=0 newReleases=1 flips=1 token=unset
+{
+  "stats": {
+    "total": 1,
+    "apiOk": 1,
+    "apiErr": 0,
+    "synced": 0,
+    "yes": 1,
+    "uninstalled": 0,
+    "pendingReview": 0,
+    "newReleases": 1,
+    "flips": 1,
+    "token": "unset"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "VSCode",
+      "gitVer": "1.136.1",
+      "gitDate": "2026-09-03",
+      "localVer": "1.0.0",
+      "flag": "yes",
+      "prevFlag": "no",
+      "latest": "1.136.1",
+      "publishedUtc": "2026-09-03T15:25:32Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": true,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    }
+  ]
+}
+===== END step2 =====
+===== EXECUTING step3 =====
+===== END step3 =====
+===== EXECUTING step4 =====
+REVIEW_WRITE_OK|复核完成：0 项；stats/items 保持不变。
+===== END step4 =====
+===== EXECUTING step5-full =====
+COMMIT_OK|已原子替换主 md（数据行 1，yes/no 校验通过，repo 集合一致）。
+RUN_STATUS|success|fetch + 必要 review + commit + lock release 完成。
+===== END step5-full =====
+===== Pipeline complete =====
+

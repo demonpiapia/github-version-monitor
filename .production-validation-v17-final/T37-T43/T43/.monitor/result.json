@@ -1,0 +1,235 @@
+{
+  "runAt": "2026-09-08T03:22:16.8407566+08:00",
+  "stats": {
+    "total": 6,
+    "apiOk": 3,
+    "apiErr": 3,
+    "synced": 1,
+    "yes": 2,
+    "uninstalled": 1,
+    "pendingReview": 4,
+    "newReleases": 3,
+    "flips": 2,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "facebook/react",
+      "name": "React",
+      "gitVer": "v19.2.8",
+      "gitDate": "2026-07-21",
+      "localVer": "1.0.0",
+      "flag": "yes",
+      "prevFlag": "no",
+      "latest": "v19.2.8",
+      "publishedUtc": "2026-07-21T15:49:09Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": true,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    },
+    {
+      "repo": "microsoft/vscode",
+      "name": "VSCode",
+      "gitVer": "1.136.1",
+      "gitDate": "2026-09-03",
+      "localVer": "1.136.1",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "1.136.1",
+      "publishedUtc": "2026-09-03T15:25:32Z",
+      "status": "ok",
+      "cmp": "eq",
+      "isNew": true,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    },
+    {
+      "repo": "golang/go",
+      "name": "Go",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "未安装",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "not_found",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "not_found"
+      ],
+      "error": "Response status code does not indicate success: 404 (Not Found)."
+    },
+    {
+      "repo": "python/cpython",
+      "name": "CPython",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "some-weird-string",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "not_found",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "not_found"
+      ],
+      "error": "Response status code does not indicate success: 404 (Not Found)."
+    },
+    {
+      "repo": "octocat/this-does-not-exist-99999",
+      "name": "NotFound",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "1.0.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "not_found",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "not_found"
+      ],
+      "error": "Response status code does not indicate success: 404 (Not Found)."
+    },
+    {
+      "repo": "nodejs/node",
+      "name": "Node.js",
+      "gitVer": "v26.8.1",
+      "gitDate": "2026-08-27",
+      "localVer": "1.0.0",
+      "flag": "yes",
+      "prevFlag": "no",
+      "latest": "v26.8.1",
+      "publishedUtc": "2026-08-26T22:10:37Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": true,
+      "versionJump": true,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "version_jump"
+      ],
+      "error": ""
+    }
+  ],
+  "review": {
+    "performed": true,
+    "items": [
+      {
+        "repo": "golang/go",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口前1项：|pre=False|draft=False|published= HTML 诊断 HTTP 200；页面标题仅供诊断：Releases · golang/go · GitHub",
+        "conclusion": "pending",
+        "reasons": [
+          "not_found"
+        ],
+        "apiListStatus": "ok",
+        "apiList": [
+          {
+            "tag_name": "",
+            "published_at": "",
+            "prerelease": false,
+            "draft": false
+          }
+        ],
+        "htmlStatus": "200",
+        "htmlTitle": "Releases · golang/go · GitHub"
+      },
+      {
+        "repo": "python/cpython",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口前1项：|pre=False|draft=False|published= HTML 诊断 HTTP 200；页面标题仅供诊断：Releases · python/cpython · GitHub",
+        "conclusion": "pending",
+        "reasons": [
+          "not_found"
+        ],
+        "apiListStatus": "ok",
+        "apiList": [
+          {
+            "tag_name": "",
+            "published_at": "",
+            "prerelease": false,
+            "draft": false
+          }
+        ],
+        "htmlStatus": "200",
+        "htmlTitle": "Releases · python/cpython · GitHub"
+      },
+      {
+        "repo": "octocat/this-does-not-exist-99999",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口复核请求失败。 HTML 诊断请求失败。",
+        "conclusion": "pending",
+        "reasons": [
+          "not_found"
+        ],
+        "apiListStatus": "error",
+        "apiList": [],
+        "htmlStatus": "error",
+        "htmlTitle": ""
+      },
+      {
+        "repo": "nodejs/node",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口前1项：v26.8.1 v26.8.0 v24.20.0 v26.7.0 v26.6.0|pre=True|draft=True|published= HTML 诊断 HTTP 200；页面标题仅供诊断：Releases · nodejs/node · GitHub",
+        "conclusion": "pending",
+        "reasons": [
+          "version_jump"
+        ],
+        "apiListStatus": "ok",
+        "apiList": [
+          {
+            "tag_name": "v26.8.1 v26.8.0 v24.20.0 v26.7.0 v26.6.0",
+            "published_at": "",
+            "prerelease": true,
+            "draft": true
+          }
+        ],
+        "htmlStatus": "200",
+        "htmlTitle": "Releases · nodejs/node · GitHub"
+      }
+    ]
+  }
+}

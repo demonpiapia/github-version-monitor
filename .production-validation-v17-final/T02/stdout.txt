@@ -1,0 +1,42 @@
+=== T02 - 404 / not_found ===
+Repo: octocat/this-repo-does-not-exist-99999 (non-existent)
+PrevGitVer: v1.0.0
+PrevGitDate: 2026-01-15
+LocalVer: v1.0.0
+PrevFlag: no
+Token: set
+
+[API CALL] GET https://api.github.com/repos/octocat/this-repo-does-not-exist-99999/releases/latest
+[API ERROR] HTTP 404 → status=not_found, error=Response status code does not indicate success: 404 (Not Found).
+
+=== State Machine Output ===
+queryStatus: not_found
+latest (tag_name): ''
+publishedUtc: ''
+pubDate: ''
+error: Response status code does not indicate success: 404 (Not Found).
+rateRemaining: '4997'
+actualHttpCode: 404
+
+=== Comparison + Review Output ===
+gitVer (newGitVer): ''
+gitDate (newGitDate): ''
+flag (newFlag): 'no'
+prevFlag: 'no'
+cmp: ''
+isNew: False
+isFlip: False
+review: True
+reviewReasons: not_found
+
+=== Verification ===
+queryStatus=not_found: True (actual: not_found)
+gitVer empty: True (actual: '')
+gitDate empty: True (actual: '')
+flag preserved (==prevFlag): True (actual: 'no' vs prevFlag 'no')
+review=true: True (actual: True)
+reviewReasons contains 'not_found': True (actual: not_found)
+Error info NOT in gitVer: True (gitVer='')
+HTML result NOT used (latest stays empty): True (latest='')
+
+VERDICT: PASS

@@ -1,0 +1,2 @@
+PARSE_ERROR|状态文件 schema 校验失败，本轮终止，不写回主 md。
+  问题：repo 重复：octocat/Hello-World

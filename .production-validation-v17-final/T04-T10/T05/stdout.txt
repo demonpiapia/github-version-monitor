@@ -1,0 +1,9 @@
+========== T05 - 403 + X-RateLimit-Remaining>0 ==========
+T05: HTTP 403 + X-RateLimit-Remaining=50
+  Expected queryStatus: forbidden
+  Actual queryStatus: forbidden
+  RateLimit-Remaining read from response headers: '50'
+  Error message: Response status code does not indicate success: 403 (Forbidden).
+  Verdict: PASS
+
+

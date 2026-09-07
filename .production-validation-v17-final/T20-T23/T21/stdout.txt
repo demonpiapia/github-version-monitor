@@ -1,0 +1,21 @@
+========== T21 - review atomicity ==========
+Base dir: D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v17-final\T20-T23\T21\test-base
+result.json SHA256 (before): DF16984E24F6436820FB99E0AC3F9A96A027242469E50DCCA7E99CF111F81F44
+Locked result.json with FileShare::None
+Pre-write stats unchanged: True
+Pre-write items unchanged: True
+Wrote result.review.tmp (review.performed=true)
+Caught Move-Item error: 当文件已存在时，无法创建该文件。
+SKILL output: REVIEW_WRITE_ERROR|review 原子替换失败：当文件已存在时，无法创建该文件。
+Released lock on result.json
+result.json SHA256 (after):  DF16984E24F6436820FB99E0AC3F9A96A027242469E50DCCA7E99CF111F81F44
+SHA256 unchanged: True
+result.json still valid JSON: True
+stats still unchanged: True
+items still unchanged: True
+review.performed still false (not overwritten): True
+result.review.tmp still exists: False (expected: False)
+Output starts with REVIEW_WRITE_ERROR: True
+
+Verdict: PASS
+

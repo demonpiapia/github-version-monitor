@@ -1,0 +1,3 @@
+BACKUP_OK|20260907-160452507
+PID=29272
+STEP1_DONE|Lock created, now holding (sleeping to simulate Step 2 work)...

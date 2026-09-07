@@ -1,0 +1,9 @@
+========== T10 - 200 + tag_name present, published_at missing => metadata_incomplete ==========
+T10: HTTP 200 + JSON body with tag_name but no published_at
+  Body sent: {"tag_name": "v1.0.0"}
+  Expected queryStatus: metadata_incomplete
+  Actual queryStatus: metadata_incomplete
+  Error message: tag_name present but published_at missing
+  Verdict: PASS
+
+

@@ -1,0 +1,80 @@
+HTTP listener started on http://localhost:8765/
+
+========== T18a - auth_error (HTTP 401) ==========
+Prev: gitVer='v1.5.0', gitDate='2026-03-20', flag='no'
+queryStatus: auth_error
+gitVer: 'v1.5.0' (expected: 'v1.5.0')
+gitDate: '2026-03-20' (expected: '2026-03-20')
+flag: 'no' (expected: 'no')
+review: True (expected: True)
+reviewReasons: api_failure
+
+========== T18b - forbidden (HTTP 403 + X-RateLimit-Remaining: 50) ==========
+Prev: gitVer='v1.5.0', gitDate='2026-03-20', flag='no'
+queryStatus: forbidden
+rateLimit-Remaining: '50'
+gitVer: 'v1.5.0' (expected: 'v1.5.0')
+gitDate: '2026-03-20' (expected: '2026-03-20')
+flag: 'no' (expected: 'no')
+review: True (expected: True)
+
+========== T18c - rate_limited (HTTP 429) ==========
+Prev: gitVer='v1.5.0', gitDate='2026-03-20', flag='no'
+queryStatus: rate_limited
+gitVer: 'v1.5.0' (expected: 'v1.5.0')
+gitDate: '2026-03-20' (expected: '2026-03-20')
+flag: 'no' (expected: 'no')
+review: True (expected: True)
+
+========== T18d - server_error (HTTP 500) ==========
+Prev: gitVer='v1.5.0', gitDate='2026-03-20', flag='no'
+queryStatus: server_error
+gitVer: 'v1.5.0' (expected: 'v1.5.0')
+gitDate: '2026-03-20' (expected: '2026-03-20')
+flag: 'no' (expected: 'no')
+review: True (expected: True)
+
+========== T18e - http_error (HTTP 418 - unusual status code) ==========
+Note: Using HTTP 418 instead of 302 because Invoke-RestMethod follows 3xx
+      redirects by default. 418 reliably triggers the http_error catch path.
+Prev: gitVer='v1.5.0', gitDate='2026-03-20', flag='no'
+  catch block: code=418, status=http_error, rl=''
+queryStatus: http_error
+gitVer: 'v1.5.0' (expected: 'v1.5.0')
+gitDate: '2026-03-20' (expected: '2026-03-20')
+flag: 'no' (expected: 'no')
+review: True (expected: True)
+
+========== T18f - network_error (connection refused) ==========
+Prev: gitVer='v1.5.0', gitDate='2026-03-20', flag='no'
+Connecting to http://localhost:39999 (closed port)...
+  catch block: code=, status=network_error
+queryStatus: network_error
+gitVer: 'v1.5.0' (expected: 'v1.5.0')
+gitDate: '2026-03-20' (expected: '2026-03-20')
+flag: 'no' (expected: 'no')
+review: True (expected: True)
+
+========== T18g - not_found (HTTP 404) ==========
+Prev: gitVer='v1.5.0', gitDate='2026-03-20', flag='no'
+Expected: gitVer='' (cleared), gitDate='' (cleared), flag='no' (preserved)
+queryStatus: not_found
+gitVer: '' (expected: '' - cleared)
+gitDate: '' (expected: '' - cleared)
+flag: 'no' (expected: 'no' - preserved)
+review: True (expected: True)
+reviewReasons: not_found (expected: contains 'not_found')
+
+HTTP listener stopped.
+
+========== SUMMARY ==========
+Total: 7 | PASS: 7 | FAIL: 0
+  [PASS] T18a: auth_error (HTTP 401): gitVer/gitDate/flag preserved, review=true
+  [PASS] T18b: forbidden (HTTP 403 + X-RateLimit-Remaining: 50): gitVer/gitDate/flag preserved, review=true
+  [PASS] T18c: rate_limited (HTTP 429): gitVer/gitDate/flag preserved, review=true
+  [PASS] T18d: server_error (HTTP 500): gitVer/gitDate/flag preserved, review=true
+  [PASS] T18e: http_error (HTTP 418, unusual code): gitVer/gitDate/flag preserved, review=true
+  [PASS] T18f: network_error (connection refused): gitVer/gitDate/flag preserved, review=true
+  [PASS] T18g: not_found (HTTP 404): gitVer='' (cleared), gitDate='' (cleared), flag preserved, review=true, reviewReasons contains 'not_found'
+
+Report saved to: D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v17-final\T18-T19\T18\test-report.md

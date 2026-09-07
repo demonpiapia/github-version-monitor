@@ -1,0 +1,11 @@
+COMMIT_OK|已原子替换主 md（数据行 1，yes/no 校验通过，repo 集合一致）。 RUNTIME_ERROR|释放锁前 ownership 校验失败（锁内 PID 与当前进程不一致或锁不可读），未删除锁文件。 RUN_STATUS|failed|主 md 提交状态不可否认，但运行锁未安全释放。
+
+Pre-created lock with foreign PID=999998, step=4
+PID 999998 is dead: YES
+Step 5 output: COMMIT_OK|已原子替换主 md（数据行 1，yes/no 校验通过，repo 集合一致）。 RUNTIME_ERROR|释放锁前 ownership 校验失败（锁内 PID 与当前进程不一致或锁不可读），未删除锁文件。 RUN_STATUS|failed|主 md 提交状态不可否认，但运行锁未安全释放。
+Has RUNTIME_ERROR (ownership): RUNTIME_ERROR|释放锁前 ownership 校验失败（锁内 PID 与当前进程不一致或锁不可读），未删除锁文件。
+Has RUN_STATUS|failed: RUN_STATUS|failed|主 md 提交状态不可否认，但运行锁未安全释放。
+Lock file still exists: True
+Lock still has foreign PID: True
+Lock content after: pid=999998;start=2026-09-07T08:04:51.2452607+00:00;step=4;beat=2026-09-07T08:04:51.2452607+00:00
+

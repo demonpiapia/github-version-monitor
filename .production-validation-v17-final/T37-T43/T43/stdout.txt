@@ -1,0 +1,163 @@
+===== Running full pipeline (Steps 1-5) =====
+===== EXECUTING step1 =====
+BACKUP_OK|20260908-032212590
+===== END step1 =====
+===== EXECUTING step2 =====
+FETCH_COMPLETE|apiOk=3 apiErr=3 total=6
+SUMMARY|total=6 apiOK=3 apiErr=3 synced=1 yes=2 uninstalled=1 pendingReview=4 newReleases=3 flips=2 token=set
+{
+  "stats": {
+    "total": 6,
+    "apiOk": 3,
+    "apiErr": 3,
+    "synced": 1,
+    "yes": 2,
+    "uninstalled": 1,
+    "pendingReview": 4,
+    "newReleases": 3,
+    "flips": 2,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "facebook/react",
+      "name": "React",
+      "gitVer": "v19.2.8",
+      "gitDate": "2026-07-21",
+      "localVer": "1.0.0",
+      "flag": "yes",
+      "prevFlag": "no",
+      "latest": "v19.2.8",
+      "publishedUtc": "2026-07-21T15:49:09Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": true,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    },
+    {
+      "repo": "microsoft/vscode",
+      "name": "VSCode",
+      "gitVer": "1.136.1",
+      "gitDate": "2026-09-03",
+      "localVer": "1.136.1",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "1.136.1",
+      "publishedUtc": "2026-09-03T15:25:32Z",
+      "status": "ok",
+      "cmp": "eq",
+      "isNew": true,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    },
+    {
+      "repo": "golang/go",
+      "name": "Go",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "未安装",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "not_found",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "not_found"
+      ],
+      "error": "Response status code does not indicate success: 404 (Not Found)."
+    },
+    {
+      "repo": "python/cpython",
+      "name": "CPython",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "some-weird-string",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "not_found",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "not_found"
+      ],
+      "error": "Response status code does not indicate success: 404 (Not Found)."
+    },
+    {
+      "repo": "octocat/this-does-not-exist-99999",
+      "name": "NotFound",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "1.0.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "not_found",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "not_found"
+      ],
+      "error": "Response status code does not indicate success: 404 (Not Found)."
+    },
+    {
+      "repo": "nodejs/node",
+      "name": "Node.js",
+      "gitVer": "v26.8.1",
+      "gitDate": "2026-08-27",
+      "localVer": "1.0.0",
+      "flag": "yes",
+      "prevFlag": "no",
+      "latest": "v26.8.1",
+      "publishedUtc": "2026-08-26T22:10:37Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": true,
+      "versionJump": true,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "version_jump"
+      ],
+      "error": ""
+    }
+  ]
+}
+===== END step2 =====
+===== EXECUTING step3 =====
+===== END step3 =====
+===== EXECUTING step4 =====
+REVIEW_WRITE_OK|复核完成：4 项；stats/items 保持不变。
+===== END step4 =====
+===== EXECUTING step5-full =====
+COMMIT_OK|已原子替换主 md（数据行 6，yes/no 校验通过，repo 集合一致）。
+RUN_STATUS|success|fetch + 必要 review + commit + lock release 完成。
+===== END step5-full =====
+===== Pipeline complete =====
+

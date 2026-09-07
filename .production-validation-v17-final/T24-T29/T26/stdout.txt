@@ -1,0 +1,32 @@
+=== fixture_inv_upper_yes ===
+PARSE_ERROR|状态文件 schema 校验失败，本轮终止，不写回主 md。
+  问题：第 6 列 flag 非法：| 1 | [test-repo](https://github.com/octocat/Hello-World/releases) | v1.0.0 | 2026-01-01 | 1.0.0 | YES |
+
+=== fixture_inv_title_yes ===
+PARSE_ERROR|状态文件 schema 校验失败，本轮终止，不写回主 md。
+  问题：第 6 列 flag 非法：| 1 | [test-repo](https://github.com/octocat/Hello-World/releases) | v1.0.0 | 2026-01-01 | 1.0.0 | Yes |
+
+=== fixture_inv_mixed_yes ===
+PARSE_ERROR|状态文件 schema 校验失败，本轮终止，不写回主 md。
+  问题：第 6 列 flag 非法：| 1 | [test-repo](https://github.com/octocat/Hello-World/releases) | v1.0.0 | 2026-01-01 | 1.0.0 | yEs |
+
+=== fixture_inv_upper_no ===
+PARSE_ERROR|状态文件 schema 校验失败，本轮终止，不写回主 md。
+  问题：第 6 列 flag 非法：| 1 | [test-repo](https://github.com/octocat/Hello-World/releases) | v1.0.0 | 2026-01-01 | 1.0.0 | NO |
+
+=== fixture_inv_title_no ===
+PARSE_ERROR|状态文件 schema 校验失败，本轮终止，不写回主 md。
+  问题：第 6 列 flag 非法：| 1 | [test-repo](https://github.com/octocat/Hello-World/releases) | v1.0.0 | 2026-01-01 | 1.0.0 | No |
+
+=== fixture_inv_pending ===
+PARSE_ERROR|状态文件 schema 校验失败，本轮终止，不写回主 md。
+  问题：第 6 列 flag 非法：| 1 | [test-repo](https://github.com/octocat/Hello-World/releases) | v1.0.0 | 2026-01-01 | 1.0.0 | pending |
+
+=== fixture_inv_true ===
+PARSE_ERROR|状态文件 schema 校验失败，本轮终止，不写回主 md。
+  问题：第 6 列 flag 非法：| 1 | [test-repo](https://github.com/octocat/Hello-World/releases) | v1.0.0 | 2026-01-01 | 1.0.0 | true |
+
+=== fixture_valid_yes ===
+
+=== fixture_valid_no ===
+

@@ -1,0 +1,9 @@
+========== T09 - 200 + no tag_name => invalid_response ==========
+T09: HTTP 200 + JSON body without tag_name
+  Body sent: {"id": 1, "name": "test"}
+  Expected queryStatus: invalid_response
+  Actual queryStatus: invalid_response
+  Error message: 200 but empty tag_name
+  Verdict: PASS
+
+

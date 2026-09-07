@@ -1,0 +1,8 @@
+========== T07 - 500 => server_error ==========
+T07: HTTP 500
+  Expected queryStatus: server_error
+  Actual queryStatus: server_error
+  Error message: Response status code does not indicate success: 500 (Internal Server Error).
+  Verdict: PASS
+
+

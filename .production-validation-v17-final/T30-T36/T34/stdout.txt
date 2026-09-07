@@ -1,0 +1,10 @@
+BACKUP_OK|20260907-160451077 PID=28468
+
+Pre-created lock with dead PID=999999, LastWriteTime=31min ago
+PID 999999 is dead: YES
+Step 1 output: BACKUP_OK|20260907-160451077 PID=28468
+Got BACKUP_OK (takeover): BACKUP_OK|20260907-160451077
+Not LOCKED: True
+Lock has new PID (takeover happened): True
+Lock content after: pid=28468;start=2026-09-07T08:04:51.0656164+00:00;step=1;beat=2026-09-07T08:04:51.0656164+00:00
+

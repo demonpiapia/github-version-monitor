@@ -1,0 +1,16 @@
+=== fixture_no_conclusion ===
+PARSE_ERROR|状态文件 schema 校验失败，本轮终止，不写回主 md。
+  问题：缺少写回锚点：## 结论
+
+=== fixture_no_update_summary ===
+PARSE_ERROR|状态文件 schema 校验失败，本轮终止，不写回主 md。
+  问题：缺少写回锚点：## 更新摘要
+
+=== fixture_no_remarks ===
+PARSE_ERROR|状态文件 schema 校验失败，本轮终止，不写回主 md。
+  问题：缺少写回锚点：## 备注
+
+=== fixture_no_verify_method ===
+PARSE_ERROR|状态文件 schema 校验失败，本轮终止，不写回主 md。
+  问题：缺少写回锚点：## 核对方法
+
