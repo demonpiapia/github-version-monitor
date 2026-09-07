@@ -1,0 +1,5 @@
+# 本目录永不纳入版本控制的内容
+.env
+.env.*
+.monitor/
+.backup/
