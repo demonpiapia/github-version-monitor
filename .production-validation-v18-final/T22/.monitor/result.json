@@ -1,0 +1,112 @@
+{
+  "runAt": "2026-09-08T06:40:37.5828395+08:00",
+  "stats": {
+    "total": 2,
+    "apiOk": 1,
+    "apiErr": 1,
+    "synced": 0,
+    "yes": 1,
+    "uninstalled": 0,
+    "pendingReview": 2,
+    "newReleases": 1,
+    "flips": 1,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "VS Code",
+      "gitVer": "1.136.1",
+      "gitDate": "2026-09-03",
+      "localVer": "1.0.0",
+      "flag": "yes",
+      "prevFlag": "no",
+      "latest": "1.136.1",
+      "publishedUtc": "2026-09-03T15:25:32Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": true,
+      "versionJump": true,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "version_jump"
+      ],
+      "error": ""
+    },
+    {
+      "repo": "torvalds/linux",
+      "name": "Linux",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "6.5.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "not_found",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "not_found"
+      ],
+      "error": "Response status code does not indicate success: 404 (Not Found)."
+    }
+  ],
+  "review": {
+    "performed": true,
+    "items": [
+      {
+        "repo": "microsoft/vscode",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口前1项：1.136.1 1.136.0 1.135.0 1.134.0 1.133.0|pre=True|draft=True|published= HTML 诊断 HTTP 200；页面标题仅供诊断：Releases · microsoft/vscode · GitHub",
+        "conclusion": "pending",
+        "reasons": [
+          "version_jump"
+        ],
+        "apiListStatus": "ok",
+        "apiList": [
+          {
+            "tag_name": "1.136.1 1.136.0 1.135.0 1.134.0 1.133.0",
+            "published_at": "",
+            "prerelease": true,
+            "draft": true
+          }
+        ],
+        "htmlStatus": "200",
+        "htmlTitle": "Releases · microsoft/vscode · GitHub"
+      },
+      {
+        "repo": "torvalds/linux",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口前1项：|pre=False|draft=False|published= HTML 诊断 HTTP 200；页面标题仅供诊断：Releases · torvalds/linux · GitHub",
+        "conclusion": "pending",
+        "reasons": [
+          "not_found"
+        ],
+        "apiListStatus": "ok",
+        "apiList": [
+          {
+            "tag_name": "",
+            "published_at": "",
+            "prerelease": false,
+            "draft": false
+          }
+        ],
+        "htmlStatus": "200",
+        "htmlTitle": "Releases · torvalds/linux · GitHub"
+      }
+    ]
+  }
+}

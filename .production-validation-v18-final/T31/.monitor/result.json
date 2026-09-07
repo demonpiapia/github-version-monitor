@@ -1,0 +1,65 @@
+{
+  "runAt": "2026-09-07T22:44:39.9958012+00:00",
+  "stats": {
+    "total": 2,
+    "apiOk": 1,
+    "apiErr": 1,
+    "synced": 0,
+    "yes": 1,
+    "uninstalled": 0,
+    "pendingReview": 2,
+    "newReleases": 1,
+    "flips": 1,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "VS Code",
+      "gitVer": "1.136.1",
+      "gitDate": "2026-09-03",
+      "localVer": "1.0.0",
+      "flag": "yes",
+      "prevFlag": "no",
+      "latest": "1.136.1",
+      "publishedUtc": "2026-09-03T15:25:32Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": true,
+      "versionJump": true,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "version_jump"
+      ],
+      "error": ""
+    },
+    {
+      "repo": "torvalds/linux",
+      "name": "Linux",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "6.5.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "not_found",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "not_found"
+      ],
+      "error": "Response status code does not indicate success: 404 (Not Found)."
+    }
+  ],
+  "review": {
+    "performed": false,
+    "items": []
+  }
+}

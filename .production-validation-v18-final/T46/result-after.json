@@ -1,0 +1,81 @@
+{
+  "runAt": "2026-09-07T23:02:25.0907103+00:00",
+  "stats": {
+    "total": 3,
+    "apiOk": 3,
+    "apiErr": 0,
+    "synced": 1,
+    "yes": 1,
+    "uninstalled": 1,
+    "pendingReview": 0,
+    "newReleases": 2,
+    "flips": 1,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "nodejs/node",
+      "name": "Node.js",
+      "gitVer": "v26.8.1",
+      "gitDate": "2026-08-27",
+      "localVer": "v26.6.0",
+      "flag": "yes",
+      "prevFlag": "no",
+      "latest": "v26.8.1",
+      "publishedUtc": "2026-08-26T22:10:37Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": true,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    },
+    {
+      "repo": "kubernetes/kubernetes",
+      "name": "Kubernetes",
+      "gitVer": "v1.37.0",
+      "gitDate": "2026-08-26",
+      "localVer": "v1.37.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "v1.37.0",
+      "publishedUtc": "2026-08-26T16:29:12Z",
+      "status": "ok",
+      "cmp": "eq",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    },
+    {
+      "repo": "grafana/grafana",
+      "name": "Grafana",
+      "gitVer": "v13.2.1",
+      "gitDate": "2026-09-02",
+      "localVer": "未安装",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "v13.2.1",
+      "publishedUtc": "2026-09-02T07:00:31Z",
+      "status": "ok",
+      "cmp": "",
+      "isNew": true,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    }
+  ],
+  "review": {
+    "performed": false,
+    "items": []
+  }
+}

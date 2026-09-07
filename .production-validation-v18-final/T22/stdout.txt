@@ -1,0 +1,7 @@
+BACKUP_OK|20260908-064041635
+Set-Content: D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v18-final\lib\step5-full.ps1:70:1
+Line |
+  70 |  Set-Content -Path $tmp -Value $newText -Encoding UTF8 -NoNewline
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Access to the path
+     | 'D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v18-final\T22\.output\GitHub更新监测列表.md.tmp' is denied.

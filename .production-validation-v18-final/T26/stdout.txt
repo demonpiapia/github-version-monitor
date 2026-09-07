@@ -1,0 +1,9 @@
+PS_VERSION|7.6.4
+FIXTURE|file=fixture_valid_yes.md|flag=[yes]|expected=PASS|verdict=PASS|parseErrors=0|repos=1|errors=(none)
+FIXTURE|file=fixture_valid_no.md|flag=[no]|expected=PASS|verdict=PASS|parseErrors=0|repos=1|errors=(none)
+FIXTURE|file=fixture_invalid_flag_UPPER.md|flag=[YES]|expected=PARSE_ERROR|verdict=PASS|parseErrors=1|repos=0|errors=第 6 列 flag 非法：| 1 | [Test](https://github.com/test/repo/releases) | v1.0.0 | 2026-08-01 | v1.0.0 | YES |
+FIXTURE|file=fixture_invalid_flag_CAP.md|flag=[Yes]|expected=PARSE_ERROR|verdict=PASS|parseErrors=1|repos=0|errors=第 6 列 flag 非法：| 1 | [Test](https://github.com/test/repo/releases) | v1.0.0 | 2026-08-01 | v1.0.0 | Yes |
+FIXTURE|file=fixture_invalid_flag_MIXED.md|flag=[yEs]|expected=PARSE_ERROR|verdict=PASS|parseErrors=1|repos=0|errors=第 6 列 flag 非法：| 1 | [Test](https://github.com/test/repo/releases) | v1.0.0 | 2026-08-01 | v1.0.0 | yEs |
+FIXTURE|file=fixture_invalid_flag_UPPER2.md|flag=[NO]|expected=PARSE_ERROR|verdict=PASS|parseErrors=1|repos=0|errors=第 6 列 flag 非法：| 1 | [Test](https://github.com/test/repo/releases) | v1.0.0 | 2026-08-01 | v1.0.0 | NO |
+FIXTURE|file=fixture_invalid_flag_CAP2.md|flag=[No]|expected=PARSE_ERROR|verdict=PASS|parseErrors=1|repos=0|errors=第 6 列 flag 非法：| 1 | [Test](https://github.com/test/repo/releases) | v1.0.0 | 2026-08-01 | v1.0.0 | No |
+SUMMARY|pass=7|fail=0

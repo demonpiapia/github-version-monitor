@@ -1,0 +1,5 @@
+PS_VERSION|7.6.4
+TARGET_A|http://192.0.2.1:9999/repos/test/repo/releases/latest
+RESULT_A|queryStatus=network_error|rateRemaining=|elapsedMs=15025|error=The request was canceled due to the configured HttpClient.Timeout of 15 seconds elapsing.
+TARGET_B|http://localhost:1/repos/test/repo/releases/latest
+RESULT_B|queryStatus=network_error|rateRemaining=|elapsedMs=4108|error=由于目标计算机积极拒绝，无法连接。 (localhost:1)

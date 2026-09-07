@@ -1,0 +1,7 @@
+PS_VERSION|7.6.4
+LISTENER_READY|port=18345
+RESULT|queryStatus=rate_limited|rateRemaining=0|latest=|error=Response status code does not indicate success: 403 (Forbidden).
+REQ_COUNT|latest=1|html=0|step4=0
+LISTENER_LOG_START
+[2026-09-08T06:17:23.5620953+08:00] GET /repos/test/repo/releases/latest -> 403
+LISTENER_LOG_END

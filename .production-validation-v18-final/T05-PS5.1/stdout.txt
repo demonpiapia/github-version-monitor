@@ -1,0 +1,8 @@
+PS_VERSION|5.1.22621.963
+LISTENER_READY|port=18346
+RESULT|queryStatus=forbidden|rateRemaining=50|latest=|error=远程服务器返回错误: (403) 已禁止。
+HEADER_TYPE|System.Net.WebHeaderCollection
+REQ_COUNT|latest=1|html=0|step4=0
+LISTENER_LOG_START
+[2026-09-08T07:13:22.1673082+08:00] GET /repos/test/repo/releases/latest -> 403
+LISTENER_LOG_END

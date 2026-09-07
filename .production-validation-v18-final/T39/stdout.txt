@@ -1,0 +1,85 @@
+===== EXECUTING step1 =====
+BACKUP_OK|20260908-060659158
+
+===== END step1 =====
+===== EXECUTING step2 =====
+FETCH_COMPLETE|apiOk=1 apiErr=1 total=2
+SUMMARY|total=2 apiOK=1 apiErr=1 synced=0 yes=1 uninstalled=0 pendingReview=2 newReleases=1 flips=1 token=set
+{
+  "stats": {
+    "total": 2,
+    "apiOk": 1,
+    "apiErr": 1,
+    "synced": 0,
+    "yes": 1,
+    "uninstalled": 0,
+    "pendingReview": 2,
+    "newReleases": 1,
+    "flips": 1,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "VS Code",
+      "gitVer": "1.136.1",
+      "gitDate": "2026-09-03",
+      "localVer": "1.0.0",
+      "flag": "yes",
+      "prevFlag": "no",
+      "latest": "1.136.1",
+      "publishedUtc": "2026-09-03T15:25:32Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": true,
+      "versionJump": true,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "version_jump"
+      ],
+      "error": ""
+    },
+    {
+      "repo": "torvalds/linux",
+      "name": "Linux",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "6.5.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "not_found",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "not_found"
+      ],
+      "error": "Response status code does not indicate success: 404 (Not Found)."
+    }
+  ]
+}
+
+===== END step2 =====
+===== EXECUTING step3 =====
+
+===== END step3 =====
+===== EXECUTING step4 =====
+REVIEW_WRITE_OK|复核完成：2 项；stats/items 保持不变。
+
+===== END step4 =====
+===== EXECUTING step5-commit =====
+COMMIT_OK|已原子替换主 md（数据行 2，yes/no 校验通过，repo 集合一致）。
+
+===== END step5-commit =====
+===== EXECUTING step5-lockrelease-test =====
+RUNTIME_ERROR|释放锁前 ownership 校验失败（锁内 PID 与当前进程不一致或锁不可读），未删除锁文件。
+RUN_STATUS|failed|主 md 提交状态不可否认，但运行锁未安全释放。
+
+===== END step5-lockrelease-test =====

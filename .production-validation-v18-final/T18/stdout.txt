@@ -1,0 +1,9 @@
+PS_VERSION|7.6.4
+SCENARIO|name=auth_error|verdict=PASS|queryStatus=auth_error|gitVer=[v2.0.0]|gitDate=[2026-08-01]|flag=[yes]|prevFlag=[yes]|review=True|reasons=api_failure
+SCENARIO|name=forbidden|verdict=PASS|queryStatus=forbidden|gitVer=[v2.0.0]|gitDate=[2026-08-01]|flag=[yes]|prevFlag=[yes]|review=True|reasons=api_failure
+SCENARIO|name=rate_limited|verdict=PASS|queryStatus=rate_limited|gitVer=[v2.0.0]|gitDate=[2026-08-01]|flag=[yes]|prevFlag=[yes]|review=True|reasons=api_failure
+SCENARIO|name=server_error|verdict=PASS|queryStatus=server_error|gitVer=[v2.0.0]|gitDate=[2026-08-01]|flag=[yes]|prevFlag=[yes]|review=True|reasons=api_failure
+SCENARIO|name=network_error|verdict=PASS|queryStatus=network_error|gitVer=[v2.0.0]|gitDate=[2026-08-01]|flag=[yes]|prevFlag=[yes]|review=True|reasons=api_failure
+SCENARIO|name=http_error|verdict=PASS|queryStatus=http_error|gitVer=[v2.0.0]|gitDate=[2026-08-01]|flag=[yes]|prevFlag=[yes]|review=True|reasons=api_failure
+SCENARIO|name=not_found|verdict=PASS|queryStatus=not_found|gitVer=[]|gitDate=[]|flag=[yes]|prevFlag=[yes]|review=True|reasons=not_found
+SUMMARY|pass=7|fail=0

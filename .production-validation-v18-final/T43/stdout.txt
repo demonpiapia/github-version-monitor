@@ -1,0 +1,163 @@
+===== EXECUTING step1 =====
+BACKUP_OK|20260908-070124787
+
+===== END step1 =====
+===== EXECUTING step2 =====
+FETCH_COMPLETE|apiOk=5 apiErr=1 total=6
+SUMMARY|total=6 apiOK=5 apiErr=1 synced=1 yes=3 uninstalled=1 pendingReview=3 newReleases=4 flips=2 token=set
+{
+  "stats": {
+    "total": 6,
+    "apiOk": 5,
+    "apiErr": 1,
+    "synced": 1,
+    "yes": 3,
+    "uninstalled": 1,
+    "pendingReview": 3,
+    "newReleases": 4,
+    "flips": 2,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "nodejs/node",
+      "name": "Node.js",
+      "gitVer": "v26.8.1",
+      "gitDate": "2026-08-27",
+      "localVer": "v26.6.0",
+      "flag": "yes",
+      "prevFlag": "no",
+      "latest": "v26.8.1",
+      "publishedUtc": "2026-08-26T22:10:37Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": true,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    },
+    {
+      "repo": "kubernetes/kubernetes",
+      "name": "Kubernetes",
+      "gitVer": "v1.37.0",
+      "gitDate": "2026-08-26",
+      "localVer": "v1.37.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "v1.37.0",
+      "publishedUtc": "2026-08-26T16:29:12Z",
+      "status": "ok",
+      "cmp": "eq",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    },
+    {
+      "repo": "grafana/grafana",
+      "name": "Grafana",
+      "gitVer": "v13.2.1",
+      "gitDate": "2026-09-02",
+      "localVer": "未安装",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "v13.2.1",
+      "publishedUtc": "2026-09-02T07:00:31Z",
+      "status": "ok",
+      "cmp": "",
+      "isNew": true,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    },
+    {
+      "repo": "hashicorp/terraform",
+      "name": "Terraform",
+      "gitVer": "v1.16.1",
+      "gitDate": "2026-09-02",
+      "localVer": "N/A",
+      "flag": "yes",
+      "prevFlag": "yes",
+      "latest": "v1.16.1",
+      "publishedUtc": "2026-09-02T14:49:32Z",
+      "status": "ok",
+      "cmp": "incomparable",
+      "isNew": true,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "incomparable_version"
+      ],
+      "error": ""
+    },
+    {
+      "repo": "demonpiapia/nonexistent-repo-xyz",
+      "name": "GhostRepo",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "v0.1.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "not_found",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "not_found"
+      ],
+      "error": "Response status code does not indicate success: 404 (Not Found)."
+    },
+    {
+      "repo": "microsoft/typescript",
+      "name": "TypeScript",
+      "gitVer": "v7.0.2",
+      "gitDate": "2026-08-21",
+      "localVer": "v6.0.0",
+      "flag": "yes",
+      "prevFlag": "no",
+      "latest": "v7.0.2",
+      "publishedUtc": "2026-08-20T18:09:49Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": true,
+      "versionJump": true,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "version_jump"
+      ],
+      "error": ""
+    }
+  ]
+}
+
+===== END step2 =====
+===== EXECUTING step3 =====
+
+===== END step3 =====
+===== EXECUTING step4 =====
+REVIEW_WRITE_OK|复核完成：3 项；stats/items 保持不变。
+
+===== END step4 =====
+===== EXECUTING step5-full =====
+COMMIT_OK|已原子替换主 md（数据行 6，yes/no 校验通过，repo 集合一致）。
+RUN_STATUS|success|fetch + 必要 review + commit + lock release 完成。
+
+===== END step5-full =====

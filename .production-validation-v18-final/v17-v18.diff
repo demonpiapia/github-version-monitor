@@ -1,0 +1,136 @@
+warning: in the working copy of 'SKILL-v1.7.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'SKILL-v1.8.md', LF will be replaced by CRLF the next time Git touches it
+diff --git a/SKILL-v1.7.md b/SKILL-v1.8.md
+index 70fc3fd..9023f44 100644
+--- a/SKILL-v1.7.md
++++ b/SKILL-v1.8.md
+@@ -5,7 +5,7 @@ description: GitHub 项目版本监测（自动化版·纯 PowerShell）——
+ 
+ # GitHub 项目版本监测（自动化版·纯 PowerShell）
+ 
+-> 版本：v1.7
++> 版本：v1.8
+ > 生产执行基准：PowerShell 7.x；PowerShell 5.1 仅作兼容性验证环境。
+ 
+ ## 0. 受众与职责
+@@ -34,7 +34,7 @@ description: GitHub 项目版本监测（自动化版·纯 PowerShell）——
+ 
+ ## 2. 执行上下文
+ 
+-- 每轮自动化线程新开，不沿用历史上下文。上一轮的全部状态只能从 `GitHub更新监测列表.md` 与 `.monitor/result.json` 恢复。
++- 每轮自动化线程新开，不沿用历史上下文。上一轮的全部状态只能从 `.output/GitHub更新监测列表.md` 与 `.monitor/result.json` 恢复。
+ - 状态文件同时承担输入和输出角色。输入字段包括仓库链接、本地版本基线、上轮 yes/no；成功运行后仅由程序更新允许写回的字段。
+ - 全部逻辑内联在本文件，不另写脚本文件，不依赖外部 orchestrator。
+ - 不依赖 Python / Node.js 运行时。
+@@ -76,19 +76,19 @@ Agent 禁止修改：
+ 8. `rate_limited` 项不得重试，不得进入步骤 4。
+ 9. `versionJump` / `dateSuspicious` 仅为程序化 review 触发器，不参与 `flag` 计算。
+ 10. `result.json` 初次生成与 review 更新均必须经临时文件 + JSON 校验 + 原子替换。
+-11. `RUN_STATUS|...|` 是整轮最终终态；`COMMIT_OK|` 仅是中间成功信号。
++11. `RUN_STATUS|...|` 是整轮最终终态；`COMMIT_OK|` 仅是中间成功信号。`RUN_STATUS|success|` 只能在 `$commitSucceeded = $true` 且 `$lockReleased = $true` 时输出。
+ 12. canonical flag / enum 的比较必须使用大小写敏感语义，不得依赖 PowerShell 默认大小写不敏感比较。
+ 
+ ## 5. 数据来源与状态文件
+ 
+-- 状态文件：`GitHub更新监测列表.md`（本目录）。
++- 状态文件：`.output/GitHub更新监测列表.md`。这是持久化状态文件：既是输入（仓库清单 + 本地版本基线 + 上轮 yes/no），也是输出（原地更新）。
+ - 解析由步骤 2 的 PowerShell 完成，逐行读取 `owner/repo`（第 2 列链接）、`gitVer`（第 3 列）、`gitDate`（第 4 列）、`localVer`（第 5 列）、上轮 `flag`（第 6 列，翻转检测的必要输入）。agent 不手动抄表。
+ - 若状态文件不存在：不创建空清单，输出 `STATE_MISSING|` 并终止。
+ - 本地版本基线只读。
+ 
+ ### 5.1 状态文件 schema（contract）
+ 
+-`GitHub更新监测列表.md` 必须满足以下 contract；任何异常均 `PARSE_ERROR|`，主 md 不写回：
++`.output/GitHub更新监测列表.md` 必须满足以下 contract；任何异常均 `PARSE_ERROR|`，主 md 不写回：
+ 
+ - 必须恰好存在一个 `## 监测列表` 节。
+ - 节内必须存在固定表头：`# | 项目名称 | GIT最新版本 | GIT更新日期 | 本地版本 | 是否更新`。
+@@ -120,7 +120,7 @@ Agent 禁止修改：
+ 
+ ### 5.4 机器运行状态协议（contract）
+ 
+-`RUN_STATUS|success|` / `RUN_STATUS|failed|` 是整轮唯一最终终态；`COMMIT_OK|` 仅为中间信号。
++`RUN_STATUS|success|` / `RUN_STATUS|failed|` 是整轮唯一最终终态；`COMMIT_OK|` 仅为中间信号。`COMMIT_OK|` 必须对应 `$commitSucceeded = $true`；只有主 md 原子替换成功且锁安全释放后才允许 `RUN_STATUS|success|`。
+ 
+ ## 6. 查询状态机
+ 
+@@ -162,12 +162,12 @@ $ErrorActionPreference = 'Stop'
+ $base = if ($env:GITHUB_VERSION_MONITOR_BASE) { $env:GITHUB_VERSION_MONITOR_BASE }
+         elseif ($PSScriptRoot) { $PSScriptRoot }
+         else { 'D:\AI\Workspace\automatic\github-version-monitor' }
+-$md = Join-Path $base 'GitHub更新监测列表.md'
++$md = Join-Path (Join-Path $base '.output') 'GitHub更新监测列表.md'
+ $monitorDir = Join-Path $base '.monitor'
+ 
+ # 状态文件存在性检查先于 lock：STATE_MISSING 不得留下锁副作用
+ if (-not (Test-Path $md)) {
+-    Write-Output 'STATE_MISSING|状态文件 GitHub更新监测列表.md 不存在；不创建空清单。需提供初始清单（releases 链接 + 本地版本）后重跑。'
++    Write-Output 'STATE_MISSING|状态文件 .output\GitHub更新监测列表.md 不存在；不创建空清单。需提供初始清单（releases 链接 + 本地版本）后重跑。'
+     return
+ }
+ New-Item -ItemType Directory -Force -Path $monitorDir | Out-Null
+@@ -241,7 +241,7 @@ $base = if ($env:GITHUB_VERSION_MONITOR_BASE) { $env:GITHUB_VERSION_MONITOR_BASE
+         elseif ($PSScriptRoot) { $PSScriptRoot }
+         else { 'D:\AI\Workspace\automatic\github-version-monitor' }
+ if (-not $env:GITHUB_TOKEN) { $envFile = Join-Path $base '.env'; if (Test-Path $envFile) { foreach ($line in (Get-Content $envFile)) { if ($line -match '^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.+?)\s*$') { if (-not (Get-Content "env:$($Matches[1])" -ErrorAction SilentlyContinue)) { Set-Content -Path "env:$($Matches[1])" -Value $Matches[2] } } } } }
+-$md = Join-Path $base 'GitHub更新监测列表.md'
++$md = Join-Path (Join-Path $base '.output') 'GitHub更新监测列表.md'
+ $monitorDir = Join-Path $base '.monitor'
+ 
+ function Release-LockSafely { try { $raw=Get-Content $lockPath -Raw -ErrorAction Stop; if($raw -notmatch ('pid='+[regex]::Escape([string]$PID)+';')){return $false}; Remove-Item $lockPath -Force -ErrorAction Stop; return(-not(Test-Path $lockPath)) } catch { return $false } }
+@@ -492,7 +492,7 @@ $ErrorActionPreference = 'Stop'
+ $base = if ($env:GITHUB_VERSION_MONITOR_BASE) { $env:GITHUB_VERSION_MONITOR_BASE }
+         elseif ($PSScriptRoot) { $PSScriptRoot }
+         else { 'D:\AI\Workspace\automatic\github-version-monitor' }
+-$md = Join-Path $base 'GitHub更新监测列表.md'
++$md = Join-Path (Join-Path $base '.output') 'GitHub更新监测列表.md'
+ $monitorDir = Join-Path $base '.monitor'
+ # 锁 heartbeat（保活）+ 锁存在性验证
+ $lockPath = Join-Path $monitorDir 'run.lock'
+@@ -576,6 +576,7 @@ $header='| # | 项目名称 | GIT最新版本 | GIT更新日期 | 本地版本 |
+ $headerOk=($check -split "`r?`n"|Where-Object{$_.Trim() -ceq $header}).Count -eq 1
+ if ($rows2.Count -eq $items.Count -and $badFlag.Count -eq 0 -and $repoMatch -and $headerOk -and $anchorsOk) {
+     Move-Item -Path $tmp -Destination $md -Force
++    $commitSucceeded=$true
+     Write-Output "COMMIT_OK|已原子替换主 md（数据行 $($rows2.Count)，yes/no 校验通过，repo 集合一致）。"
+ } else {
+     Remove-Item $tmp -Force -ErrorAction SilentlyContinue
+@@ -622,10 +623,10 @@ if (-not $lockReleased) {
+ GitHub 监测完成：监测 N 项，本轮 M 项需更新、K 项未安装、E 项 API 失败（保留上轮状态）。
+ 需更新：<项目名> <本地版本>→<GIT 最新正式 Release>(<发布日期>)；…
+ 未安装（GIT 已有最新正式 Release）：<项目名> <GIT 最新正式 Release>；…
+-完整清单见 GitHub更新监测列表.md
++完整清单见 .output\GitHub更新监测列表.md
+ ```
+ 
+-字段约束：`N` = 监测总数，`M` = `flag=yes` 项数，`K` = 本地版本「未安装」项数，`E` = 本轮 API 失败项数（`E=0` 时省略该句）；均取 `stats` 实测值。「需更新」行仅列 yes 项，格式 `项目名 本地版本→GIT 最新正式 Release(发布日期)`，多个 `；` 分隔，无则写「无」；「未安装」行列未安装且 GIT 已有正式版的项（只给 GIT 最新正式 Release）；发布日期取主 md「GIT更新日期」列简写 `MM-DD`（统一由内部唯一事实 `publishedUtc` 按 `UTC+08:00` 换算；"今日发布"判断同样以 `publishedUtc` 为准）；末尾固定指向 `GitHub更新监测列表.md`；只推变更摘要不刷屏。
++字段约束：`N` = 监测总数，`M` = `flag=yes` 项数，`K` = 本地版本「未安装」项数，`E` = 本轮 API 失败项数（`E=0` 时省略该句）；均取 `stats` 实测值。「需更新」行仅列 yes 项，格式 `项目名 本地版本→GIT 最新正式 Release(发布日期)`，多个 `；` 分隔，无则写「无」；「未安装」行列未安装且 GIT 已有正式版的项（只给 GIT 最新正式 Release）；发布日期取主 md「GIT更新日期」列简写 `MM-DD`（统一由内部唯一事实 `publishedUtc` 按 `UTC+08:00` 换算；"今日发布"判断同样以 `publishedUtc` 为准）；末尾固定指向 `.output/GitHub更新监测列表.md`；只推变更摘要不刷屏。
+ 
+ ## 9. 机器运行状态协议
+ 
+@@ -692,7 +693,7 @@ FETCH_COMPLETE
+ 6. 状态文件是输入也是输出。解析旧表拿基线（含上轮 yes/no），再原地写回，不清空不另存。
+ 7. `Format-Table` 是人类展示格式，不是机器接口。一律用 `ConvertTo-Json` 输出结构化结果。
+ 8. 解析失败静默 `continue` 会导致监测项无声消失。一律 fail-closed：候选行解析失败整轮终止、不写回、保留备份、回报问题行。
+-9. 在当前 PowerShell `Invoke-RestMethod` 运行环境中，`published_at` 实测会被反序列化为 `[System.DateTime]` 对象（不是字符串）。只能 `.ToString("yyyy-MM-dd")`，不得 `.Substring`。跨 harness / 等价实现不得预设其类型，应先实测确认；无论返回字符串还是 DateTime，都不得盲目使用 `.Substring`。
++9. `published_at` 在不同 PowerShell / harness 中可能是 `DateTime`、`DateTimeOffset` 或字符串；统一通过 `ConvertTo-UtcIso` 归一化为 UTC，不依赖 `.Substring`。
+ 10. 运行锁采用原子创建 + heartbeat + PID 存活检查模型，不是持续持有的 OS 文件句柄锁。
+ 
+ ## 13. 用户偏好（不变）
+@@ -701,7 +702,7 @@ FETCH_COMPLETE
+ - 表内不用粗体；是否更新 yes/no 小写。
+ - 监测项增减一律由用户指定，不自行增删；404 仓库照留（`not_found`：404 仅表示当前请求下资源不可见，可能仓库不存在 / 无可用 release / 当前身份无法访问；`gitVer` / `gitDate` 置空，`flag` 保留上轮状态，`review=true`，不表述为已确认事实）。
+ - 未安装项本地版本填"未安装"、是否更新 no；但 GIT 发新版本仍刷新 GIT 列。
+-- 原地更新（事务式原子替换），不另存副本。
++- `.output/GitHub更新监测列表.md` 原地更新（事务式原子替换），不另存副本。
+ - 本地版本基线只读：程序永不修改，疑似错误标 `review=true`。
+ - 微信只推变更摘要 + 需更新项，不推完整表格；`K` 口径为"未安装"。
+ - 汇报语气：数字与结论 zero 主观干扰，不夸大、不渲染、不掩盖失败项。
+@@ -712,6 +713,7 @@ FETCH_COMPLETE
+ 
+ ## 15. Changelog
+ 
++- **v1.8（2026-09-08 生产验证 P1 修复 + 状态路径同步轮）**：①修复 v1.7 T37/T43 暴露的 `$commitSucceeded` 状态遗漏：主 md 原子替换成功后立即置 `$commitSucceeded=$true`，确保正常提交可正确输出 `RUN_STATUS|success|` ②将 `COMMIT_OK|` 与 `$commitSucceeded=$true` 的对应关系、以及 `RUN_STATUS|success|` 必须同时满足 commit 与 lock release 成功写入 invariant ③将持久化状态文件路径统一为 `.output/GitHub更新监测列表.md`，并同步所有解析、写回、汇报引用 ④其余 v1.7 能力保持不变。
+ - **v1.7（2026-09-07 从仓库 v1.6 正确派生的生产兼容修复轮）**：①完整保留 v1.6 的 `versionJump` / `dateSuspicious` / `reviewReasons` / schema contract / `result.fetch.tmp` / `RUN_STATUS` / 404→`not_found` / lock ownership-safe 等能力 ②新增 `Get-ResponseHeaderValue`，兼容 Windows PowerShell 5.1 与 PowerShell 7+ header 类型 ③修复 T04：403 + `X-RateLimit-Remaining=0` 只有真实读取到 `0` 才判 `rate_limited` ④生产执行基准明确为 PowerShell 7.x，PS5.1 仅作兼容性验证。
+ 
+ - **v1.4（2026-09-06 执行型文档规范化轮）**：①`REVIEW_WRITE_ERROR` 明确终止步骤 5（不替换主 md、保留 backup、释放 `run.lock`、整轮 failed）②review 写回改为原子写入（`result.review.tmp` → JSON 结构校验 → `stats`/`items` 完整性校验 → 原子替换）③所有运行时刻统一 UTC 内部事实 + `UTC+08:00` 展示（`runAt` / `lock.start` / `lock.beat` / backup timestamp / `fetch_run.log`）④`not_found` 不再把状态说明文本写入 `gitVer`（`gitVer=""`、`gitDate=""`、`flag` 保留上轮状态、`review=true`）⑤写回校验由 `-ge` 改为精确相等 + repo 集合一致性校验 ⑥释放锁前确认 ownership（锁内 PID 必须等于当前进程 PID）⑦新增术语表、职责边界 invariant、Documentation Conventions 对齐 ⑧全文去人格化改写。
