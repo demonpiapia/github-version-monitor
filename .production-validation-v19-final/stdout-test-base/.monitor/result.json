@@ -1,0 +1,67 @@
+{
+  "runAt": "2026-09-08T13:12:40.7812396+08:00",
+  "stats": {
+    "total": 1,
+    "apiOk": 1,
+    "apiErr": 0,
+    "synced": 0,
+    "yes": 1,
+    "uninstalled": 0,
+    "pendingReview": 1,
+    "newReleases": 1,
+    "flips": 0,
+    "token": "unset"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "vscode",
+      "gitVer": "1.136.1",
+      "gitDate": "2026-09-03",
+      "localVer": "1.0.0",
+      "flag": "yes",
+      "prevFlag": "yes",
+      "latest": "1.136.1",
+      "publishedUtc": "2026-09-03T15:25:32Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": false,
+      "versionJump": true,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "version_jump"
+      ],
+      "error": ""
+    }
+  ],
+  "review": {
+    "performed": true,
+    "items": [
+      {
+        "repo": "microsoft/vscode",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口前1项：1.136.1 1.136.0 1.135.0 1.134.0 1.133.0|pre=True|draft=True|published= HTML 诊断 HTTP 200；页面标题仅供诊断：Releases · microsoft/vscode · GitHub",
+        "conclusion": "pending",
+        "reasons": [
+          "version_jump"
+        ],
+        "apiListStatus": "ok",
+        "apiList": [
+          {
+            "tag_name": "1.136.1 1.136.0 1.135.0 1.134.0 1.133.0",
+            "published_at": "",
+            "prerelease": true,
+            "draft": true
+          }
+        ],
+        "htmlStatus": "200",
+        "htmlTitle": "Releases · microsoft/vscode · GitHub"
+      }
+    ]
+  }
+}

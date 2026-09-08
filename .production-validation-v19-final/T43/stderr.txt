@@ -1,0 +1,1 @@
+# stderr 与 stdout 已合并到 stdout.txt（PowerShell *> 语义）

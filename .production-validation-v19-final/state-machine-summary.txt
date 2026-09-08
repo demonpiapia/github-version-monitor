@@ -1,0 +1,12 @@
+=== Phase 6 State Machine Summary ===
+  PASS  T02: not_found 
+  PASS  T04-PS7: rate_limited 
+  PASS  T05-PS7: forbidden 
+  PASS  T08: network_error 
+  PASS  T14: ok 
+  PASS  T15: ok 
+  PASS  T16: ok 
+  PASS  T17: ok 
+  PASS  T19: ok 
+
+PASS: 9 / FAIL: 0

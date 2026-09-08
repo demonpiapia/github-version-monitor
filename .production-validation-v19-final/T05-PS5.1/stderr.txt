@@ -1,0 +1,1 @@
+﻿stderr merged into stdout.txt via 2>&1 redirect (PS5.1 -File mode)

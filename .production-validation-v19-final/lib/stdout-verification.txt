@@ -1,0 +1,39 @@
+# Stdout 透传独立验证 [M3]
+
+## 执行命令
+
+```powershell
+pwsh -NoProfile -NonInteractive -File .production-validation-v19-final\lib\run-full-pipeline.ps1 -Base .production-validation-v19-final\stdout-test-base *>&1 > .production-validation-v19-final\lib\stdout-raw.txt
+```
+
+- 运行环境：PowerShell 7.x（`pwsh`）
+- Fixture：1 个仓库（microsoft/vscode）
+- 退出码：0
+- 输出大小：1199 bytes
+- 原始输出：`.production-validation-v19-final\lib\stdout-raw.txt`
+
+## 关键标记核验
+
+| 标记 | 期望来源 | 实际命中行 | 结果 |
+|---|---|---|---|
+| `BACKUP_OK\|` | Step 1 (SKILL L228) | L1 `BACKUP_OK\|20260908-131154224` | PASS |
+| `FETCH_COMPLETE\|` | Step 2 (SKILL L417) | L2 `FETCH_COMPLETE\|apiOk=1 apiErr=0 total=1` | PASS |
+| `SUMMARY\|` | Step 2 (SKILL L418) | L3 `SUMMARY\|total=1 apiOK=1 ...` | PASS |
+| JSON 机器接口 | Step 2 (SKILL L420) | L4-L41 | PASS |
+| `REVIEW_WRITE_OK\|` | Step 4 (SKILL L504) | L42 `REVIEW_WRITE_OK\|复核完成：1 项` | PASS |
+| `COMMIT_OK\|` | Step 5 (SKILL L623) | L43 `COMMIT_OK\|已原子替换主 md` | PASS |
+| `RUN_STATUS\|success\|` | Step 5 (SKILL L646) | L44 `RUN_STATUS\|success\|fetch + 必要 review + commit + lock release 完成。` | PASS |
+
+## 结论
+
+**stdout 透传正常。**
+
+- 5 个 step 通过 dot-source 串行执行，stdout 完整透传到 `-File` 模式的最终输出流。
+- 所有 7 个关键标记（BACKUP_OK / FETCH_COMPLETE / SUMMARY / JSON / REVIEW_WRITE_OK / COMMIT_OK / RUN_STATUS|success|）均在 stdout 中出现，顺序与 SKILL 步骤一致。
+- 无需逐 step 执行；`run-full-pipeline.ps1` 的 dot-source 模式可用。
+
+## 附注
+
+- 本次运行未注入 mock，Step 2 实际调用 GitHub REST API（`microsoft/vscode` 返回 `1.136.1` / `2026-09-03`）。
+- `versionJump=true`（major 1→1, minor 80→136 差 56 ≥ 50 触发 L118 条件），`review=true`，Step 4 复核正常执行。
+- 全流程无 `RUNTIME_ERROR` / `VALIDATE_ERROR` / `PARSE_ERROR` / `LOCKED` 等异常标记。

@@ -1,0 +1,66 @@
+# Mock Contract Self-Check [D3]
+
+对齐目标：SKILL-v1.9.md L341-L366（Step 2 的 Invoke-RestMethod 消费契约）。
+
+## 契约提取（SKILL L341-L366）
+
+成功路径：
+- L341 `if ($j.tag_name -and $j.published_at)` → `ok`
+- L346 `elseif ($j.tag_name)` → `metadata_incomplete`
+- L349 `else` → `invalid_response`
+
+异常路径：
+- L354 `$_.Exception.Response.StatusCode` → `[int]$code`
+- L356-357 `$_.Exception.Response.Headers` → `Get-ResponseHeaderValue $Headers 'X-RateLimit-Remaining'`
+- L359-366 状态机分类：401 / 404 / 429 / 403(RL=0) / 403(RL>0) / ≥500 / 其他 / 无 Response
+
+## Headers 类型选择记录
+
+**选择：`System.Net.WebHeaderCollection`（外层）+ `HttpResponseMessage.Headers`（内层透传）**
+
+理由：
+1. SKILL L322-328 `Get-ResponseHeaderValue` 支持三种访问分支：
+   - `WebHeaderCollection.Get($Name)` — 直接命中
+   - `$Headers[$Name]` — 索引器
+   - `$Headers.TryGetValues($Name, [ref]$values)` — `HttpResponseHeaders` 分支
+2. 真实 `Invoke-RestMethod` 抛出的 `WebException.Response` 是 `HttpResponseMessage`，其 `.Headers` 为 `HttpResponseHeaders`。
+3. `HttpResponseHeaders` 支持 `TryGetValues`（L326 分支命中）；`WebHeaderCollection` 不支持 `TryGetValues`，但支持 `.Get()`（L324 分支命中）。
+4. 为贴近真实响应形状，异常对象的 `.Response` 使用 `HttpResponseMessage`，其 `.Headers` 为 `HttpResponseHeaders`；构造时用 `TryAddWithoutValidation` 写入 `X-RateLimit-Remaining`。
+5. 兼容 PS5.1：`System.Net.Http.HttpResponseMessage` 在 PS5.1 中需 `Add-Type -AssemblyName System.Net.Http`；`System.Net.WebHeaderCollection` 是 .NET Framework 原生类型，PS5.1 和 PS7 均可用。
+
+## 各场景 mock 返回值 / 异常对象形状
+
+| 场景 | 返回值类型 | 关键成员 | 对齐验证 |
+|---|---|---|---|
+| normal | PSCustomObject | `tag_name='v2.0.0'`, `published_at='2026-09-07T12:00:00Z'` | L341 命中 → `ok` |
+| versionJump | PSCustomObject | `tag_name='v2.0.0'`, `published_at='2026-09-07T12:00:00Z'` | L341 命中 → `ok`；versionJump 由 L380 状态机基于 prevGitVer 计算，不依赖 mock |
+| metadata_incomplete | PSCustomObject | `tag_name='v1.0.0'`（无 `published_at`） | L346 命中 → `metadata_incomplete` |
+| invalid_response | PSCustomObject | `tag_name=''` | L349 命中 → `invalid_response` |
+| not_found | WebException | `.Response.StatusCode=NotFound(404)` | L361 命中 → `not_found` |
+| auth_error | WebException | `.Response.StatusCode=Unauthorized(401)` | L360 命中 → `auth_error` |
+| rate_limited_429 | WebException | `.Response.StatusCode=TooManyRequests(429)` | L362 命中 → `rate_limited` |
+| rate_limited_403 | WebException | `.Response.StatusCode=Forbidden(403)`, `.Response.Headers['X-RateLimit-Remaining']='0'` | L363 命中（RL='0'）→ `rate_limited` |
+| forbidden_403 | WebException | `.Response.StatusCode=Forbidden(403)`, `.Response.Headers['X-RateLimit-Remaining']='50'` | L363 命中（RL='50'）→ `forbidden` |
+| server_error | WebException | `.Response.StatusCode=InternalServerError(500)` | L364 命中（≥500）→ `server_error` |
+| http_error | WebException | `.Response.StatusCode=Found(302)` | L365 命中（其他非零）→ `http_error` |
+| network_error | System.Exception | 无 `.Response` | L366 命中（else）→ `network_error` |
+
+## 与 SKILL 提取表达式的对齐验证
+
+| SKILL 表达式 | 场景 | mock 值 | 结果 |
+|---|---|---|---|
+| `$j.tag_name` | normal | `'v2.0.0'`（truthy） | 通过 L341 |
+| `$j.published_at` | normal | `'2026-09-07T12:00:00Z'`（truthy） | 通过 L341 |
+| `$j.tag_name` | metadata_incomplete | `'v1.0.0'`（truthy） | 跳过 L341，进入 L346 |
+| `$j.published_at` | metadata_incomplete | `$null`（falsy） | L346 命中 |
+| `$j.tag_name` | invalid_response | `''`（falsy） | L349 命中 |
+| `$_.Exception.Response.StatusCode` | not_found | `[HttpStatusCode]::NotFound` → `[int]404` | L361 命中 |
+| `$_.Exception.Response.Headers['X-RateLimit-Remaining']` | rate_limited_403 | `'0'` | L357 返回 `'0'` → L363 命中 `rate_limited` |
+| `$_.Exception.Response.Headers['X-RateLimit-Remaining']` | forbidden_403 | `'50'` | L357 返回 `'50'` → L363 命中 `forbidden` |
+| `$_.Exception.Response` | network_error | `$null` | L354 跳过，L356 跳过，L366 命中 |
+
+## 关键结论
+
+- Headers 类型选择：`System.Net.WebHeaderCollection` 作为构造输入，`HttpResponseMessage.Headers`（`HttpResponseHeaders`）作为异常对象的 `.Response.Headers`。SKILL L326 `TryGetValues` 分支可命中。
+- 所有 12 个场景的 mock 返回值/异常对象形状与 SKILL L341-L366 的提取表达式一一对齐，无遗漏。
+- `network_error` 场景使用 `System.Exception`（无 `.Response`），确保 L354/L356 均跳过，最终 L366 命中。

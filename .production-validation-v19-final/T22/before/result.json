@@ -1,0 +1,43 @@
+{
+  "runAt": "2026-09-08T06:06:03.9890471+00:00",
+  "stats": {
+    "total": 1,
+    "apiOk": 1,
+    "apiErr": 0,
+    "synced": 0,
+    "yes": 1,
+    "uninstalled": 0,
+    "pendingReview": 1,
+    "newReleases": 1,
+    "flips": 1,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "vscode",
+      "gitVer": "1.136.1",
+      "gitDate": "2026-09-03",
+      "localVer": "1.0.0",
+      "flag": "yes",
+      "prevFlag": "no",
+      "latest": "1.136.1",
+      "publishedUtc": "2026-09-03T15:25:32Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": true,
+      "versionJump": true,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "version_jump"
+      ],
+      "error": ""
+    }
+  ],
+  "review": {
+    "performed": false,
+    "items": []
+  }
+}

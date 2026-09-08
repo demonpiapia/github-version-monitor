@@ -1,0 +1,44 @@
+BACKUP_OK|20260908-131238481
+FETCH_COMPLETE|apiOk=1 apiErr=0 total=1
+SUMMARY|total=1 apiOK=1 apiErr=0 synced=0 yes=1 uninstalled=0 pendingReview=1 newReleases=1 flips=0 token=unset
+{
+  "stats": {
+    "total": 1,
+    "apiOk": 1,
+    "apiErr": 0,
+    "synced": 0,
+    "yes": 1,
+    "uninstalled": 0,
+    "pendingReview": 1,
+    "newReleases": 1,
+    "flips": 0,
+    "token": "unset"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "vscode",
+      "gitVer": "1.136.1",
+      "gitDate": "2026-09-03",
+      "localVer": "1.0.0",
+      "flag": "yes",
+      "prevFlag": "yes",
+      "latest": "1.136.1",
+      "publishedUtc": "2026-09-03T15:25:32Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": false,
+      "versionJump": true,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "version_jump"
+      ],
+      "error": ""
+    }
+  ]
+}
+REVIEW_WRITE_OK|复核完成：1 项；stats/items 保持不变。
+COMMIT_OK|已原子替换主 md（数据行 1，yes/no 校验通过，repo 集合一致）。
+RUN_STATUS|success|fetch + 必要 review + commit + lock release 完成。

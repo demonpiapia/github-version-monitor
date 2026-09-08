@@ -1,0 +1,43 @@
+{
+  "runAt": "2026-09-08T08:12:49.7873230+00:00",
+  "stats": {
+    "total": 1,
+    "apiOk": 0,
+    "apiErr": 1,
+    "synced": 0,
+    "yes": 0,
+    "uninstalled": 0,
+    "pendingReview": 1,
+    "newReleases": 0,
+    "flips": 0,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "test/test-repo",
+      "name": "test",
+      "gitVer": "v1.0.0",
+      "gitDate": "2026-01-01",
+      "localVer": "1.0.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "http_error",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "api_failure"
+      ],
+      "error": "Mock http_error"
+    }
+  ],
+  "review": {
+    "performed": false,
+    "items": []
+  }
+}

@@ -1,0 +1,14 @@
+
+Name                  PSIsContainer
+----                  -------------
+.monitor                       True
+.output                        True
+after                          True
+before                         True
+directory-listing.txt         False
+md-after.md                   False
+md-before.md                  False
+run-t46.ps1                   False
+stderr.txt                    False
+stdout.txt                    False
+

@@ -1,0 +1,102 @@
+diff --git a/SKILL-v1.8.md b/SKILL-v1.9.md
+index 9023f44..e95c0d9 100644
+--- a/SKILL-v1.8.md
++++ b/SKILL-v1.9.md
+@@ -5,7 +5,7 @@ description: GitHub 项目版本监测（自动化版·纯 PowerShell）——
+ 
+ # GitHub 项目版本监测（自动化版·纯 PowerShell）
+ 
+-> 版本：v1.8
++> 版本：v1.9
+ > 生产执行基准：PowerShell 7.x；PowerShell 5.1 仅作兼容性验证环境。
+ 
+ ## 0. 受众与职责
+@@ -476,7 +476,33 @@ function Release-LockSafely { try{$raw=Get-Content $lockPath -Raw -ErrorAction S
+ try{$raw=Get-Content $lockPath -Raw -ErrorAction Stop;if($raw-notmatch('pid='+[regex]::Escape([string]$PID)+';')){throw 'ownership mismatch'};$startTok=if($raw-match 'start=([^;\r\n]+)'){$Matches[1]}else{[DateTimeOffset]::UtcNow.ToString('o')};$fs=[IO.File]::Open($lockPath,[IO.FileMode]::Open,[IO.FileAccess]::ReadWrite,[IO.FileShare]::None);try{$fs.SetLength(0);$b=[Text.Encoding]::UTF8.GetBytes(('pid={0};start={1};step=4;beat={2}'-f $PID,$startTok,[DateTimeOffset]::UtcNow.ToString('o')));$fs.Write($b,0,$b.Length)}finally{$fs.Close()}}catch{Write-Output ('RUNTIME_ERROR|步骤4 heartbeat 失败：{0}'-f $_.Exception.Message);return}
+ $doc=Get-Content $resultPath -Raw|ConvertFrom-Json;$origStats=$doc.stats|ConvertTo-Json -Depth 8 -Compress;$origItems=$doc.items|ConvertTo-Json -Depth 8 -Compress;$candidates=@($doc.items|Where-Object{$_.review-eq $true});$reviewItems=@();$headers=@{'User-Agent'='workbuddy-version-monitor';'Accept'='application/vnd.github+json';'X-GitHub-Api-Version'='2026-03-10'};if($env:GITHUB_TOKEN){$headers['Authorization']='Bearer '+$env:GITHUB_TOKEN}
+ foreach($it in $candidates){if($it.status-eq 'rate_limited'){$reviewItems+=[PSCustomObject]@{repo=$it.repo;sources=@('releases_latest');finding='主查询已限流；不重试、不追加复核请求。';conclusion='pending';reasons=@($it.reviewReasons);apiListStatus='skipped_rate_limited';apiList=@();htmlStatus='skipped_rate_limited';htmlTitle=''};continue};$apiList=@();$apiListStatus='error';$htmlStatus='error';$htmlTitle='';$parts=@();try{$apiList=@(Invoke-RestMethod -Uri "https://api.github.com/repos/$($it.repo)/releases?per_page=5" -Headers $headers -TimeoutSec 20)|ForEach-Object{$pub='';if($_.published_at){try{$pub=ConvertTo-UtcIso $_.published_at}catch{}};[PSCustomObject]@{tag_name=[string]$_.tag_name;published_at=$pub;prerelease=[bool]$_.prerelease;draft=[bool]$_.draft}};$apiListStatus='ok'}catch{$parts+='列表接口复核请求失败。'};if($apiListStatus-eq 'ok' -and $apiList.Count -gt 0){$parts+=('列表接口前{0}项：{1}'-f $apiList.Count,(($apiList|ForEach-Object{"$($_.tag_name)|pre=$($_.prerelease)|draft=$($_.draft)|published=$($_.published_at)"})-join '; '))}elseif($apiListStatus-eq 'ok'){$parts+='列表接口返回空集合。'};try{$html=Invoke-WebRequest -Uri "https://github.com/$($it.repo)/releases" -Headers @{'User-Agent'='workbuddy-version-monitor'} -TimeoutSec 20 -UseBasicParsing;$htmlStatus=[string]$html.StatusCode;$htmlTitle=[regex]::Match([string]$html.Content,'<title>\s*(?<t>.*?)\s*</title>','IgnoreCase').Groups['t'].Value;$parts+=('HTML 诊断 HTTP {0}；页面标题仅供诊断：{1}'-f $htmlStatus,$htmlTitle)}catch{$parts+='HTML 诊断请求失败。'};$reviewItems+=[PSCustomObject]@{repo=$it.repo;sources=@('releases_api','html');finding=($parts-join ' ');conclusion='pending';reasons=@($it.reviewReasons);apiListStatus=$apiListStatus;apiList=@($apiList);htmlStatus=$htmlStatus;htmlTitle=$htmlTitle}}
+-$doc.review=[PSCustomObject]@{performed=$true;items=@($reviewItems)};$newStats=$doc.stats|ConvertTo-Json -Depth 8 -Compress;$newItems=$doc.items|ConvertTo-Json -Depth 8 -Compress;if($newStats-ne $origStats-or $newItems-ne $origItems){Remove-Item $tmpPath -Force -ErrorAction SilentlyContinue;Write-Output 'REVIEW_WRITE_ERROR|review 修改了 stats/items，拒绝覆盖 result.json。';Release-LockSafely;return};$doc|ConvertTo-Json -Depth 8|Set-Content -Path $tmpPath -Encoding UTF8;try{$check=Get-Content $tmpPath -Raw|ConvertFrom-Json}catch{$check=$null};if($null-eq $check-or $null-eq $check.review-or ($check.stats|ConvertTo-Json -Depth 8 -Compress)-ne $origStats-or ($check.items|ConvertTo-Json -Depth 8 -Compress)-ne $origItems){Remove-Item $tmpPath -Force -ErrorAction SilentlyContinue;Write-Output 'REVIEW_WRITE_ERROR|review 临时 JSON 校验失败，不替换 result.json。';Release-LockSafely;return};try{Move-Item $tmpPath $resultPath -Force}catch{Remove-Item $tmpPath -Force -ErrorAction SilentlyContinue;Write-Output ('REVIEW_WRITE_ERROR|review 原子替换失败：{0}'-f $_.Exception.Message);Release-LockSafely;return};Write-Output ('REVIEW_WRITE_OK|复核完成：{0} 项；stats/items 保持不变。'-f $reviewItems.Count)
++$doc.review=[PSCustomObject]@{performed=$true;items=@($reviewItems)};$newStats=$doc.stats|ConvertTo-Json -Depth 8 -Compress;$newItems=$doc.items|ConvertTo-Json -Depth 8 -Compress;if($newStats-ne $origStats-or $newItems-ne $origItems){Remove-Item $tmpPath -Force -ErrorAction SilentlyContinue;Write-Output 'REVIEW_WRITE_ERROR|review 修改了 stats/items，拒绝覆盖 result.json。';Release-LockSafely;return};try {
++    $doc|ConvertTo-Json -Depth 8|Set-Content -Path $tmpPath -Encoding UTF8
++} catch {
++    Remove-Item $tmpPath -Force -ErrorAction SilentlyContinue
++    $released=Release-LockSafely
++    Write-Output ('REVIEW_WRITE_ERROR|review 临时文件写入失败：{0}' -f $_.Exception.Message)
++    if (-not $released) { Write-Output 'RUNTIME_ERROR|review 写入失败后锁释放失败，保留锁供陈锁机制接管。' }
++    return
++}
++try { $check=Get-Content $tmpPath -Raw|ConvertFrom-Json } catch { $check=$null }
++if($null-eq $check-or $null-eq $check.review-or ($check.stats|ConvertTo-Json -Depth 8 -Compress)-ne $origStats-or ($check.items|ConvertTo-Json -Depth 8 -Compress)-ne $origItems){
++    Remove-Item $tmpPath -Force -ErrorAction SilentlyContinue
++    Write-Output 'REVIEW_WRITE_ERROR|review 临时 JSON 校验失败，不替换 result.json。'
++    $released=Release-LockSafely
++    if (-not $released) { Write-Output 'RUNTIME_ERROR|review 失败后锁释放失败，保留锁供陈锁机制接管。' }
++    return
++}
++try {
++    Move-Item $tmpPath $resultPath -Force
++} catch {
++    Remove-Item $tmpPath -Force -ErrorAction SilentlyContinue
++    Write-Output ('REVIEW_WRITE_ERROR|review 原子替换失败：{0}'-f $_.Exception.Message)
++    $released=Release-LockSafely
++    if (-not $released) { Write-Output 'RUNTIME_ERROR|review 原子替换失败后锁释放失败，保留锁供陈锁机制接管。' }
++    return
++}
++Write-Output ('REVIEW_WRITE_OK|复核完成：{0} 项；stats/items 保持不变。'-f $reviewItems.Count)
+ ```
+ 
+ 复核结论只影响 agent 撰写的「备注」段与汇报第三优先级。
+@@ -557,8 +583,25 @@ $newText = ($outLines -join "`r`n") + "`r`n"
+ 
+ # 事务式写入：临时文件 → 结构校验 → 原子替换
+ $tmp = "$md.tmp"
+-Set-Content -Path $tmp -Value $newText -Encoding UTF8 -NoNewline
+-$check = Get-Content $tmp -Raw
++try {
++    Set-Content -Path $tmp -Value $newText -Encoding UTF8 -NoNewline
++    $check = Get-Content $tmp -Raw -ErrorAction Stop
++} catch {
++    Remove-Item $tmp -Force -ErrorAction SilentlyContinue
++    Write-Output ('RUNTIME_ERROR|主 md 临时文件写入/读取失败：{0}' -f $_.Exception.Message)
++    $lockReleased = $false
++    try {
++        $lockRaw = Get-Content $lockPath -Raw -ErrorAction Stop
++        $lockPid = if ($lockRaw -match 'pid=(\d+)') { [int]$Matches[1] } else { -1 }
++        if ($lockPid -eq $PID) {
++            Remove-Item $lockPath -Force -ErrorAction Stop
++            $lockReleased = -not (Test-Path $lockPath)
++        }
++    } catch { $lockReleased = $false }
++    if (-not $lockReleased) { Write-Output 'RUNTIME_ERROR|主 md 临时文件失败后锁释放失败，保留锁供陈锁机制接管。' }
++    Write-Output 'RUN_STATUS|failed|主 md 未提交。'
++    return
++}
+ $rows2 = @(($check -split "`r?`n") | Where-Object { $_ -match '^\s*\|\s*\d+\s*\|' })
+ $badFlag = @($rows2 | Where-Object {
+     $cells = @($_.Trim().Trim('|') -split '\|' | ForEach-Object { $_.Trim() })
+@@ -575,9 +618,14 @@ $commitSucceeded=$false
+ $header='| # | 项目名称 | GIT最新版本 | GIT更新日期 | 本地版本 | 是否更新 |'
+ $headerOk=($check -split "`r?`n"|Where-Object{$_.Trim() -ceq $header}).Count -eq 1
+ if ($rows2.Count -eq $items.Count -and $badFlag.Count -eq 0 -and $repoMatch -and $headerOk -and $anchorsOk) {
+-    Move-Item -Path $tmp -Destination $md -Force
+-    $commitSucceeded=$true
+-    Write-Output "COMMIT_OK|已原子替换主 md（数据行 $($rows2.Count)，yes/no 校验通过，repo 集合一致）。"
++    try {
++        Move-Item -Path $tmp -Destination $md -Force
++        $commitSucceeded=$true
++        Write-Output "COMMIT_OK|已原子替换主 md（数据行 $($rows2.Count)，yes/no 校验通过，repo 集合一致）。"
++    } catch {
++        Remove-Item $tmp -Force -ErrorAction SilentlyContinue
++        Write-Output ('RUNTIME_ERROR|主 md 原子替换失败：{0}' -f $_.Exception.Message)
++    }
+ } else {
+     Remove-Item $tmp -Force -ErrorAction SilentlyContinue
+     Write-Output ("VALIDATE_ERROR|临时文件结构校验未过（数据行 {0} vs 应有 {1}，非法 flag 行 {2}，repo 集合一致={3}），不替换主 md；主 md 与备份保持原状。" -f $rows2.Count, $items.Count, $badFlag.Count, $repoMatch)
+@@ -713,6 +761,7 @@ FETCH_COMPLETE
+ 
+ ## 15. Changelog
+ 
++- **v1.9（2026-09-08 运行时异常清理与锁释放修复轮）**：①修复 v1.8 T38：Step 4 `result.review.tmp` 写入失败现在进入受保护异常分支，清理临时文件并尝试释放运行锁，最终不进入 Step 5 ②修复 v1.8 T23：Step 5 主 md 临时文件写入/读取失败现在清理临时文件、释放运行锁并输出 `RUN_STATUS|failed|`；主 md 原子替换失败同样清理临时文件并进入统一 failed 终态 ③将异常路径的 `tmp` 清理、lock release、最终失败状态形成显式闭环 ④保留 v1.8 的 `$commitSucceeded`、`.output` 状态路径、PS7 生产基准与其他核心能力不变。
+ - **v1.8（2026-09-08 生产验证 P1 修复 + 状态路径同步轮）**：①修复 v1.7 T37/T43 暴露的 `$commitSucceeded` 状态遗漏：主 md 原子替换成功后立即置 `$commitSucceeded=$true`，确保正常提交可正确输出 `RUN_STATUS|success|` ②将 `COMMIT_OK|` 与 `$commitSucceeded=$true` 的对应关系、以及 `RUN_STATUS|success|` 必须同时满足 commit 与 lock release 成功写入 invariant ③将持久化状态文件路径统一为 `.output/GitHub更新监测列表.md`，并同步所有解析、写回、汇报引用 ④其余 v1.7 能力保持不变。
+ - **v1.7（2026-09-07 从仓库 v1.6 正确派生的生产兼容修复轮）**：①完整保留 v1.6 的 `versionJump` / `dateSuspicious` / `reviewReasons` / schema contract / `result.fetch.tmp` / `RUN_STATUS` / 404→`not_found` / lock ownership-safe 等能力 ②新增 `Get-ResponseHeaderValue`，兼容 Windows PowerShell 5.1 与 PowerShell 7+ header 类型 ③修复 T04：403 + `X-RateLimit-Remaining=0` 只有真实读取到 `0` 才判 `rate_limited` ④生产执行基准明确为 PowerShell 7.x，PS5.1 仅作兼容性验证。
+ 

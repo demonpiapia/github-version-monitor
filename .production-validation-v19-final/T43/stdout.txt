@@ -1,0 +1,148 @@
+BACKUP_OK|20260908-145948290
+FETCH_COMPLETE|apiOk=5 apiErr=1 total=6
+SUMMARY|total=6 apiOK=5 apiErr=1 synced=1 yes=2 uninstalled=1 pendingReview=3 newReleases=4 flips=2 token=set
+{
+  "stats": {
+    "total": 6,
+    "apiOk": 5,
+    "apiErr": 1,
+    "synced": 1,
+    "yes": 2,
+    "uninstalled": 1,
+    "pendingReview": 3,
+    "newReleases": 4,
+    "flips": 2,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "vscode",
+      "gitVer": "1.136.1",
+      "gitDate": "2026-09-03",
+      "localVer": "1.0.0",
+      "flag": "yes",
+      "prevFlag": "no",
+      "latest": "1.136.1",
+      "publishedUtc": "2026-09-03T15:25:32Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": true,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    },
+    {
+      "repo": "kubernetes/kubernetes",
+      "name": "kubernetes",
+      "gitVer": "v1.37.0",
+      "gitDate": "2026-08-26",
+      "localVer": "v1.37.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "v1.37.0",
+      "publishedUtc": "2026-08-26T16:29:12Z",
+      "status": "ok",
+      "cmp": "eq",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    },
+    {
+      "repo": "nodejs/node",
+      "name": "node",
+      "gitVer": "v26.8.1",
+      "gitDate": "2026-08-27",
+      "localVer": "未安装",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "v26.8.1",
+      "publishedUtc": "2026-08-26T22:10:37Z",
+      "status": "ok",
+      "cmp": "",
+      "isNew": true,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    },
+    {
+      "repo": "rust-lang/rust",
+      "name": "rust",
+      "gitVer": "1.98.1",
+      "gitDate": "2026-09-03",
+      "localVer": "v1.2.3a",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "1.98.1",
+      "publishedUtc": "2026-09-03T13:14:07Z",
+      "status": "ok",
+      "cmp": "incomparable",
+      "isNew": true,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "incomparable_version"
+      ],
+      "error": ""
+    },
+    {
+      "repo": "test/nonexistent-repo-12345",
+      "name": "nonexistent",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "1.0.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "not_found",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "not_found"
+      ],
+      "error": "Response status code does not indicate success: 404 (Not Found)."
+    },
+    {
+      "repo": "vercel/next.js",
+      "name": "next.js",
+      "gitVer": "v16.3.4",
+      "gitDate": "2026-09-01",
+      "localVer": "v10.0.0",
+      "flag": "yes",
+      "prevFlag": "no",
+      "latest": "v16.3.4",
+      "publishedUtc": "2026-08-31T20:02:15Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": true,
+      "versionJump": true,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "version_jump"
+      ],
+      "error": ""
+    }
+  ]
+}
+REVIEW_WRITE_OK|复核完成：3 项；stats/items 保持不变。
+COMMIT_OK|已原子替换主 md（数据行 6，yes/no 校验通过，repo 集合一致）。
+RUN_STATUS|success|fetch + 必要 review + commit + lock release 完成。

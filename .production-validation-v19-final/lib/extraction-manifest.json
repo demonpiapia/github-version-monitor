@@ -1,0 +1,58 @@
+{
+  "source_file": "SKILL-v1.9.md",
+  "source_sha256": "23B4CA59540F69A20A29AC38AF2B70A350C4B4CAEEC27B4A200F98CDE1D89BB1",
+  "extractions": [
+    {
+      "file": "step1.ps1",
+      "source_lines": "160-229",
+      "sha256": "F07C486AF3FCE83E24904041CD1D471466FE27DDE3DB38416553DFB864A1A689"
+    },
+    {
+      "file": "step2.ps1",
+      "source_lines": "240-421",
+      "sha256": "53BB5DA2360A83DE4387A9547997D1E6388215E9ECC9D90AE50D697398AEBFEF"
+    },
+    {
+      "file": "step3.ps1",
+      "source_lines": "431-450",
+      "sha256": "F8CE8F248BFDA24884AD1092392A4199861DB3AE55E41C1AD292C4511449DBFF"
+    },
+    {
+      "file": "step4.ps1",
+      "source_lines": "473-505",
+      "sha256": "36A85E634B689E36732AD00647CE20217B10C79653A0A847168759EB0E680077"
+    },
+    {
+      "file": "step5-full.ps1",
+      "source_lines": "517-650",
+      "sha256": "81C4D352AF2C5C6A5926453E4F7A81BE3B0E4A6EAB7A572542F77053A1721AA9"
+    },
+    {
+      "file": "step5-t39-harness.ps1",
+      "source_lines": "517-650 with injection at L632-L633",
+      "sha256": "8E6C92878698636E581F601C6E62AFC4ABD2B001D5A492B9965EBF5ABD2E4CDA"
+    }
+  ],
+  "auxiliary_files": [
+    {
+      "file": "run-full-pipeline.ps1",
+      "sha256": "73D6EBBDE44854784A14BACAA99DB0F24095DE050C956F3FA24EE9C72FAC2856"
+    },
+    {
+      "file": "mock-invoke-restmethod.ps1",
+      "sha256": "BCCB07B677B87E8A0F8304D76C90053F42650BDBC486AAFA56D9BC0EF4FD1574"
+    },
+    {
+      "file": "step2-mock-harness.ps1",
+      "sha256": "C4DA1273E2F6C5B514582187EAEEE52AECF941C36C8FB102225748BE1573AA7F"
+    },
+    {
+      "file": "create-fixture.ps1",
+      "sha256": "5BD9251E68B3FD4B7F964A98AD72E2658D81C5721BC6849C10D7503443A52538"
+    },
+    {
+      "file": "extract-code.ps1",
+      "sha256": "A8C9866A9EF8D346167DFFCE9717444287E6EAD32E3AD4063905A4CA86211613"
+    }
+  ]
+}

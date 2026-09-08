@@ -1,0 +1,1 @@
+﻿FIXTURE_OK|d:\AI\Workspace\automatic\github-version-monitor\.production-validation-v19-final\T04-PS5.1\.output\GitHub更新监测列表.md|1 repos
