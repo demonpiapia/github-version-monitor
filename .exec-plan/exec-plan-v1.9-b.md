@@ -1,6 +1,6 @@
 # SKILL-v1.9 定向最终验证 — 执行计划
 
-> **版本**: exec-plan-v1.9-e（基于 exec-plan-v1.9-d 修订，采纳第三轮 CodeBuddy 审计 D1-D4）
+> **版本**: exec-plan-v1.9-b（基于 exec-plan-v1.9-a 修订，纳入 CodeBuddy 独立审计结论）
 > **制定日期**: 2026-09-08
 > **依据**: `.GPT/Production Validation Prompt — SKILL-v1.9 Targeted Final Validation.md`（唯一事实源）
 > **被测对象**: `SKILL-v1.9.md`
@@ -23,7 +23,7 @@ T22: Step 5 md.tmp 创建/写入异常 → 异常冒泡 → lock 残留
 T23: Step 5 Move-Item 原子替换异常 → tmp 残留 → lock 残留
 ```
 
-[^1]: Prompt §0 列 3 个 P2。v1.8 报告 L.2 正式计数 P2=2（T38+T23），因 T22-v18 测试结论为 PASS。本计划沿用 Prompt 口径"3 个 P2"，但注明 v1.8 报告实际 P2=2。**此脚注仅供信息参考，不影响任何测试设计决策（§0.5 独立性原则）**。
+[^1]: Prompt §0 列 3 个 P2。v1.8 报告 L.2 正式计数 P2=2（T38+T23），因 T22-v18 测试结论为 PASS。本计划沿用 Prompt 口径"3 个 P2"，但注明 v1.8 报告实际 P2=2。
 
 v1.9 的唯一修复目标：上述异常不污染主状态 → 清理能够安全清理的 tmp → 正确处理 lock → 输出明确失败状态 → 不得伪装 success。
 
@@ -82,31 +82,6 @@ SKILL 中 API URL 硬编码为 `https://api.github.com`（SKILL L340/478），�
 
 **T46 运行目录**：T46 测试在 `.production-validation-v19-final/T46/` 目录下运行，通过 `GITHUB_VERSION_MONITOR_BASE` 指向该目录，不触碰生产根目录 [M2 修订]。
 
-### 0.5 独立性原则 [v1.9-c 新增]
-
-本计划是"独立"验证的执行计划。以下原则适用于计划制定与执行全过程：
-
-```
-1. 所有测试设计决策必须基于以下两个事实源的直接阅读：
-   - SKILL-v1.9.md 源码（行号 + 代码逻辑）
-   - Production Validation Prompt 原文
-
-2. 旧版本验证报告（v17/v18）的结论不得作为本轮测试设计的依据。
-   旧报告中的发现只能作为"待独立验证的声明"，不能作为已验证事实。
-
-3. 如果在计划制定过程中引用了旧报告的发现，
-   必须在执行阶段由 sub-agent 独立验证该发现是否成立。
-   验证方法：实际运行相关脚本/工具，记录独立证据。
-
-4. 旧报告的"结论"（如 PASS/FAIL/P2 计数）仅供信息参考，
-   不得影响本轮任何测试的构造方法、验证项或判定逻辑。
-
-5. 链式继承风险：如果 v1.8 引用了 v1.7 的结论，
-   v1.7 引用了 v1.6 的结论，… 一直回溯到 v1.1，
-   那么最初版本的任何系统性偏差将沿链传播到所有后续版本。
-   本计划通过上述原则切断此继承链。
-```
-
 ---
 
 ## 1. 模块分解
@@ -122,7 +97,7 @@ SKILL 中 API URL 硬编码为 `https://api.github.com`（SKILL L340/478），�
 | 4 | T39 — Commit 成功 + 锁释放失败 | lib/step5-t39-harness.ps1, fixture | 测试目录 + 证据 | **硬门槛** |
 | 5 | T43 — 全管线 + T46 — 路径契约 | fixture（6 场景）| 2 个测试目录 + 证据 | **关键** |
 | 6 | 状态机 + Schema + Lock 回归 | lib/step2.ps1, fixture | 多个测试目录 + 证据 | 中 |
-| 7 | PS5.1 兼容性回归 | lib/mock-invoke-restmethod.ps1, lib/step2-mock-harness.ps1, PS5.1 | 2 个测试目录 + 证据 | 兼容 |
+| 7 | PS5.1 兼容性回归 | lib/mock-listener.ps1, PS5.1 | 2 个测试目录 + 证据 | 兼容 |
 | 8 | Self-Review | 全部 Phase 0-7 证据 | selfreview.md | 质量控制 |
 | 9 | Final Report + Commit | 全部证据 | production-validation-report-v19-final.md | 收尾 |
 
@@ -295,68 +270,19 @@ skip commit
 
 **设计原因**：SKILL Step 5 中 `$commitSucceeded`（L617/623）和 `$lockReleased`（L634/640）是同进程局部变量。若拆分为两个独立脚本通过 `pwsh -File` 执行，跨进程无法传递变量，导致测试失去区分度。
 
-**实现方式**：仅内联复制（dot-source 不可行）[N1 修订]
-
-> dot-source `step5-full.ps1` 会一次性连续执行完整 Step 5（commit 段 + 锁释放段），不存在"执行至 Move-Item 成功后暂停"的注入点。唯一可行方式是**内联复制 Step 5 代码并注入**。
-
-**注入点**：SKILL L632（`}` — if/else 块结束）与 L633（`# 释放锁前确认 ownership`）之间。此切分点在 try/catch 块外，技术干净。
-
-**注入内容**：在 L632 之后、L633 之前插入：
-```powershell
-# T39 注入：模拟锁被外来 PID 持有
-Set-Content $lockPath -Value "pid=999999;ts=$(Get-Date -Format o)" -Force
-```
-
-**前置变量**：harness 须预置 `$conclusionText` / `$summaryText` / `$noteText`（SKILL L535-543 占位值），否则 Step 5 md 组装失败。[N1]
+**harness 机制**：
+1. 将 Step 5 代码嵌入单个脚本（dot-source 或内联）
+2. 执行至 Move-Item 成功后（`$commitSucceeded=$true` + `COMMIT_OK|`）
+3. 在同进程中修改锁文件 PID 为 999999
+4. 继续执行锁释放部分（ownership 校验失败 → `RUNTIME_ERROR|` + `RUN_STATUS|failed|`）
+5. 所有变量在同一进程作用域内可用
 
 #### Step 6: 创建测试工具
 
 - `lib/run-full-pipeline.ps1` — 串行执行 step1→step5-full
-- `lib/mock-invoke-restmethod.ps1` — mock `Invoke-RestMethod` 覆盖函数库（原 `mock-listener.ps1` 更名，因不再使用 HTTP listener）[N6]
-- `lib/step2-mock-harness.ps1` — mock 测试包装脚本：定义 mock `Invoke-RestMethod` → dot-source `step2.ps1` [N6]
+- `lib/mock-listener.ps1` — HTTP 模拟监听器（用于状态机测试的 mock `Invoke-RestMethod` 覆盖函数）
 - `lib/create-fixture.ps1` — fixture 生成工具
 - `lib/extract-code.ps1` — 代码提取工具
-
-#### Step 6.1: mock 对象 contract [N2]
-
-`mock-invoke-restmethod.ps1` 须按场景返回仿真对象，成员形状与 SKILL 状态机访问路径一致（SKILL L340-366 直接核实）：
-
-**成功路径**（`Invoke-RestMethod` 正常返回）：
-
-| 场景 | mock 返回对象 | SKILL 访问路径 |
-|---|---|---|
-| normal / versionJump | `PSCustomObject` 含 `tag_name`(string) + `published_at`(ISO date) | L341 `$j.tag_name` / `$j.published_at` |
-| metadata_incomplete | `PSCustomObject` 含 `tag_name`(string) 但无 `published_at` | L346-348 |
-| invalid_response | `PSCustomObject` 含空 `tag_name` 或无 `tag_name` | L349-350 |
-
-**异常路径**（`Invoke-RestMethod` 抛异常）：
-
-| 场景 | mock 异常对象 | SKILL 访问路径 |
-|---|---|---|
-| 404 (not_found) | `Exception.Response.StatusCode = 404` | L361 |
-| 401 (auth_error) | `Exception.Response.StatusCode = 401` | L360 |
-| 429 (rate_limited) | `Exception.Response.StatusCode = 429` | L362 |
-| 403+remaining=0 (rate_limited) | `StatusCode = 403` + `Headers['X-RateLimit-Remaining'] = '0'` | L363 |
-| 403+remaining>0 (forbidden) | `StatusCode = 403` + `Headers['X-RateLimit-Remaining'] = '50'` | L363 |
-| 5xx (server_error) | `StatusCode = 500` | L364 |
-| 其他 HTTP (http_error) | `StatusCode = 302` | L365 |
-| network_error | 异常无 `.Exception.Response`（如 timeout） | L366 else 分支 |
-
-**PS5.1 兼容要求**：T04/T05-PS5.1 验证 `Get-ResponseHeaderValue` 对 `System.Net.WebHeaderCollection` 的兼容性。mock 的 `Headers` **必须是 `System.Net.WebHeaderCollection` 实例**（不可用 `Hashtable` 替代），否则兼容性验证无意义。[N2]
-
-**类型规范** [D3 修订·v1.9-e 新增]：
-
-mock 对象成员类型须与 SKILL 提取/比较表达式兼容（SKILL L341-366 直接核实）：
-
-- `Exception.Response.StatusCode`：SKILL L354 以 `[int]$_.Exception.Response.StatusCode` 显式转换后做数值比较（L360-365），因此 mock 侧使用 `int`（如 `404`）或 `System.Net.HttpStatusCode` 枚举实例（如 `[System.Net.HttpStatusCode]::NotFound`）均可兼容；推荐枚举实例以贴近真实响应形状。
-- `X-RateLimit-Remaining` 取值：SKILL L363 以字符串比较（`$rl -eq '0'`），mock Headers 返回值**必须为字符串** `'0'` / `'50'`（不得为 int）。
-- `Exception.Response` 必须真实存在（`$_.Exception.Response` 为真值，SKILL L353-354/L356），network_error 场景（L366 else 分支）则必须**无** `.Response` 或 `.Response.StatusCode` 为 null。
-- **PS7 侧 `Headers` 类型选择**（T04-PS7/T05-PS7）[D3]：二选一并记录于 `lib/mock-contract-selfcheck.txt`——
-  a) `System.Net.WebHeaderCollection`（与 PS5.1 共用同一 mock 库，实现简单；但本轮 `Get-ResponseHeaderValue` 面向 PS7 真实响应的 `HttpResponseHeaders` 分支将无直接覆盖）；
-  b) `System.Net.Http.Headers.HttpResponseHeaders` 形状对象（覆盖更完整，构造复杂度高）。
-  无论选择哪种，最终报告 **J 节** 必须如实记录 PS7 header 分支的覆盖方式（本轮直接覆盖 / v1.7 历史轮验证 / 本轮未覆盖）[D3]。
-
-**对齐自检** [D3 修订·v1.9-e 新增]：mock 函数库构造完成后、任何测试执行前，sub-agent 须做一次 "contract → SKILL 提取表达式" 对齐自检：按 SKILL L341-366 逐成员模拟访问（`tag_name` / `published_at` / `Exception.Response.StatusCode` / `Headers`），确认每个场景取值路径与 contract 表一致，结果记录于 `lib/mock-contract-selfcheck.txt`（含 PS7 Headers 类型选择记录）。
 
 #### Step 7: 生成提取清单 [L8 修订]
 
@@ -379,12 +305,7 @@ mock 对象成员类型须与 SKILL 提取/比较表达式兼容（SKILL L341-36
 
 此清单供 Phase 8 self-review 验证提取脚本与原文一致性。
 
-> **harness 逐字性验证** [N1 修订]：`step5-t39-harness.ps1` 内联复制了 SKILL Step 5 代码并注入一段 PID 修改逻辑。Phase 8 第 4 项验证须对 harness 做受限 diff——与 SKILL 原文 Step 5 代码块仅允许存在一处注入差异（L632-L633 之间的 PID 修改），其余代码须逐字一致。
-
-> **stdout 捕获策略** [M3 修订·v1.9-c 独立验证]：v1.8 报告 N.2 曾声称 `run-full-pipeline.ps1` 在 `-File` 模式下 stdout 未正确透传。**本计划不将此声明作为已验证事实采纳**。改为：Phase 1 代码提取完成后，由 sub-agent 独立运行 `run-full-pipeline.ps1` 一次，实际验证 stdout 透传行为并记录证据（`lib/stdout-verification.txt`）。
-> - 如果独立验证确认 stdout 透传正常 → T37/T43 使用 `run-full-pipeline.ps1` 单次执行 + 捕获 stdout
-> - 如果独立验证确认 stdout 透传异常 → T37/T43 改为逐 step 独立执行 + 拼接 stdout
-> - 无论哪种结果，决策依据是本轮独立验证，而非旧报告声明
+> **stdout 捕获策略** [M3 修订]：v1.8 报告 N.2 记录 `run-full-pipeline.ps1` 在 `-File` 模式下 stdout 未正确透传。T37/T43 不依赖 `run-full-pipeline.ps1` 单次执行捕获 stdout，改为逐 step 独立执行（`pwsh -File step1.ps1` → 捕获 stdout → `pwsh -File step2.ps1` → 捕获 stdout → ...），最终拼接为完整 stdout.txt。`run-full-pipeline.ps1` 仅作为便捷工具保留。
 
 **输出结果**:
 - `.production-validation-v19-final/v18-v19.diff`
@@ -392,16 +313,13 @@ mock 对象成员类型须与 SKILL 提取/比较表达式兼容（SKILL L341-36
 - `.production-validation-v19-final/lib/step1.ps1` ~ `step5-full.ps1`
 - `.production-validation-v19-final/lib/step5-t39-harness.ps1`
 - `.production-validation-v19-final/lib/run-full-pipeline.ps1`
-- `.production-validation-v19-final/lib/mock-invoke-restmethod.ps1` [N6]
-- `.production-validation-v19-final/lib/step2-mock-harness.ps1` [N6]
+- `.production-validation-v19-final/lib/mock-listener.ps1`
 - `.production-validation-v19-final/lib/create-fixture.ps1`
 - `.production-validation-v19-final/lib/extract-code.ps1`
 - `.production-validation-v19-final/lib/extraction-manifest.json`
-- `.production-validation-v19-final/lib/mock-contract-selfcheck.txt` — mock 对象 contract 对齐自检 + PS7 Headers 类型选择记录 [D3·v1.9-e]
-- `.production-validation-v19-final/lib/stdout-verification.txt` — run-full-pipeline.ps1 stdout 透传独立验证证据 [v1.9-c]
 - `.production-validation-v19-final/phase-progress.json`
 
-**主 agent 审查点**: 确认 diff-integrity.md 中 28 项能力逐项核验完成；确认 9 项禁止项检查完成；确认 5 个 step 脚本 + 2 个 harness（`step5-t39-harness.ps1` / `step2-mock-harness.ps1`）+ 4 个辅助工具（`run-full-pipeline.ps1` / `mock-invoke-restmethod.ps1` / `create-fixture.ps1` / `extract-code.ps1`）全部按输出清单产出且提取脚本未修改原文 [D1]；确认 extraction-manifest.json 存在且非空；确认 stdout-verification.txt 与 mock-contract-selfcheck.txt 存在且记录了独立验证结果 [D3]。
+**主 agent 审查点**: 确认 diff-integrity.md 中 28 项能力逐项核验完成；确认 9 项禁止项检查完成；确认 5 个 step 脚本 + 1 个 harness + 4 个工具脚本提取完成且未修改原文；确认 extraction-manifest.json 存在且非空。
 
 ---
 
@@ -461,16 +379,9 @@ T38/lock-after.txt
 **构造方法**: 使 `$md.tmp`（即 `GitHub更新监测列表.md.tmp`）创建或写入失败。[L4 修订]
 
 方法选项：
-- 通过 ACL deny 拒绝当前用户对 `.output` 目录的 CreateFiles 权限 [N3 修订]
-- **注意 1**：Windows `ReadOnly` 属性**不阻止**文件创建，不可作为构造方法
-- **注意 2**：`[System.IO.File]::Open()` 只能打开文件，目录不支持 FileShare 排他锁，不可作为构造方法 [N3]
-
-**ACL 恢复步骤** [N3 修订]：
-1. 构造前记录 `.output` 目录原始 ACL：`Get-Acl $outputDir | Export-Clixml T22/acl-before.xml`
-2. 施加 deny 规则
-3. 测试执行
-4. 测试后还原 ACL：`Import-Clixml T22/acl-before.xml | Set-Acl $outputDir`
-5. 验证还原成功：`Get-Acl $outputDir` 确认 deny 规则已移除
+- 通过 ACL deny 拒绝当前用户对 `.output` 目录的 CreateFiles 权限
+- 以 `[System.IO.File]::Open()` 独占锁定 `.output` 目录（`FileShare::None`）
+- **注意**：Windows `ReadOnly` 属性**不阻止**文件创建，不可作为构造方法
 
 **验证项**:
 ```
@@ -568,10 +479,11 @@ T23/lock-after.txt
 
 **执行**: 在 PS7 中运行完整 Step 1→5 代码 + Step 6 汇报模板。[L9]
 
-> **stdout 捕获策略** [M3 修订·v1.9-c 独立验证]：根据 Phase 1 `lib/stdout-verification.txt` 的独立验证结果决定执行方式：
-> - 如果验证确认 stdout 透传正常 → 使用 `run-full-pipeline.ps1` 单次执行，捕获 stdout
-> - 如果验证确认 stdout 透传异常 → 逐 step 独立执行（`pwsh -File step1.ps1 *>&1 > T37/stdout-step1.txt` → ...），最终拼接为 `T37/stdout.txt`
-> - sub-agent 须在 test-report.md 中记录实际采用的执行方式及依据
+> **stdout 捕获策略** [M3 修订]：不依赖 `run-full-pipeline.ps1` 单次执行，改为逐 step 独立执行并捕获 stdout：
+> 1. `pwsh -NoProfile -NonInteractive -File step1.ps1 *>&1 > T37/stdout-step1.txt`
+> 2. `pwsh -NoProfile -NonInteractive -File step2.ps1 *>&1 > T37/stdout-step2.txt`
+> 3. ... 以此类推
+> 4. 最终拼接为 `T37/stdout.txt`
 
 **验证项**:
 ```
@@ -592,8 +504,8 @@ result.json valid           — JSON 结构完整、stats/items/review 字段存
 ```
 T37/before/
 T37/after/
-T37/stdout.txt              — 完整 stdout（单次执行或拼接，取决于 Phase 1 验证结果）
-T37/stdout-step1.txt ~ stdout-step5.txt  — 各 step 独立 stdout（仅当逐 step 方式时）[M3]
+T37/stdout.txt              — 拼接的完整 stdout
+T37/stdout-step1.txt ~ stdout-step5.txt  — 各 step 独立 stdout [M3]
 T37/stderr.txt
 T37/test-report.md
 T37/md-before.md
@@ -701,7 +613,7 @@ versionJump         — 真实仓库，版本跨越大（major 差 ≥2 或 mino
 
 **执行**: PS7 完整 Step 1→5 代码 + Step 6 汇报模板。[L9]
 
-> **stdout 捕获策略**：同 Phase 3，根据 Phase 1 `lib/stdout-verification.txt` 独立验证结果决定执行方式。[M3·v1.9-c]
+> **stdout 捕获策略**：同 Phase 3，逐 step 独立执行并拼接 stdout。[M3]
 
 **验证项**:
 ```
@@ -727,7 +639,7 @@ lock                 — 锁已释放
 T43/before/
 T43/after/
 T43/stdout.txt
-T43/stdout-step1.txt ~ stdout-step5.txt   — 各 step 独立 stdout（仅当逐 step 方式时）[M3]
+T43/stdout-step1.txt ~ stdout-step5.txt   [M3]
 T43/stderr.txt
 T43/test-report.md
 T43/md-before.md
@@ -778,7 +690,7 @@ T46/root-md-check.txt
 
 **子 agent 输入参数**:
 - 测试目录: `.production-validation-v19-final/`
-- 提取的脚本: `lib/step2.ps1`, `lib/mock-invoke-restmethod.ps1`, `lib/step2-mock-harness.ps1` [N6]
+- 提取的脚本: `lib/step2.ps1`, `lib/mock-listener.ps1`
 - fixture 生成工具: `lib/create-fixture.ps1`
 - 隔离环境变量: `GITHUB_VERSION_MONITOR_BASE` 指向各测试子目录
 
@@ -786,20 +698,20 @@ T46/root-md-check.txt
 
 #### 6.1 状态机回归（Prompt 第 16 节）[M6 修订]
 
-SKILL-v1.9 状态机共有 9 种非 ok 状态（SKILL L132-140 直接核实）。本轮 T18 覆盖全部 9 种。[M6 修订·v1.9-c 独立依据]
+SKILL-v1.9 状态机共有 9 种非 ok 状态（SKILL L132-140 直接核实）。v1.8 报告 N.4 明确记录 `metadata_incomplete` 与 `invalid_response` 未测。本轮 T18 覆盖全部 9 种。
 
-| 测试 | 验证内容 | 构造方法 | API 来源 [N5] | 期望 queryStatus |
-|---|---|---|---|---|
-| T02 | 404 → not_found | mock 返回 404 | mock | `not_found` |
-| T04-PS7 | 403 + remaining=0 → rate_limited | mock 返回 403 + `X-RateLimit-Remaining: 0` | mock | `rate_limited` |
-| T05-PS7 | 403 + remaining>0 → forbidden | mock 返回 403 + `X-RateLimit-Remaining: 50` | mock | `forbidden` |
-| T08 | network_error | mock 抛出异常（无 HTTP response） | mock | `network_error` |
-| T14 | incomparable | 版本格式不可比较（如 `v1.2.3a` vs `v1.2.3`） | mock | `ok` + `cmp=incomparable` + `review=true` |
-| T15 | versionJump | major 差 ≥2 的仓库 | mock（可控版本差） | `ok` + `versionJump=true` + `review=true` |
-| T16 | dateSuspicious | 新 publishedUtc 对应北京时间日期早于上轮 gitDate | mock（可控 published_at） | `ok` + `dateSuspicious=true` + `review=true` |
-| T17 | isFlip | 上轮 `flag=no` → 本轮 `flag=yes` | mock（可控版本翻转） | `ok` + `isFlip=true` |
-| T18 | 状态保留（9 种非 ok 状态） | 9 种 error 状态下 gitVer/gitDate/flag 不变 | mock | 各状态保留上轮状态 |
-| T19 | uninstalled | localVer=未安装 → flag=no（但 GIT 列照常刷新） | mock | `ok` + `flag=no` |
+| 测试 | 验证内容 | 构造方法 | 期望 queryStatus |
+|---|---|---|---|
+| T02 | 404 → not_found | mock `Invoke-RestMethod` 返回 404 | `not_found` |
+| T04-PS7 | 403 + remaining=0 → rate_limited | mock 返回 403 + `X-RateLimit-Remaining: 0` | `rate_limited` |
+| T05-PS7 | 403 + remaining>0 → forbidden | mock 返回 403 + `X-RateLimit-Remaining: 50` | `forbidden` |
+| T08 | network_error | mock 抛出异常（无 HTTP response） | `network_error` |
+| T14 | incomparable | 版本格式不可比较（如 `v1.2.3a` vs `v1.2.3`） | `ok` + `cmp=incomparable` + `review=true` |
+| T15 | versionJump | major 差 ≥2 的真实仓库 | `ok` + `versionJump=true` + `review=true` |
+| T16 | dateSuspicious | 新 publishedUtc 对应北京时间日期早于上轮 gitDate | `ok` + `dateSuspicious=true` + `review=true` |
+| T17 | isFlip | 上轮 `flag=no` → 本轮 `flag=yes` | `ok` + `isFlip=true` |
+| T18 | 状态保留（9 种非 ok 状态） | 9 种 error 状态下 gitVer/gitDate/flag 不变 | 各状态保留上轮状态 |
+| T19 | uninstalled | localVer=未安装 → flag=no（但 GIT 列照常刷新） | `ok` + `flag=no` |
 
 **T18 的 9 种非 ok 状态** [M6]：
 
@@ -892,7 +804,7 @@ File.Open
 
 **子 agent 输入参数**:
 - 测试目录: `.production-validation-v19-final/`
-- 提取的脚本: `lib/mock-invoke-restmethod.ps1`, `lib/step2-mock-harness.ps1` [N6]
+- 提取的脚本: `lib/mock-listener.ps1`
 - PS5.1 路径: `C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe`
 - 隔离环境变量: `GITHUB_VERSION_MONITOR_BASE` 指向各测试子目录
 
@@ -913,11 +825,7 @@ File.Open
 - 在 PS5.1 中执行
 - 验证: `queryStatus=forbidden`
 
-> **PS5.1 语法处理** [L6 修订·v1.9-c 独立验证]：v1.8 报告 N.3 曾声称 PS5.1 无法解析 PS7 单行紧凑函数定义。**本计划不将此声明作为已验证事实采纳**。PS5.1 测试执行时：
-> 1. 先尝试直接运行提取的紧凑脚本
-> 2. 如果解析失败（`ParseException`），记录原始错误信息，然后将紧凑代码展开为多行格式重新执行
-> 3. 展开时记录原始行号与展开映射关系，供 Phase 8 验证展开后代码与原文语义一致
-> 4. 如果直接运行成功，则无需展开
+> **PS5.1 语法注意事项** [L6 修订]：v1.8 报告 N.3 记录 PS5.1 无法解析 PS7 单行紧凑函数定义。SKILL-v1.9 提取的代码为紧凑单行风格。PS5.1 测试脚本需将紧凑代码展开为多行格式后再执行。不影响生产代码（SKILL 原文为多行格式）。
 
 **判定规则**（Prompt 第 13 节）[M1 修订]:
 - PS5.1 不存在 → BLOCKED（不影响 PS7 production gate）
@@ -952,7 +860,6 @@ T05-PS5.1/test-report.md
 - 被测文件: `SKILL-v1.9.md`
 - 提取清单: `lib/extraction-manifest.json`
 - Phase 0 SHA256 基线: `v18.sha256`, `v19.sha256`, `state.sha256`
-- harness 对照材料 [D2·v1.9-e 新增]: `lib/step5-t39-harness.ps1`（被验对象）+ 注入规格（Phase 1 Step 5：注入点 SKILL L632→L633、注入内容）+ SKILL-v1.9.md Step 5 代码块原文
 
 **处理逻辑**:
 
@@ -973,7 +880,6 @@ T05-PS5.1/test-report.md
 4. 有没有测试脚本修改导致假 PASS
    — 按 extraction-manifest.json 逐文件重算 SHA256，与清单记录比对 [L8]
    — 确认提取脚本与 SKILL 原文代码块逐字一致
-   — 对 lib/step5-t39-harness.ps1 做受限 diff [D2·v1.9-e]：与 SKILL Step 5 代码块原文对照，仅允许存在一处注入差异（SKILL L632 与 L633 之间的锁 PID 修改行，见 Phase 1 Step 5 注入规格），其余代码须逐字一致
 
 5. 有没有 FAIL 被写成 BLOCKED
    — 逐项核验每个测试的实际输出 vs 报告结论
@@ -1131,19 +1037,16 @@ PS7 primary runtime PASS
 
 **PRODUCTION_BLOCKED**: 仅当 P0=0 / P1=0 / production-critical FAIL=0 / production-critical BLOCKED > 0。
 
-#### Step 6: 最终结论（Prompt 第 26 节）[D4 修订]
+#### Step 6: 最终结论（Prompt 第 26 节）
 
-报告最后严格输出（保持 Prompt §26 字面格式）：
+报告最后严格输出：
 
 ```
 VERSION: v1.9
 
 EXECUTED: N
-
 PASS: N
-
 FAIL: N
-
 BLOCKED: N
 
 P0: N
@@ -1160,16 +1063,6 @@ PRODUCTION_READY
 
 （或 PRODUCTION_NOT_READY / PRODUCTION_BLOCKED）
 
-其中 `EXECUTED` / `PASS` 为 Total 口径，`FAIL` / `BLOCKED` 为 **Production-critical 口径**（与 §8 gate 判定一致）[N4]。
-
-Prompt 模板之后紧随附注输出维度分解（附注不属于模板本身，保持 §26 字面格式不变）[D4·v1.9-e]：
-
-```
-FAIL breakdown: Production-critical N | Compatibility N
-BLOCKED breakdown: Production-critical N | Compatibility N
-Counting basis: EXECUTED/PASS = Total; FAIL/BLOCKED = Production-critical (see §8)
-```
-
 并给出：
 ```
 REPORT:
@@ -1184,7 +1077,7 @@ SKILL-v1.9.md                      — 被测对象（Phase 0 已 git add）
 .production-validation-v19-final/  — 全部测试证据
 production-validation-report-v19-final.md  — 最终报告
 .selfreview/selfreview-v19-20260909-014524.md  — self-review
-.exec-plan/exec-plan-v1.9-d.md     — 本执行计划
+.exec-plan/exec-plan-v1.9-b.md     — 本执行计划
 ```
 
 commit message 必须包含：
@@ -1507,47 +1400,6 @@ BLOCKED 不得改写为 PASS
 
 ## 11. 修订日志
 
-### exec-plan-v1.9-e（2026-09-08，采纳第三轮 CodeBuddy 审计 D1-D4）
-
-**审计来源**: `exec-plan-v1.9-d-codebuddy-review.md`（第三轮独立审计）
-
-| 审计项 | 严重性 | 采纳/驳回 | 修订内容 | 理由 |
-|---|---|---|---|---|
-| D1 | 低 | **采纳** | Phase 1 主 agent 审查点计数更新为 "5 个 step 脚本 + 2 个 harness（step5-t39-harness / step2-mock-harness）+ 4 个辅助工具"，并纳入 mock-contract-selfcheck.txt 检查 | [文档] N6 更名/新增工具后审查点数字未同步，按旧数字核验会漏验 step2-mock-harness.ps1 |
-| D2 | 低 | **采纳** | harness 逐字性受限 diff 规则并入 Phase 8 第 4 项正文；Phase 8 输入新增 harness 对照材料（被验对象 + 注入规格 + SKILL Step 5 原文） | [文档] 规则原仅挂 Phase 1 Step 7 下方，Phase 8 正文与输入未同步，sub-agent 按 Phase 8 正文执行会遗漏该验证 |
-| D3 | 中-低 | **采纳** | Phase 1 Step 6.1 新增类型规范（StatusCode 枚举/int 均兼容——SKILL L354 `[int]` 显式转换；X-RateLimit-Remaining 必须字符串——L363 字符串比较；PS7 侧 Headers 类型二选一并记录）+ 对齐自检（`lib/mock-contract-selfcheck.txt`）+ 报告 J 节记录 PS7 header 分支覆盖方式 | [源码] SKILL L353-354 `[int]` 转换、L363 字符串比较、L356 Headers 访问路径直接核实；PS7 `HttpResponseHeaders` 分支若统一用 WebHeaderCollection mock 将无直接覆盖，须在报告 J 节如实记录 |
-| D4 | 极轻 | **采纳** | Phase 9 Step 6 模板恢复 Prompt §26 字面格式；双维度分解改为模板后附注；口径说明（EXECUTED/PASS=Total、FAIL/BLOCKED=Production-critical）并入附注 | [Prompt] §26 要求"严格输出"，N4 修复时的注记前置属格式偏离；后置附注保持字面一致且信息不丢失 |
-
-**驳回项**: 无。D1-D4 全部采纳。
-
-### exec-plan-v1.9-d（2026-09-08，采纳第二轮 CodeBuddy 审计 N1-N6）
-
-**审计来源**: `exec-plan-v1.9-c-codebuddy-review.md`（第二轮独立审计）
-
-| 审计项 | 严重性 | 采纳/驳回 | 修订内容 | 理由 |
-|---|---|---|---|---|
-| N1 | 中 | **采纳** | T39 harness 改为"仅内联复制"（删除 dot-source 选项）；明确注入点 L632→L633；新增前置变量 `$conclusionText`/`$summaryText`/`$noteText`；Phase 8 新增 harness 逐字性受限 diff | [源码] SKILL Step 5 代码连续执行，dot-source 无注入点；L535-543 确认三个占位变量；extraction-manifest 未覆盖 harness 须补验证 |
-| N2 | 中 | **采纳** | Phase 1 新增 Step 6.1 mock 对象 contract 表（成功路径 3 场景 + 异常路径 8 场景，逐场景列出成员形状与 SKILL 访问行号）；PS5.1 要求 `Headers` 为 `WebHeaderCollection` 实例 | [源码] SKILL L340-366 确认访问路径固定；mock 对象形状错误→状态机走错分支→假 FAIL/假 PASS |
-| N3 | 低-中 | **采纳** | T22 删除 `[System.IO.File]::Open()` 目录锁选项（技术不可行）；新增 ACL 备份/恢复步骤（`acl-before.xml` + `Set-Acl` 还原） | `File.Open()` 只能锁文件不能锁目录；ACL 残留会影响后续测试 |
-| N4 | 低 | **采纳** | Phase 9 Step 6 模板 `FAIL`/`BLOCKED` 行标注 `(Production-critical: N \| Compatibility: N)` | 双维度计数下模板未标口径会产生 `FAIL: 1 + PRODUCTION_READY` 字面矛盾 |
-| N5 | 低 | **采纳** | Phase 6.1 状态机表新增 "API 来源" 列；T15/T16/T17/T19 从"真实仓库"改为 mock（可控参数） | [源码] T16 需控制 `published_at`，真实 API 不可控；执行摘要要求回答 API 来源分配 |
-| N6 | 极轻 | **采纳** | `mock-listener.ps1` 更名为 `mock-invoke-restmethod.ps1`；新增 `step2-mock-harness.ps1`（mock 包装脚本）；更新全部引用 | mock 机制从 HTTP listener 改为函数覆盖后，原文件名名不副实；包装脚本未列入工具清单 |
-
-**驳回项**: 无。N1-N6 全部采纳。
-
-### exec-plan-v1.9-c（2026-09-08，消除旧报告结论链式继承偏差）
-
-**修订背景**：用户指出 v1.9-b 在修订过程中读取了 v1.8 验证报告，并将其中部分发现（N.2 stdout 透传、N.3 PS5.1 解析、N.4 未测状态）作为已验证事实采纳，未独立验证。如果旧报告存在系统性偏差，偏差将通过链式继承传播到所有后续版本。
-
-**修订原则**：新增 §0.5 独立性原则，切断旧报告结论的继承链。所有测试设计决策必须基于 SKILL 源码和 Prompt 原文的直接阅读。
-
-| 修订项 | v1.9-b 做法 | v1.9-c 修订 | 修订理由 |
-|---|---|---|---|
-| M3 (stdout 透传) | 直接采纳 v1.8 N.2 结论，改为逐 step 执行 | Phase 1 新增独立验证步骤，实际运行 `run-full-pipeline.ps1` 验证 stdout 行为，记录 `stdout-verification.txt`。T37/T43 执行方式取决于本轮独立验证结果 | 旧报告声称未经独立验证；如果声称不准确，逐 step 方式可能引入新偏差 |
-| L6 (PS5.1 解析) | 直接采纳 v1.8 N.3 结论，要求预先展开为多行 | Phase 7 改为先尝试直接运行紧凑脚本，如果 `ParseException` 才展开。记录原始错误与展开映射 | 旧报告声称未经独立验证；预先展开可能引入与原文不一致的代码 |
-| M6 (T18 状态数) | 部分依据来自 v1.8 N.4（含末句"在 v1.7 中已验证"） | 删除 v1.8 N.4 引用，依据改为：直接读 SKILL L132-140 确认 9 种非 ok 状态存在 | v1.8 N.4 末句本身是向 v1.7 传递信任，属链式继承 |
-| §0.5 | 无 | 新增独立性原则章节（5 条规则） | 明确切断旧报告结论继承链，防止未来版本重复偏差 |
-
 ### exec-plan-v1.9-b（2026-09-08，基于 CodeBuddy 独立审计修订）
 
 | 审计项 | 严重性 | 采纳/驳回 | 修订内容 | 理由 |
@@ -1564,7 +1416,7 @@ BLOCKED 不得改写为 PASS
 | L2 | 低 | **采纳** | 明确 .selfreview/ 位于项目根目录 | 与 v1.8 selfreview 文件路径一致 |
 | L3 | 低 | **采纳** | T37 审查点 REVIEW_WRITE_OK 改为条件性 | 验证项已标"（有 review 时）"，审查点须一致 |
 | L4 | 低 | **采纳** | 构造方法替换"read-only directory"为 ACL deny / file lock | Windows ReadOnly 属性不阻止文件创建，实测确认 |
-| L5 | 低 | **采纳** | lock-ownership 期望加 `\|`；lock-stale-dead 指定 `BACKUP_OK\|` 为判定标记 | [源码] SKILL L228 确认 Step 1 输出 `BACKUP_OK\|`；SKILL 输出带竖线 |
+| L5 | 低 | **采纳** | lock-ownership 期望加 `|`；lock-stale-dead 指定 `BACKUP_OK\|` 为判定标记 | [源码] SKILL 输出带竖线；v1.8 以 BACKUP_OK 判定 takeover |
 | L6 | 低 | **采纳** | 新增 PS5.1 多行展开注意事项 | [文档] v1.8 报告 N.3 实测确认 PS5.1 无法解析紧凑单行函数 |
 | L7 | 低 | **部分采纳** | 保留"3 个 P2"（Prompt 口径），新增脚注注明 v1.8 报告 P2=2 | [Prompt] §0 明确列 3 个 P2；[文档] v1.8 报告 L.2 计 P2=2（T22-v18 PASS）。计划沿用唯一事实源口径，脚注注明差异 |
 | L8 | 低 | **采纳** | Phase 1 新增 extraction-manifest.json；Phase 8 第 4 项按清单验证 | self-review 第 4 项原无核验基准 |

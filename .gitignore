@@ -2,4 +2,5 @@
 .env
 .env.*
 .backup/
-.GPT/
+.codebuddy/
+.vscode/

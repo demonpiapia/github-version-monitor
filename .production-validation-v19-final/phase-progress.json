@@ -5,7 +5,7 @@
   "status": "completed",
   "completed_steps": ["self-review-9-items"],
   "pending_steps": [],
-  "evidence_files": [".selfreview/production-validation-selfreview.md"],
+  "evidence_files": [".selfreview/selfreview-v19-20260909-014524.md"],
   "next_phase": "Phase9",
   "results": {
     "check_1_test_object_integrity": {

@@ -199,7 +199,7 @@ Write-Output 'RUN_STATUS|failed|review 写入失败，整轮终止。'
 | T05-PS5.1 | `.production-validation-v19-final/T05-PS5.1/` |
 | Runtime Error Contract | `.production-validation-v19-final/runtime-error-contract/` |
 | Diff Integrity | `.production-validation-v19-final/diff-integrity.md` |
-| Self-Review | `.selfreview/production-validation-selfreview.md` |
+| Self-Review | `.selfreview/selfreview-v19-20260909-014524.md` |
 
 ---
 

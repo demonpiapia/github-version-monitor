@@ -1,6 +1,6 @@
 # SKILL-v1.9 定向最终验证 — 执行计划
 
-> **版本**: exec-plan-v1.9-e（基于 exec-plan-v1.9-d 修订，采纳第三轮 CodeBuddy 审计 D1-D4）
+> **版本**: exec-plan-v1.9-d（基于 exec-plan-v1.9-c 修订，采纳第二轮 CodeBuddy 审计 N1-N6）
 > **制定日期**: 2026-09-08
 > **依据**: `.GPT/Production Validation Prompt — SKILL-v1.9 Targeted Final Validation.md`（唯一事实源）
 > **被测对象**: `SKILL-v1.9.md`
@@ -344,20 +344,6 @@ Set-Content $lockPath -Value "pid=999999;ts=$(Get-Date -Format o)" -Force
 
 **PS5.1 兼容要求**：T04/T05-PS5.1 验证 `Get-ResponseHeaderValue` 对 `System.Net.WebHeaderCollection` 的兼容性。mock 的 `Headers` **必须是 `System.Net.WebHeaderCollection` 实例**（不可用 `Hashtable` 替代），否则兼容性验证无意义。[N2]
 
-**类型规范** [D3 修订·v1.9-e 新增]：
-
-mock 对象成员类型须与 SKILL 提取/比较表达式兼容（SKILL L341-366 直接核实）：
-
-- `Exception.Response.StatusCode`：SKILL L354 以 `[int]$_.Exception.Response.StatusCode` 显式转换后做数值比较（L360-365），因此 mock 侧使用 `int`（如 `404`）或 `System.Net.HttpStatusCode` 枚举实例（如 `[System.Net.HttpStatusCode]::NotFound`）均可兼容；推荐枚举实例以贴近真实响应形状。
-- `X-RateLimit-Remaining` 取值：SKILL L363 以字符串比较（`$rl -eq '0'`），mock Headers 返回值**必须为字符串** `'0'` / `'50'`（不得为 int）。
-- `Exception.Response` 必须真实存在（`$_.Exception.Response` 为真值，SKILL L353-354/L356），network_error 场景（L366 else 分支）则必须**无** `.Response` 或 `.Response.StatusCode` 为 null。
-- **PS7 侧 `Headers` 类型选择**（T04-PS7/T05-PS7）[D3]：二选一并记录于 `lib/mock-contract-selfcheck.txt`——
-  a) `System.Net.WebHeaderCollection`（与 PS5.1 共用同一 mock 库，实现简单；但本轮 `Get-ResponseHeaderValue` 面向 PS7 真实响应的 `HttpResponseHeaders` 分支将无直接覆盖）；
-  b) `System.Net.Http.Headers.HttpResponseHeaders` 形状对象（覆盖更完整，构造复杂度高）。
-  无论选择哪种，最终报告 **J 节** 必须如实记录 PS7 header 分支的覆盖方式（本轮直接覆盖 / v1.7 历史轮验证 / 本轮未覆盖）[D3]。
-
-**对齐自检** [D3 修订·v1.9-e 新增]：mock 函数库构造完成后、任何测试执行前，sub-agent 须做一次 "contract → SKILL 提取表达式" 对齐自检：按 SKILL L341-366 逐成员模拟访问（`tag_name` / `published_at` / `Exception.Response.StatusCode` / `Headers`），确认每个场景取值路径与 contract 表一致，结果记录于 `lib/mock-contract-selfcheck.txt`（含 PS7 Headers 类型选择记录）。
-
 #### Step 7: 生成提取清单 [L8 修订]
 
 生成 `lib/extraction-manifest.json`，记录每个提取脚本的源行号范围与 SHA256：
@@ -397,11 +383,10 @@ mock 对象成员类型须与 SKILL 提取/比较表达式兼容（SKILL L341-36
 - `.production-validation-v19-final/lib/create-fixture.ps1`
 - `.production-validation-v19-final/lib/extract-code.ps1`
 - `.production-validation-v19-final/lib/extraction-manifest.json`
-- `.production-validation-v19-final/lib/mock-contract-selfcheck.txt` — mock 对象 contract 对齐自检 + PS7 Headers 类型选择记录 [D3·v1.9-e]
 - `.production-validation-v19-final/lib/stdout-verification.txt` — run-full-pipeline.ps1 stdout 透传独立验证证据 [v1.9-c]
 - `.production-validation-v19-final/phase-progress.json`
 
-**主 agent 审查点**: 确认 diff-integrity.md 中 28 项能力逐项核验完成；确认 9 项禁止项检查完成；确认 5 个 step 脚本 + 2 个 harness（`step5-t39-harness.ps1` / `step2-mock-harness.ps1`）+ 4 个辅助工具（`run-full-pipeline.ps1` / `mock-invoke-restmethod.ps1` / `create-fixture.ps1` / `extract-code.ps1`）全部按输出清单产出且提取脚本未修改原文 [D1]；确认 extraction-manifest.json 存在且非空；确认 stdout-verification.txt 与 mock-contract-selfcheck.txt 存在且记录了独立验证结果 [D3]。
+**主 agent 审查点**: 确认 diff-integrity.md 中 28 项能力逐项核验完成；确认 9 项禁止项检查完成；确认 5 个 step 脚本 + 1 个 harness + 4 个工具脚本提取完成且未修改原文；确认 extraction-manifest.json 存在且非空；确认 stdout-verification.txt 存在且记录了独立验证结果。
 
 ---
 
@@ -952,7 +937,6 @@ T05-PS5.1/test-report.md
 - 被测文件: `SKILL-v1.9.md`
 - 提取清单: `lib/extraction-manifest.json`
 - Phase 0 SHA256 基线: `v18.sha256`, `v19.sha256`, `state.sha256`
-- harness 对照材料 [D2·v1.9-e 新增]: `lib/step5-t39-harness.ps1`（被验对象）+ 注入规格（Phase 1 Step 5：注入点 SKILL L632→L633、注入内容）+ SKILL-v1.9.md Step 5 代码块原文
 
 **处理逻辑**:
 
@@ -973,7 +957,6 @@ T05-PS5.1/test-report.md
 4. 有没有测试脚本修改导致假 PASS
    — 按 extraction-manifest.json 逐文件重算 SHA256，与清单记录比对 [L8]
    — 确认提取脚本与 SKILL 原文代码块逐字一致
-   — 对 lib/step5-t39-harness.ps1 做受限 diff [D2·v1.9-e]：与 SKILL Step 5 代码块原文对照，仅允许存在一处注入差异（SKILL L632 与 L633 之间的锁 PID 修改行，见 Phase 1 Step 5 注入规格），其余代码须逐字一致
 
 5. 有没有 FAIL 被写成 BLOCKED
    — 逐项核验每个测试的实际输出 vs 报告结论
@@ -1131,20 +1114,17 @@ PS7 primary runtime PASS
 
 **PRODUCTION_BLOCKED**: 仅当 P0=0 / P1=0 / production-critical FAIL=0 / production-critical BLOCKED > 0。
 
-#### Step 6: 最终结论（Prompt 第 26 节）[D4 修订]
+#### Step 6: 最终结论（Prompt 第 26 节）
 
-报告最后严格输出（保持 Prompt §26 字面格式）：
+报告最后严格输出：
 
 ```
 VERSION: v1.9
 
-EXECUTED: N
-
-PASS: N
-
-FAIL: N
-
-BLOCKED: N
+EXECUTED: N (Total)
+PASS: N (Total)
+FAIL: N (Production-critical: N | Compatibility: N) [N4]
+BLOCKED: N (Production-critical: N | Compatibility: N) [N4]
 
 P0: N
 P1: N
@@ -1159,16 +1139,6 @@ PRODUCTION_READY
 ```
 
 （或 PRODUCTION_NOT_READY / PRODUCTION_BLOCKED）
-
-其中 `EXECUTED` / `PASS` 为 Total 口径，`FAIL` / `BLOCKED` 为 **Production-critical 口径**（与 §8 gate 判定一致）[N4]。
-
-Prompt 模板之后紧随附注输出维度分解（附注不属于模板本身，保持 §26 字面格式不变）[D4·v1.9-e]：
-
-```
-FAIL breakdown: Production-critical N | Compatibility N
-BLOCKED breakdown: Production-critical N | Compatibility N
-Counting basis: EXECUTED/PASS = Total; FAIL/BLOCKED = Production-critical (see §8)
-```
 
 并给出：
 ```
@@ -1506,19 +1476,6 @@ BLOCKED 不得改写为 PASS
 ---
 
 ## 11. 修订日志
-
-### exec-plan-v1.9-e（2026-09-08，采纳第三轮 CodeBuddy 审计 D1-D4）
-
-**审计来源**: `exec-plan-v1.9-d-codebuddy-review.md`（第三轮独立审计）
-
-| 审计项 | 严重性 | 采纳/驳回 | 修订内容 | 理由 |
-|---|---|---|---|---|
-| D1 | 低 | **采纳** | Phase 1 主 agent 审查点计数更新为 "5 个 step 脚本 + 2 个 harness（step5-t39-harness / step2-mock-harness）+ 4 个辅助工具"，并纳入 mock-contract-selfcheck.txt 检查 | [文档] N6 更名/新增工具后审查点数字未同步，按旧数字核验会漏验 step2-mock-harness.ps1 |
-| D2 | 低 | **采纳** | harness 逐字性受限 diff 规则并入 Phase 8 第 4 项正文；Phase 8 输入新增 harness 对照材料（被验对象 + 注入规格 + SKILL Step 5 原文） | [文档] 规则原仅挂 Phase 1 Step 7 下方，Phase 8 正文与输入未同步，sub-agent 按 Phase 8 正文执行会遗漏该验证 |
-| D3 | 中-低 | **采纳** | Phase 1 Step 6.1 新增类型规范（StatusCode 枚举/int 均兼容——SKILL L354 `[int]` 显式转换；X-RateLimit-Remaining 必须字符串——L363 字符串比较；PS7 侧 Headers 类型二选一并记录）+ 对齐自检（`lib/mock-contract-selfcheck.txt`）+ 报告 J 节记录 PS7 header 分支覆盖方式 | [源码] SKILL L353-354 `[int]` 转换、L363 字符串比较、L356 Headers 访问路径直接核实；PS7 `HttpResponseHeaders` 分支若统一用 WebHeaderCollection mock 将无直接覆盖，须在报告 J 节如实记录 |
-| D4 | 极轻 | **采纳** | Phase 9 Step 6 模板恢复 Prompt §26 字面格式；双维度分解改为模板后附注；口径说明（EXECUTED/PASS=Total、FAIL/BLOCKED=Production-critical）并入附注 | [Prompt] §26 要求"严格输出"，N4 修复时的注记前置属格式偏离；后置附注保持字面一致且信息不丢失 |
-
-**驳回项**: 无。D1-D4 全部采纳。
 
 ### exec-plan-v1.9-d（2026-09-08，采纳第二轮 CodeBuddy 审计 N1-N6）
 
