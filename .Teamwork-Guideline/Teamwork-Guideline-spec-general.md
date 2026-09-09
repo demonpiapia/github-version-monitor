@@ -132,6 +132,7 @@ Git               → 同步：唯一事实层
 | ---------------- | ---------------------------------- | --------------------------------- |
 | TRAE IDE         | coding-agent / exec-plan-maker     | 执行agent                           |
 | Codebuddy        | governance-agent / test-agent      | TRAE IDE内扩展agent；本地审计、测试agent     |
+| Zoo              | limited-API-rate-governance-agent  | TRAE IDE内扩展agent；本地API限流审计        |
 | Cherry           | general-claude-agent               | 日常助理 /记忆管理 / 数据库管理 / 文档管理 / 自动化任务 |
 | Workbuddy        | coding-assistant-agent / doc-agent | 助理执行agent                         |
 | codexCLI         | audit-sub-agent                    | 本地代码审计专用CLI agent                 |
