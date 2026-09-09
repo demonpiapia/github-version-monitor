@@ -1,0 +1,31 @@
+{
+  "source_file": "SKILL-v1.10.md",
+  "source_sha256": "4F7E1170B655F73C847B445570CB68DFDAEB5B4F2C6961AF19A946490123DA42",
+  "extractions": [
+    {
+      "file": "step1.ps1",
+      "source_lines": "161-230",
+      "sha256": "F07C486AF3FCE83E24904041CD1D471466FE27DDE3DB38416553DFB864A1A689"
+    },
+    {
+      "file": "step2.ps1",
+      "source_lines": "240-422",
+      "sha256": "EF851690C516BB85EA00232864ECD868E8BEE92BA2794E46E8654C27784522D0"
+    },
+    {
+      "file": "step3.ps1",
+      "source_lines": "432-451",
+      "sha256": "F8CE8F248BFDA24884AD1092392A4199861DB3AE55E41C1AD292C4511449DBFF"
+    },
+    {
+      "file": "step4.ps1",
+      "source_lines": "473-509",
+      "sha256": "731C224183828BD8A69074443F111B0CC091B1B7931DEA319BCBAA0A4ECCBC22"
+    },
+    {
+      "file": "step5-full.ps1",
+      "source_lines": "521-654",
+      "sha256": "81C4D352AF2C5C6A5926453E4F7A81BE3B0E4A6EAB7A572542F77053A1721AA9"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+=== Phase 10: Runtime Error Contract Static Audit + Final Invariant Verification ===
+=== Start: 2026-09-09T09:18:15+08:00 ===
+
+=== SKILL-v1.10.md SHA256 ===
+4F7E1170B655F73C847B445570CB68DFDAEB5B4F2C6961AF19A946490123DA42
+
+=== Static Scan Results ===
+return statements total: 41
+  - control flow exits (Step 1-5 top-level): 13
+  - function return values: 22
+  - comment/doc references: 2
+  - inline function definitions: 4
+RUN_STATUS|failed| code output points: 9
+RUN_STATUS|success| code output points: 1
+
+=== Step 4 constraint #13 Coverage ===
+L477 heartbeat failure: RUN_STATUS|failed| + return = PASS
+L478 result.json read failure: RUN_STATUS|failed| + return = PASS
+L480 stats/items integrity failure: RUN_STATUS|failed| + NO return = FAIL (P1)
+L487 review tmp write failure: RUN_STATUS|failed| + return = PASS
+L496 review JSON validation failure: RUN_STATUS|failed| + return = PASS
+L506 review atomic replacement failure: RUN_STATUS|failed| + return = PASS
+
+=== L480 Fall-through Analysis ===
+L480 outputs RUN_STATUS|failed| but has no return
+Execution falls through to L481 try block
+L481 writes modified $doc to result.review.tmp
+L490 reads tmp back
+L491 checks stats/items integrity -> fails (modified stats != origStats)
+L496 outputs RUN_STATUS|failed| again
+Result: RUN_STATUS|failed| appears 2 times (violates constraint #13)
+
+=== T38-stats-items Evidence ===
+stdout.txt L41: RUN_STATUS|failed|review 程序事实完整性校验失败，整轮终止。
+stdout.txt L44: RUN_STATUS|failed|review 临时 JSON 校验失败，整轮终止。
+RUN_STATUS|failed| count: 2
+
+=== Invariant Verification Results ===
+I1: atomic md replacement success -> commitSucceeded=true = PASS
+  Evidence: T37/T43/T39 stdout COMMIT_OK| lines
+I2: commitSucceeded=true + lockReleased=true -> RUN_STATUS|success| = PASS
+  Evidence: T37/T43 stdout RUN_STATUS|success| lines
+I3: commitSucceeded=true + lockReleased=false -> RUN_STATUS|failed| = PASS
+  Evidence: T39 stdout COMMIT_OK| + RUN_STATUS|failed| lines
+I4: review write failure -> no md commit = PASS
+  Evidence: T38-A/B/C/heartbeat/result-read/stats-items/T22/T23 stdout (no COMMIT_OK|)
+I5: review write failure -> RUN_STATUS|failed| = FAIL (P1)
+  Evidence: T38-stats-items stdout RUN_STATUS|failed| count = 2
+I6: md replacement failure -> main md unchanged = PASS
+  Evidence: T22/T23 sha256 before/after (main_md SHA256 identical)
+I7: failure -> safe cleanup + lock handling + terminal failed status = PASS (with P1 caveat)
+  Evidence: T22/T23/T38-A/B/C/heartbeat/result-read/stats-items all evidence files
+
+=== P1 Findings ===
+P1-1: SKILL-v1.10.md L480 stats/items integrity failure path missing return statement
+  - Output: RUN_STATUS|failed| appears 2 times (violates constraint #13 "only once")
+  - Evidence: T38-stats-items/stdout.txt L41+L44
+  - Fix: Add 'return' after L480 Write-Output 'RUN_STATUS|failed|review 程序事实完整性校验失败，整轮终止。'
+
+=== Overall Verdict ===
+Runtime Error Audit: FAIL (P1)
+Invariant Verification: FAIL (P1)
+Combined: FAIL (P1)
+
+=== End: 2026-09-09T09:18:15+08:00 ===

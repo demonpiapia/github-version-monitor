@@ -1,0 +1,11 @@
+kill_time: 2026-09-09T09:08:45.2766876+08:00
+pipeline_pid: 61024
+stop_result: STOPPED
+step_reached: Step2-delay
+lock_state: HELD pid=61024 alive=False ageMin=0.0
+backup_count: 1
+result_exists: False
+result_valid_json: False
+md_exists: True
+md_valid: True
+trash_count: 0

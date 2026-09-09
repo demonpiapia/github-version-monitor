@@ -1,0 +1,19 @@
+=== T46 Root MD Check ===
+
+Check 1: .output/GitHub更新监测列表.md exists (期望: True)
+  Path: d:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T46\.output\GitHub更新监测列表.md
+  Exists: True
+
+Check 2: T46 root 目录不存在 GitHub更新监测列表.md (期望: True)
+  Path: d:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T46\GitHub更新监测列表.md
+  Exists: False
+
+Check 3: backup 基于 .output 状态文件（由 T43 完整管线证据覆盖）
+  T43 backup 目录存在: True
+  T43 backup 文件数: 1
+
+Check 4: 读取 .output/ 写回 .output/（由 T43 完整管线证据覆盖）
+  T43 md 已更新 (SHA256 before != after): True
+
+=== 判定 ===
+  Path contract (.output/ 唯一生产状态文件位置): PASS

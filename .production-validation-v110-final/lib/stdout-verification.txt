@@ -1,0 +1,78 @@
+=== stdout 透传独立验证 ===
+测试目录: .production-validation-v110-final\stdout-verify
+执行时间: 2026-09-09T06:33:45.7697739+08:00
+退出码: 0
+
+=== stdout 内容 ===
+=== STEP 1 START ===
+BACKUP_OK|20260909-063344314
+=== STEP 1 END ===
+=== STEP 2 START ===
+FETCH_COMPLETE|apiOk=1 apiErr=0 total=1
+SUMMARY|total=1 apiOK=1 apiErr=0 synced=0 yes=1 uninstalled=0 pendingReview=0 newReleases=1 flips=1 token=set
+{
+  "stats": {
+    "total": 1,
+    "apiOk": 1,
+    "apiErr": 0,
+    "synced": 0,
+    "yes": 1,
+    "uninstalled": 0,
+    "pendingReview": 0,
+    "newReleases": 1,
+    "flips": 1,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "VS Code",
+      "gitVer": "1.136.2",
+      "gitDate": "2026-09-09",
+      "localVer": "0.0.1",
+      "flag": "yes",
+      "prevFlag": "no",
+      "latest": "1.136.2",
+      "publishedUtc": "2026-09-08T17:54:34Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": true,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    }
+  ]
+}
+=== STEP 2 END ===
+=== STEP 3 START ===
+=== STEP 3 END ===
+=== STEP 4 START ===
+REVIEW_WRITE_OK|复核完成：0 项；stats/items 保持不变。
+=== STEP 4 END ===
+=== STEP 5 START ===
+COMMIT_OK|已原子替换主 md（数据行 1，yes/no 校验通过，repo 集合一致）。
+RUN_STATUS|success|fetch + 必要 review + commit + lock release 完成。
+=== STEP 5 END ===
+=== PIPELINE COMPLETE ===
+
+
+=== stderr 内容 ===
+
+=== 关键输出标记检查 ===
+  BACKUP_OK| : PRESENT
+  FETCH_COMPLETE| : PRESENT
+  SUMMARY| : PRESENT
+  COMMIT_OK| : PRESENT
+  RUN_STATUS|success| : PRESENT
+
+=== stdout 透传行为分析 ===
+  step 标记数: 11 / 11
+
+=== 决策 ===
+stdout 透传正常。T37/T43 使用 run-full-pipeline.ps1 单次执行 + 捕获 stdout。
+
+=== 最终决策 ===
+DECISION: PIPELINE_OK

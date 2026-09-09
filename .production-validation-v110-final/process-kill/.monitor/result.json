@@ -1,0 +1,98 @@
+{
+  "runAt": "2026-09-09T09:08:46.1109035+08:00",
+  "stats": {
+    "total": 2,
+    "apiOk": 0,
+    "apiErr": 2,
+    "synced": 0,
+    "yes": 0,
+    "uninstalled": 0,
+    "pendingReview": 2,
+    "newReleases": 0,
+    "flips": 0,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "VS Code",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "1.0.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "network_error",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "api_failure"
+      ],
+      "error": "You cannot call a method on a null-valued expression."
+    },
+    {
+      "repo": "torvalds/linux",
+      "name": "Linux",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "6.5.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "network_error",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "api_failure"
+      ],
+      "error": "You cannot call a method on a null-valued expression."
+    }
+  ],
+  "review": {
+    "performed": true,
+    "items": [
+      {
+        "repo": "microsoft/vscode",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口复核请求失败。 HTML 诊断 HTTP 200；页面标题仅供诊断：Releases · microsoft/vscode · GitHub",
+        "conclusion": "pending",
+        "reasons": [
+          "api_failure"
+        ],
+        "apiListStatus": "error",
+        "apiList": [],
+        "htmlStatus": "200",
+        "htmlTitle": "Releases · microsoft/vscode · GitHub"
+      },
+      {
+        "repo": "torvalds/linux",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口复核请求失败。 HTML 诊断 HTTP 200；页面标题仅供诊断：Releases · torvalds/linux · GitHub",
+        "conclusion": "pending",
+        "reasons": [
+          "api_failure"
+        ],
+        "apiListStatus": "error",
+        "apiList": [],
+        "htmlStatus": "200",
+        "htmlTitle": "Releases · torvalds/linux · GitHub"
+      }
+    ]
+  }
+}

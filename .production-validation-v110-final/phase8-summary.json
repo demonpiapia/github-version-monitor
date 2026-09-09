@@ -1,0 +1,28 @@
+{
+  "Phase": "Phase8",
+  "StartTime": "2026-09-09T08:34:47.2086096+08:00",
+  "EndTime": "2026-09-09T08:34:54.2124353+08:00",
+  "DurationSec": 7.0,
+  "PS51Available": true,
+  "PS51Version": "5.1.22621.963",
+  "PS51Path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+  "T04_PS51": {
+    "Verdict": "PASS",
+    "Status": "rate_limited",
+    "HasRateLimited": true,
+    "LatestReqCount": 1,
+    "ReviewReqCount": 0,
+    "HtmlReqCount": 0,
+    "RetryCount": 0,
+    "TotalCallCount": 1,
+    "ExitCode": 0
+  },
+  "T05_PS51": {
+    "Verdict": "PASS",
+    "Status": "forbidden",
+    "HasForbidden": true,
+    "TotalCallCount": 1,
+    "ExitCode": 0
+  },
+  "CompatibilityFailBlocksPS7Gate": false
+}

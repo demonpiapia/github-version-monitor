@@ -1,0 +1,2 @@
+T43: vscode=1.136.2 node=v26.8.1 lowVscode=0.0.0 prevGitVerForJump=1.0.0
+Wrote fixture: d:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T43\.output\GitHub更新监测列表.md (scenario=T43)

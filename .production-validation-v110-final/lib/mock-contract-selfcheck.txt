@@ -1,0 +1,65 @@
+Mock Contract Self-Check Report
+Generated: 2026-09-09T06:40:28.3025058+08:00
+
+=== PS7 Headers 类型选择记录 ===
+选择: System.Net.WebHeaderCollection
+理由: 与 PS5.1 共用同一 mock 库，实现简单
+覆盖缺口: PS7 侧 Get-ResponseHeaderValue 面向 HttpResponseHeaders 的分支将无直接覆盖
+  - SKILL L326: if ($Headers -is [System.Net.WebHeaderCollection]) { $v=$Headers.Get($Name); ... }
+  - 本轮 mock 使用 WebHeaderCollection，直接覆盖此分支
+  - SKILL L327: try { $v=$Headers[$Name]; ... } - 索引器访问，WebHeaderCollection 也支持
+  - SKILL L328: try { $values=$null; if ($Headers.TryGetValues($Name,[ref]$values)) { ... } } - WebHeaderCollection 无 TryGetValues 方法，此分支将抛异常被 catch
+  - 结论: WebHeaderCollection 覆盖 SKILL L326/L327 分支，L328 分支通过 catch 兜底
+
+=== Contract → SKILL 提取表达式对齐自检 ===
+
+--- 成功路径 ---
+[normal] tag_name = 'v1.0.0' (SKILL L342)
+[normal] published_at = '2026-09-01T00:00:00Z' (SKILL L342)
+[normal] 类型: tag_name=String, published_at=String
+
+[metadata_incomplete] tag_name = 'v1.0.0' (SKILL L347)
+[metadata_incomplete] published_at 存在? False (SKILL L347-349)
+[metadata_incomplete] 类型: tag_name=String
+
+[invalid_response] tag_name = '' (SKILL L350-351)
+[invalid_response] 类型: tag_name=String
+
+--- 异常路径 ---
+[404] StatusCode = 404 (SKILL L362)
+[404] Exception.Response 存在? True
+[404] Exception.Response.Headers 类型: System.Net.WebHeaderCollection
+
+[401] StatusCode = 401 (SKILL L361)
+
+[429] StatusCode = 429 (SKILL L363)
+
+[403+remaining=0] StatusCode = 403 (SKILL L364)
+[403+remaining=0] X-RateLimit-Remaining = '0' (SKILL L364, 字符串比较 -eq '0')
+[403+remaining=0] rl -eq '0' = True
+
+[403+remaining>0] StatusCode = 403 (SKILL L364)
+[403+remaining>0] X-RateLimit-Remaining = '50' (SKILL L364)
+[403+remaining>0] rl -eq '0' = False (应为 false)
+
+[500] StatusCode = 500 (SKILL L365)
+[500] code -ge 500 = True
+
+[302] StatusCode = 302 (SKILL L366)
+[302] code -ge 500 = False (应为 false, 进入 http_error 分支)
+
+[network_error] StatusCode =  (SKILL L367 else 分支)
+[network_error] Exception.Response 存在? False (应为 false)
+[network_error] 无 .Response → 进入 else 分支 → network_error
+
+--- 请求计数验证 ---
+[请求计数] 调用 2 次，日志记录 2 条
+
+--- PS5.1 语法兼容检查 ---
+[PS5.1 兼容] 通过：mock-invoke-restmethod.ps1 和 step2-mock-harness.ps1 未使用 PS7-only 运算符
+
+=== 自检结论 ===
+所有场景取值路径与 contract 表一致。
+Headers 类型选择: System.Net.WebHeaderCollection
+PS7 header 分支覆盖方式: WebHeaderCollection 覆盖 SKILL L326/L327，L328 通过 catch 兜底
+PS5.1 语法兼容: 通过

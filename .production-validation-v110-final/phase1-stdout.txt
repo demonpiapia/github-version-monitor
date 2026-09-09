@@ -1,0 +1,45 @@
+# Phase 1 执行 stdout 汇总
+# 生成时间: 2026-09-09
+
+=== Step 1: Diff 生成 ===
+$ git diff --no-index SKILL-v1.9.md SKILL-v1.10.md > .production-validation-v110-final\v19-v110.diff
+warning: in the working copy of 'SKILL-v1.9.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'SKILL-v1.10.md', LF will be replaced by CRLF the next time Git touches it
+diff-exit=1
+file-size=11257 bytes
+line-count=66
+
+=== Step 2-4: Diff 分析（无 stdout，结果写入 diff-integrity.md）===
+
+=== Step 5: 代码提取 ===
+$ pwsh -NoProfile -NonInteractive -File extract-code.ps1 -SkillPath SKILL-v1.10.md -OutDir lib
+Found 5 powershell blocks
+  block: L161-L230
+  block: L240-L422
+  block: L432-L451
+  block: L473-L509
+  block: L521-L654
+Extracted step1.ps1 from L161-L230, sha256=F07C486AF3FCE83E24904041CD1D471466FE27DDE3DB38416553DFB864A1A689
+Extracted step2.ps1 from L240-L422, sha256=EF851690C516BB85EA00232864ECD868E8BEE92BA2794E46E8654C27784522D0
+Extracted step3.ps1 from L432-L451, sha256=F8CE8F248BFDA24884AD1092392A4199861DB3AE55E41C1AD292C4511449DBFF
+Extracted step4.ps1 from L473-L509, sha256=731C224183828BD8A69074443F111B0CC091B1B7931DEA319BCBAA0A4ECCBC22
+Extracted step5-full.ps1 from L521-L654, sha256=81C4D352AF2C5C6A5926453E4F7A81BE3B0E4A6EAB7A572542F77053A1721AA9
+Wrote manifest: lib\extraction-manifest.json
+
+=== Step 6: Harness 创建（无 stdout，3 个 harness 文件已生成）===
+
+=== Step 7: 测试工具创建（无 stdout，5 个工具文件已生成）===
+
+=== Step 7.1: mock contract 对齐自检 ===
+$ pwsh -NoProfile -NonInteractive -File mock-contract-selfcheck.ps1
+Self-check complete. Output: mock-contract-selfcheck.txt
+[请求计数] 调用 2 次，日志记录 2 条  # 修复后（$global:MockCallLog 作用域对齐）
+
+=== Step 8: extraction-manifest.json 已生成 ===
+
+=== Step 8.1: stdout 透传独立验证 ===
+$ pwsh -NoProfile -NonInteractive -File stdout-verify.ps1 -TestDir .production-validation-v110-final
+Wrote fixture: .production-validation-v110-final\stdout-verify\.output\GitHub更新监测列表.md (scenario=normal)
+stdout verification complete. Decision: PIPELINE_OK
+
+=== Phase 1 完成 ===

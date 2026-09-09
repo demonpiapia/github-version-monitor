@@ -1,0 +1,3 @@
+PARSE_ERROR|状态文件 schema 校验失败，本轮终止，不写回主 md。
+  问题：第 6 列 flag 非法：| 1 | [VS Code](https://github.com/microsoft/vscode/releases) |  |  | 0.0.1 | true |
+MOCK_CALLS|0

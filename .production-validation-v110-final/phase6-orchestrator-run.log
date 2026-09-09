@@ -1,0 +1,38 @@
+[08:01:28.599] Phase 6 T43 + T46 Execution Started
+[08:01:28.604] ProjectRoot: d:\AI\Workspace\automatic\github-version-monitor
+[08:01:28.605] PVDir: d:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final
+[08:01:28.605] PwshPath: C:\Program Files\PowerShell\7\pwsh.exe
+[08:01:28.610] Phase 1 stdout 透传决策 PIPELINE_OK = True
+[08:01:28.611] === T43: Full Extended Pipeline Regression ===
+[08:01:28.638] T43: Generating fixture (scenario=T43, 6 场景)
+[08:01:31.312] T43: fixture exit code = 0
+[08:01:31.384] T43: before state captured
+[08:01:40.328] T43: pipeline exit code = 0
+[08:01:40.361] T43: after state captured
+[08:01:40.376] T43: REVIEW_WRITE_OK| present = True (fixture 应触发 review)
+[08:01:40.386] T43: result.json valid = True (stats=True items=True(6) review=True stats.total=6 items.count=6 consistent=True)
+[08:01:40.392] T43: md table rows = 6, items = 6, consistent = True
+[08:01:40.396] T43: backup dir exists = True, backup files = 1
+[08:01:40.398] T43: fetch_run.log exists = True, lines = 1
+[08:01:40.399] T43: lock released = True
+[08:01:40.399] T43: hard gate violated = False
+[08:01:40.400] T43: data consistency = True
+[08:01:40.400] T43: verdict = PASS
+[08:01:40.432] T43: test-report.md written
+[08:01:40.432] === T46: .output State Path Regression ===
+[08:01:40.446] T46: Generating fixture (scenario=normal)
+[08:01:41.010] T46: fixture exit code = 0
+[08:01:41.011] T46: .output/GitHub更新监测列表.md exists = True
+[08:01:41.034] T46: before state captured
+[08:01:41.034] T46: Running Step 1
+[08:01:41.691] T46: Step 1 exit code = 0
+[08:01:41.691] T46: Running Step 2
+[08:01:43.153] T46: Step 2 exit code = 0
+[08:01:43.195] T46: after state captured
+[08:01:43.210] T46: path contract pass = True
+[08:01:43.210] T46: verdict = PASS
+[08:01:43.213] T46: test-report.md written
+[08:01:43.223] Phase 6 report written
+[08:01:43.237] phase-progress.json updated
+[08:01:43.237] Phase 6 execution finished at 2026-09-09 08:01:43
+[08:01:43.237] FINAL VERDICT: T43=PASS, T46=PASS

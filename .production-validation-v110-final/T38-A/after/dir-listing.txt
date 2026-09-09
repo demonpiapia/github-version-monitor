@@ -1,0 +1,17 @@
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-A\acl-before.xml
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-A\fixture-stdout.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-A\lock-after.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-A\lock-before.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-A\md-after.md
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-A\md-before.md
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-A\result-after.json
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-A\sha256-after.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-A\sha256-before.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-A\stdout.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-A\step4-wrapper.ps1
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-A\.monitor\fetch_run.log
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-A\.monitor\result.json
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-A\.monitor\backups\GitHub更新监测列表.backup.20260909-070925273.md
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-A\.output\GitHub更新监测列表.md
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-A\after\dir-listing.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-A\before\dir-listing.txt

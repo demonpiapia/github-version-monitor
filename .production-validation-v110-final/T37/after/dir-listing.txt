@@ -1,0 +1,17 @@
+\fixture-stdout.txt
+\lock-after.txt
+\lock-before.txt
+\md-after.md
+\md-before.md
+\result-after.json
+\result-before.json
+\sha256-after.txt
+\sha256-before.txt
+\stderr.txt
+\stdout.txt
+\.monitor\fetch_run.log
+\.monitor\result.json
+\.monitor\backups\GitHub更新监测列表.backup.20260909-074156642.md
+\.output\GitHub更新监测列表.md
+\after\dir-listing.txt
+\before\dir-listing.txt

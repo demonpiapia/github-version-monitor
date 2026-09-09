@@ -1,0 +1,1 @@
+(no stderr output — Phase 10 is static audit + evidence aggregation, no execution errors)

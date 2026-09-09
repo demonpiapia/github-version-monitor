@@ -1,0 +1,29 @@
+=== T46 Test Directory Listing (BaseDir=d:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T46) ===
+
+=== Root level (T46/) ===
+[DIR] .monitor
+[DIR] .output
+[DIR] after
+[DIR] before
+[FILE] fixture-stdout.txt
+[FILE] lock-after.txt
+[FILE] lock-before.txt
+[FILE] md-after.md
+[FILE] md-before.md
+[FILE] result-after.json
+[FILE] result-before.json
+[FILE] sha256-after.txt
+[FILE] sha256-before.txt
+[FILE] stderr.txt
+[FILE] stdout-step1.txt
+[FILE] stdout-step2.txt
+[FILE] stdout.txt
+
+=== .output/ level ===
+[FILE] GitHub更新监测列表.md
+
+=== .monitor/ level ===
+[DIR] backups
+[FILE] fetch_run.log
+[FILE] result.json
+[FILE] run.lock

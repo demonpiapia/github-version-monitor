@@ -1,0 +1,7 @@
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T43\fixture-stdout.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T43\lock-before.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T43\md-before.md
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T43\result-before.json
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T43\sha256-before.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T43\.output\GitHub更新监测列表.md
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T43\before\dir-listing.txt

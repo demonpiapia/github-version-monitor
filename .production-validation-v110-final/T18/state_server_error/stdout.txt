@@ -1,0 +1,42 @@
+FETCH_COMPLETE|apiOk=0 apiErr=1 total=1
+SUMMARY|total=1 apiOK=0 apiErr=1 synced=0 yes=0 uninstalled=0 pendingReview=1 newReleases=0 flips=0 token=set
+{
+  "stats": {
+    "total": 1,
+    "apiOk": 0,
+    "apiErr": 1,
+    "synced": 0,
+    "yes": 0,
+    "uninstalled": 0,
+    "pendingReview": 1,
+    "newReleases": 0,
+    "flips": 0,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "VS Code",
+      "gitVer": "1.0.0",
+      "gitDate": "2025-01-01",
+      "localVer": "0.0.1",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "server_error",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "api_failure"
+      ],
+      "error": "HTTP 500"
+    }
+  ]
+}
+MOCK_CALLS|1
+MOCK_CALL|server_error|https://api.github.com/repos/microsoft/vscode/releases/latest

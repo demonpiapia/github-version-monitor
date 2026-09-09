@@ -1,0 +1,18 @@
+[08:34:47.211] Phase 8 PS5.1 Compatibility Regression Started
+[08:34:47.216] ProjectRoot: D:\AI\Workspace\automatic\github-version-monitor
+[08:34:47.217] PVDir: D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final
+[08:34:47.218] PS5.1 Path: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+[08:34:48.815] PS5.1 version: 5.1.22621.963
+[08:34:48.815] === T04-PS5.1: rate_limited Regression (403 + remaining=0) ===
+[08:34:51.624] T04-PS5.1: exit=0 status=rate_limited rateLimited=True
+[08:34:51.625] T04-PS5.1: latest=1 review=0 html=0 retry=0 total=1
+[08:34:51.625] T04-PS5.1: verdict=PASS
+[08:34:51.627] === T05-PS5.1: forbidden Regression (403 + remaining=50) ===
+[08:34:54.211] T05-PS5.1: exit=0 status=forbidden forbidden=True calls=1
+[08:34:54.212] T05-PS5.1: verdict=PASS
+[08:34:54.215] === Phase 8 Summary ===
+[08:34:54.216] PS5.1 available: True (version: 5.1.22621.963)
+[08:34:54.217] T04-PS5.1: PASS
+[08:34:54.218] T05-PS5.1: PASS
+[08:34:54.218] Duration: 7.0s
+[08:34:54.244] Summary JSON written to phase8-summary.json

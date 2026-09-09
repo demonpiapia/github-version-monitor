@@ -1,0 +1,2 @@
+--- stderr-attempt1.txt ---
+--- stderr-attempt2.txt ---

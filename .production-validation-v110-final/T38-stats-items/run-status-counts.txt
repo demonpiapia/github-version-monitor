@@ -1,0 +1,12 @@
+RUN_STATUS|failed| count: 2
+REVIEW_WRITE_OK| count: 0
+Expected: RUN_STATUS|failed| count = 1 (constraint #13)
+
+Analysis:
+L480 stats/items integrity check failed (return removed in v1.10)
+→ Output RUN_STATUS|failed|review 程序事实完整性校验失败
+→ Execution falls into L481 try block
+→ Set-Content succeeds (tmp written)
+→ ConvertFrom-Json succeeds but stats mismatch detected
+→ Output RUN_STATUS|failed|review 临时 JSON 校验失败
+→ Total: 2 RUN_STATUS|failed| outputs (constraint #13 VIOLATION)

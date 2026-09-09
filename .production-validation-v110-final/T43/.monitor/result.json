@@ -1,0 +1,210 @@
+{
+  "runAt": "2026-09-09T08:01:35.4311674+08:00",
+  "stats": {
+    "total": 6,
+    "apiOk": 5,
+    "apiErr": 1,
+    "synced": 1,
+    "yes": 2,
+    "uninstalled": 1,
+    "pendingReview": 3,
+    "newReleases": 5,
+    "flips": 2,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "VS Code normal",
+      "gitVer": "1.136.2",
+      "gitDate": "2026-09-09",
+      "localVer": "0.0.1",
+      "flag": "yes",
+      "prevFlag": "no",
+      "latest": "1.136.2",
+      "publishedUtc": "2026-09-08T17:54:34Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": true,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    },
+    {
+      "repo": "nodejs/node",
+      "name": "Node.js synced",
+      "gitVer": "v26.8.1",
+      "gitDate": "2026-08-27",
+      "localVer": "v26.8.1",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "v26.8.1",
+      "publishedUtc": "2026-08-26T22:10:37Z",
+      "status": "ok",
+      "cmp": "eq",
+      "isNew": true,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    },
+    {
+      "repo": "facebook/react",
+      "name": "React uninstalled",
+      "gitVer": "v19.2.8",
+      "gitDate": "2026-07-21",
+      "localVer": "未安装",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "v19.2.8",
+      "publishedUtc": "2026-07-21T15:49:09Z",
+      "status": "ok",
+      "cmp": "",
+      "isNew": true,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    },
+    {
+      "repo": "microsoft/TypeScript",
+      "name": "TypeScript unsupported",
+      "gitVer": "v7.0.2",
+      "gitDate": "2026-08-21",
+      "localVer": "abc-invalid-format",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "v7.0.2",
+      "publishedUtc": "2026-08-20T18:09:49Z",
+      "status": "ok",
+      "cmp": "incomparable",
+      "isNew": true,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "incomparable_version"
+      ],
+      "error": ""
+    },
+    {
+      "repo": "test/nonexistent-repo-12345",
+      "name": "Nonexistent 404",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "1.0.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "not_found",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "not_found"
+      ],
+      "error": "Response status code does not indicate success: 404 (Not Found)."
+    },
+    {
+      "repo": "angular/angular",
+      "name": "Angular versionJump",
+      "gitVer": "v22.1.5",
+      "gitDate": "2026-09-03",
+      "localVer": "0.0.0",
+      "flag": "yes",
+      "prevFlag": "no",
+      "latest": "v22.1.5",
+      "publishedUtc": "2026-09-03T02:35:12Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": true,
+      "versionJump": true,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "version_jump"
+      ],
+      "error": ""
+    }
+  ],
+  "review": {
+    "performed": true,
+    "items": [
+      {
+        "repo": "microsoft/TypeScript",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口前1项：v7.0.2 v6.0.3 v6.0.2 v6.0-rc v6.0-beta|pre=True|draft=True|published= HTML 诊断 HTTP 200；页面标题仅供诊断：Releases · microsoft/TypeScript · GitHub",
+        "conclusion": "pending",
+        "reasons": [
+          "incomparable_version"
+        ],
+        "apiListStatus": "ok",
+        "apiList": [
+          {
+            "tag_name": "v7.0.2 v6.0.3 v6.0.2 v6.0-rc v6.0-beta",
+            "published_at": "",
+            "prerelease": true,
+            "draft": true
+          }
+        ],
+        "htmlStatus": "200",
+        "htmlTitle": "Releases · microsoft/TypeScript · GitHub"
+      },
+      {
+        "repo": "test/nonexistent-repo-12345",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口复核请求失败。 HTML 诊断请求失败。",
+        "conclusion": "pending",
+        "reasons": [
+          "not_found"
+        ],
+        "apiListStatus": "error",
+        "apiList": [],
+        "htmlStatus": "error",
+        "htmlTitle": ""
+      },
+      {
+        "repo": "angular/angular",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口前1项：v22.2.0-next.5 v22.1.5 v22.2.0-next.4 v22.1.4 v21.2.22|pre=True|draft=True|published= HTML 诊断 HTTP 200；页面标题仅供诊断：Releases · angular/angular · GitHub",
+        "conclusion": "pending",
+        "reasons": [
+          "version_jump"
+        ],
+        "apiListStatus": "ok",
+        "apiList": [
+          {
+            "tag_name": "v22.2.0-next.5 v22.1.5 v22.2.0-next.4 v22.1.4 v21.2.22",
+            "published_at": "",
+            "prerelease": true,
+            "draft": true
+          }
+        ],
+        "htmlStatus": "200",
+        "htmlTitle": "Releases · angular/angular · GitHub"
+      }
+    ]
+  }
+}

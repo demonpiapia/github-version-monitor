@@ -1,0 +1,1 @@
+(no stderr output — Phase 11 is static self-review, no execution errors)

@@ -1,0 +1,16 @@
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-stats-items\fixture-stdout.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-stats-items\lock-after.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-stats-items\lock-before.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-stats-items\md-after.md
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-stats-items\md-before.md
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-stats-items\result-after.json
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-stats-items\sha256-after.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-stats-items\sha256-before.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-stats-items\stdout.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-stats-items\step4-wrapper.ps1
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-stats-items\.monitor\fetch_run.log
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-stats-items\.monitor\result.json
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-stats-items\.monitor\backups\GitHub更新监测列表.backup.20260909-070942681.md
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-stats-items\.output\GitHub更新监测列表.md
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-stats-items\after\dir-listing.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-stats-items\before\dir-listing.txt

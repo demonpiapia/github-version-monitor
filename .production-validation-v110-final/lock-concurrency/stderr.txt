@@ -1,0 +1,2 @@
+--- stderr-proc1.txt ---
+--- stderr-proc2.txt ---

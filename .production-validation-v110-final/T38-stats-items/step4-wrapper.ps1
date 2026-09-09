@@ -1,0 +1,6 @@
+$ErrorActionPreference = 'Continue'
+$env:GITHUB_VERSION_MONITOR_BASE = 'd:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-stats-items'
+. 'd:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\lib\step1.ps1'
+. 'd:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\lib\step2.ps1'
+. 'd:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\lib\step3.ps1'
+. 'd:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\lib\step4-t38-stats-items-harness.ps1'

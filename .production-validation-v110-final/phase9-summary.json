@@ -1,0 +1,21 @@
+{
+  "overallVerdict": "PASS",
+  "testDirs": {
+    "lock-ownership": "d:\\AI\\Workspace\\automatic\\github-version-monitor\\.production-validation-v110-final\\lock-ownership",
+    "lock-concurrency": "d:\\AI\\Workspace\\automatic\\github-version-monitor\\.production-validation-v110-final\\lock-concurrency",
+    "lock-stale-dead": "d:\\AI\\Workspace\\automatic\\github-version-monitor\\.production-validation-v110-final\\lock-stale-dead",
+    "lock-stale-alive": "d:\\AI\\Workspace\\automatic\\github-version-monitor\\.production-validation-v110-final\\lock-stale-alive",
+    "process-kill": "d:\\AI\\Workspace\\automatic\\github-version-monitor\\.production-validation-v110-final\\process-kill"
+  },
+  "passCount": 5,
+  "failCount": 0,
+  "blockedCount": 0,
+  "results": {
+    "lock-ownership": "PASS",
+    "lock-concurrency": "PASS",
+    "lock-stale-dead": "PASS",
+    "lock-stale-alive": "PASS",
+    "process-kill": "PASS"
+  },
+  "durationSeconds": 13.6
+}

@@ -1,0 +1,17 @@
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-heartbeat\fixture-stdout.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-heartbeat\lock-after.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-heartbeat\lock-before.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-heartbeat\md-after.md
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-heartbeat\md-before.md
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-heartbeat\result-after.json
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-heartbeat\sha256-after.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-heartbeat\sha256-before.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-heartbeat\stdout.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-heartbeat\step4-wrapper.ps1
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-heartbeat\.monitor\fetch_run.log
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-heartbeat\.monitor\result.json
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-heartbeat\.monitor\run.lock
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-heartbeat\.monitor\backups\GitHub更新监测列表.backup.20260909-070935394.md
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-heartbeat\.output\GitHub更新监测列表.md
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-heartbeat\after\dir-listing.txt
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final\T38-heartbeat\before\dir-listing.txt

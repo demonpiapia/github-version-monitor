@@ -1,0 +1,40 @@
+[08:13:12.484] Phase 7 T04 + T05-PS7 + T26 + T18 Execution Started
+[08:13:12.491] ProjectRoot: d:\AI\Workspace\automatic\github-version-monitor
+[08:13:12.493] PVDir: d:\AI\Workspace\automatic\github-version-monitor\.production-validation-v110-final
+[08:13:12.493] PwshPath: C:\Program Files\PowerShell\7\pwsh.exe
+[08:13:12.493] === 7.1 T04-PS7: rate_limited Regression ===
+[08:13:13.587] T04-PS7: exit=0 status=rate_limited rateLimited=True
+[08:13:13.588] T04-PS7: latest=1 review=0 html=0 retry=0 total=1
+[08:13:13.588] T04-PS7: verdict=PASS
+[08:13:13.590] === 7.2 T05-PS7: forbidden Regression ===
+[08:13:14.474] T05-PS7: exit=0 status=forbidden forbidden=True calls=1
+[08:13:14.475] T05-PS7: verdict=PASS
+[08:13:14.475] === 7.3 T26: Strict Flag Regression ===
+[08:13:15.329] T26 case flag='yes' expect=VALID parseError=False mdUnchanged=True lockReleased=False pass=True
+[08:13:16.212] T26 case flag='no' expect=VALID parseError=False mdUnchanged=True lockReleased=False pass=True
+[08:13:16.910] T26 case flag='YES' expect=PARSE_ERROR parseError=True mdUnchanged=True lockReleased=True pass=True
+[08:13:17.703] T26 case flag='Yes' expect=PARSE_ERROR parseError=True mdUnchanged=True lockReleased=True pass=True
+[08:13:18.462] T26 case flag='yEs' expect=PARSE_ERROR parseError=True mdUnchanged=True lockReleased=True pass=True
+[08:13:19.130] T26 case flag='NO' expect=PARSE_ERROR parseError=True mdUnchanged=True lockReleased=True pass=True
+[08:13:19.809] T26 case flag='No' expect=PARSE_ERROR parseError=True mdUnchanged=True lockReleased=True pass=True
+[08:13:20.468] T26 case flag='pending' expect=PARSE_ERROR parseError=True mdUnchanged=True lockReleased=True pass=True
+[08:13:21.117] T26 case flag='true' expect=PARSE_ERROR parseError=True mdUnchanged=True lockReleased=True pass=True
+[08:13:21.117] T26: verdict=PASS (cases=9)
+[08:13:21.117] === 7.4 T18: State Preservation Regression ===
+[08:13:22.043] T18 state=not_found status=not_found(exp=not_found) gitVer=(exp=) gitDate=(exp=) flag=no(exp=no) review=True(exp=True) pass=True
+[08:13:22.826] T18 state=rate_limited status=rate_limited(exp=rate_limited) gitVer=1.0.0(exp=1.0.0) gitDate=2025-01-01(exp=2025-01-01) flag=no(exp=no) review=True(exp=True) pass=True
+[08:13:23.583] T18 state=server_error status=server_error(exp=server_error) gitVer=1.0.0(exp=1.0.0) gitDate=2025-01-01(exp=2025-01-01) flag=no(exp=no) review=True(exp=True) pass=True
+[08:13:24.326] T18 state=network_error status=network_error(exp=network_error) gitVer=1.0.0(exp=1.0.0) gitDate=2025-01-01(exp=2025-01-01) flag=no(exp=no) review=True(exp=True) pass=True
+[08:13:25.023] T18 state=invalid_response status=invalid_response(exp=invalid_response) gitVer=1.0.0(exp=1.0.0) gitDate=2025-01-01(exp=2025-01-01) flag=no(exp=no) review=True(exp=True) pass=True
+[08:13:25.730] T18 state=metadata_incomplete status=metadata_incomplete(exp=metadata_incomplete) gitVer=1.0.0(exp=1.0.0) gitDate=2025-01-01(exp=2025-01-01) flag=no(exp=no) review=True(exp=True) pass=True
+[08:13:26.501] T18 state=auth_error status=auth_error(exp=auth_error) gitVer=1.0.0(exp=1.0.0) gitDate=2025-01-01(exp=2025-01-01) flag=no(exp=no) review=True(exp=True) pass=True
+[08:13:27.259] T18 state=forbidden status=forbidden(exp=forbidden) gitVer=1.0.0(exp=1.0.0) gitDate=2025-01-01(exp=2025-01-01) flag=no(exp=no) review=True(exp=True) pass=True
+[08:13:28.007] T18 state=http_error status=http_error(exp=http_error) gitVer=1.0.0(exp=1.0.0) gitDate=2025-01-01(exp=2025-01-01) flag=no(exp=no) review=True(exp=True) pass=True
+[08:13:28.007] T18: verdict=PASS (states=9)
+[08:13:28.012] === Phase 7 Summary ===
+[08:13:28.013] T04-PS7: PASS
+[08:13:28.013] T05-PS7: PASS
+[08:13:28.013] T26:     PASS
+[08:13:28.013] T18:     PASS
+[08:13:28.014] Duration: 15.5s
+[08:13:28.037] Summary JSON written to phase7-summary.json

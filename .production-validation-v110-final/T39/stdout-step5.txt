@@ -1,0 +1,5 @@
+=== STEP 5 START (T39 harness) ===
+COMMIT_OK|已原子替换主 md（数据行 2，yes/no 校验通过，repo 集合一致）。
+RUNTIME_ERROR|释放锁前 ownership 校验失败（锁内 PID 与当前进程不一致或锁不可读），未删除锁文件。
+RUN_STATUS|failed|主 md 提交状态不可否认，但运行锁未安全释放。
+=== STEP 5 END ===

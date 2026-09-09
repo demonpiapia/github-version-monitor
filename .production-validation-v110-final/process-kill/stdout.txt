@@ -1,0 +1,72 @@
+--- stdout-attempt1.txt ---
+BACKUP_OK|20260909-090843739
+KILL_WRAPPER_STEP2_DELAY_START
+
+--- stdout-attempt2.txt ---
+BACKUP_OK|20260909-090845985
+FETCH_COMPLETE|apiOk=0 apiErr=2 total=2
+SUMMARY|total=2 apiOK=0 apiErr=2 synced=0 yes=0 uninstalled=0 pendingReview=2 newReleases=0 flips=0 token=set
+{
+  "stats": {
+    "total": 2,
+    "apiOk": 0,
+    "apiErr": 2,
+    "synced": 0,
+    "yes": 0,
+    "uninstalled": 0,
+    "pendingReview": 2,
+    "newReleases": 0,
+    "flips": 0,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "VS Code",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "1.0.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "network_error",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "api_failure"
+      ],
+      "error": "You cannot call a method on a null-valued expression."
+    },
+    {
+      "repo": "torvalds/linux",
+      "name": "Linux",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "6.5.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "network_error",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "api_failure"
+      ],
+      "error": "You cannot call a method on a null-valued expression."
+    }
+  ]
+}
+REVIEW_WRITE_OK|������ɣ�2 �stats/items ���ֲ��䡣
+COMMIT_OK|��ԭ���滻�� md�������� 2��yes/no У��ͨ����repo ����һ�£���
+RUN_STATUS|success|fetch + ��Ҫ review + commit + lock release ��ɡ�
+

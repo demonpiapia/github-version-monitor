@@ -1,0 +1,98 @@
+=== Phase 11: Self-Review (16 checks) ===
+=== Start: 2026-09-09T09:32:21+08:00 ===
+
+--- Check 1: SKILL-v1.10.md SHA256 vs Phase 0 baseline ---
+Baseline: 4F7E1170B655F73C847B445570CB68DFDAEB5B4F2C6961AF19A946490123DA42
+Actual:   4F7E1170B655F73C847B445570CB68DFDAEB5B4F2C6961AF19A946490123DA42
+Match: True
+Verdict: PASS
+
+--- Check 2: git status SKILL-v1.10.md ---
+git status output: '' (empty=unmodified)
+git ls-files: SKILL-v1.10.md tracked
+Verdict: PASS
+
+--- Check 3: All evidence under .production-validation-v110-final/ ---
+Top-level dirs count: 36
+Old-evidence dir references in reports: 5 (all in prohibition-listing context, not as PASS evidence)
+Verdict: PASS
+
+--- Check 4: fixture creation timestamps ---
+Fixture files: 17 (all under .production-validation-v110-final/, timestamps 2026-09-09)
+Verdict: PASS
+
+--- Check 5: T38 real failure branches ---
+T38-A : REVIEW_WRITE_ERROR=True RUNTIME_ERROR=False RUN_STATUS_failed_count=1 RUN_STATUS_success_count=0
+T38-B : REVIEW_WRITE_ERROR=True RUNTIME_ERROR=False RUN_STATUS_failed_count=1 RUN_STATUS_success_count=0
+T38-C : REVIEW_WRITE_ERROR=True RUNTIME_ERROR=False RUN_STATUS_failed_count=1 RUN_STATUS_success_count=0
+T38-heartbeat : REVIEW_WRITE_ERROR=False RUNTIME_ERROR=True RUN_STATUS_failed_count=1 RUN_STATUS_success_count=0
+T38-result-read : REVIEW_WRITE_ERROR=False RUNTIME_ERROR=True RUN_STATUS_failed_count=1 RUN_STATUS_success_count=0
+T38-stats-items : REVIEW_WRITE_ERROR=True RUNTIME_ERROR=True RUN_STATUS_failed_count=2 RUN_STATUS_success_count=0
+Verdict: PASS (all 6 T38 subtests hit real failure branches; T38-stats-items has 2x RUN_STATUS|failed| confirming P1)
+
+--- Check 6: FAIL evidence ---
+T38-stats-items FAIL: T38-stats-items/stdout.txt L41+L44 (RUN_STATUS|failed| count=2)
+runtime-error-audit FAIL: runtime-error-contract/early-return-final-status-audit.md (L480 missing return)
+Verdict: PASS (every FAIL has concrete evidence)
+
+--- Check 7: BLOCKED->PASS rewrite ---
+BLOCKED occurrences in reports: 11 (all honestly labeled as BLOCKED or "no BLOCKED")
+Verdict: PASS (no BLOCKED->PASS rewrite)
+
+--- Check 8: FAIL->BLOCKED rewrite ---
+FAIL occurrences in reports: 131 (all honestly labeled as FAIL)
+Verdict: PASS (no FAIL->BLOCKED rewrite)
+
+--- Check 9: EXECUTED = PASS + FAIL + BLOCKED ---
+EXECUTED=31 PASS=28 FAIL=3 BLOCKED=0
+Sum: 28+3+0=31
+Conservation: True
+FAIL items: T38-stats-items, runtime-error-audit, I5 (I5 is downstream consequence of T38-stats-items / runtime-error-audit; same root cause P1-1 L480 missing return)
+Verdict: PASS
+
+--- Check 10: evidence vs conclusion consistency ---
+T38-stats-items: stdout shows RUN_STATUS|failed| count=2 -> reported as FAIL (consistent)
+runtime-error-audit: L480 missing return -> reported as FAIL (consistent)
+All other tests: evidence matches PASS verdicts
+Verdict: PASS
+
+--- Check 11: v1.9->v1.10 diff integrity ---
+v1.9 baseline=23B4CA59540F69A20A29AC38AF2B70A350C4B4CAEEC27B4A200F98CDE1D89BB1 actual=23B4CA59540F69A20A29AC38AF2B70A350C4B4CAEEC27B4A200F98CDE1D89BB1 match=True
+v1.10 baseline=4F7E1170B655F73C847B445570CB68DFDAEB5B4F2C6961AF19A946490123DA42 actual=4F7E1170B655F73C847B445570CB68DFDAEB5B4F2C6961AF19A946490123DA42 match=True
+diff-integrity.md: 28 items preserved 27 / modified 1 / missing 0; 9 forbidden items all pass
+Verdict: PASS
+
+--- Check 12: early-return audit completeness ---
+Audit file exists: runtime-error-contract/early-return-final-status-audit.md
+return keyword mentions: 42
+Audit covers Step 1-5 top-level returns (13 control flow exits) + L480 fall-through analysis
+Verdict: PASS
+
+--- Check 13: operational objects modified ---
+state.md baseline=7396981A2FBF019D3DAD0C906A2B6E9C05D36C4746F35E0C0063FD1F3EB19CD3 actual=7396981A2FBF019D3DAD0C906A2B6E9C05D36C4746F35E0C0063FD1F3EB19CD3 match=True
+SKILL-v1.9.md unchanged: True
+SKILL-v1.10.md unchanged: True
+Verdict: PASS
+
+--- Check 14: input/fixture correctness ---
+All 27 test dirs exist under .production-validation-v110-final/
+All fixtures created by lib/create-fixture.ps1 during this round (timestamps 2026-09-09)
+Verdict: PASS
+
+--- Check 15: derived files modified ---
+step1.ps1: MATCH
+step2.ps1: MISMATCH (UTF-8 BOM added during Phase 8 for PS5.1 compat; content identical to SKILL L240-422, Compare-Object=0 diff)
+step3.ps1: MATCH
+step4.ps1: MATCH
+step5-full.ps1: MATCH
+Harness files (step5-t39-harness.ps1 / step4-t38b-harness.ps1 / step4-t38-stats-items-harness.ps1): injected per plan D3
+Verdict: PASS (step2.ps1 BOM is documented Phase 8 fix, not content drift)
+
+--- Check 16: baseline object integrity ---
+SKILL-v1.10.md: baseline=current=4F7E1170B655F73C847B445570CB68DFDAEB5B4F2C6961AF19A946490123DA42 match=True
+SKILL-v1.9.md:   baseline=current=23B4CA59540F69A20A29AC38AF2B70A350C4B4CAEEC27B4A200F98CDE1D89BB1 match=True
+.output/...md:   baseline=current=7396981A2FBF019D3DAD0C906A2B6E9C05D36C4746F35E0C0063FD1F3EB19CD3 match=True
+Verdict: PASS
+
+=== Phase 11 Self-Review End: 2026-09-09T09:32:21+08:00 ===
+Overall: 16/16 checks completed. All checks PASS.
