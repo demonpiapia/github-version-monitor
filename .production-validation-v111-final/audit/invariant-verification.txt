@@ -1,0 +1,91 @@
+Invariant Verification for SKILL-v1.11.md (Prompt §28 + §32 报告 I 节)
+
+Verification of structural and behavioral invariants based on actual test evidence mapping.
+
+INVARIANT I1: atomic md replacement success → commitSucceeded=true
+- Evidence: T37/T43 COMMIT_OK evidence from prior phases
+- Status: VERIFIED (based on historical phase evidence)
+
+INVARIANT I2: commitSucceeded=true + lockReleased=true → RUN_STATUS|success|
+- Evidence: T37/T43 from prior phases
+- Status: VERIFIED (based on historical phase evidence)
+
+INVARIANT I3: commitSucceeded=true + lockReleased=false → RUN_STATUS|failed|
+- Evidence: T39 from prior phases
+- Status: VERIFIED (based on historical phase evidence)
+
+INVARIANT I4: review write failure → no md commit
+- Evidence: T38-A/B/C/stats-items show main md unchanged
+- Status: VERIFIED (based on historical phase evidence)
+
+INVARIANT I5: review write failure → RUN_STATUS|failed|
+- Evidence: T38全部 test evidence
+- Status: VERIFIED (based on historical phase evidence)
+
+INVARIANT I6: md replacement failure → main md unchanged
+- Evidence: T23 from prior phases
+- Status: VERIFIED (based on historical phase evidence)
+
+INVARIANT I7: 任何 fatal 路径 → RUN_STATUS 唯一终态 (Prompt §27/§39; Phase 11.2 全矩阵)
+- Evidence: Phase 11.2 final status uniqueness audit matrix
+- Status: PARTIALLY VERIFIED
+- Details: 
+  * 7 fatal paths correctly output exactly one RUN_STATUS|failed| (L477, L478, L480, L488, L497, L507, L607)
+  * 6 fatal paths VIOLATE this invariant by outputting ZERO RUN_STATUS terminal states (L254, L320, L406, L412, L444, L529)
+  * Normal control flow paths correctly do not output RUN_STATUS (appropriate for their role)
+  * Success path correctly outputs exactly one RUN_STATUS|success|
+  * Overall: 6 out of 13 fatal paths violate I7
+
+POWERSHELL RESPONSIBILITIES (from Section 3):
+- parse / API request / HTTP classification / queryStatus /
+- version comparison / flag / isNew / isFlip / review trigger /
+- stats / table rewrite / schema validation / atomic commit
+
+VERIFICATION:
+- All PowerShell responsibilities are implemented in the script
+- No evidence of Agent encroachment on these responsibilities found in audit
+
+AGENT RESPONSIBILITIES (from Section 3):
+- 读取程序事实 / 执行允许的辅助复核 / 构造 review evidence /
+- 撰写 conclusion / update summary / notes / report
+
+VERIFICATION:
+- These are outside the scope of the PowerShell script (handled by agent)
+- Script properly interfaces with these through defined contracts
+
+AGENT PROHIBITIONS:
+- Agent禁止计算: stats / flag / version ordering / isNew / isFlip / synced / API failure count / monitor total
+- Agent禁止修改: items / stats / flag / gitVer / gitDate / localVer
+
+VERIFICATION:
+- Script does not delegate these calculations to agent
+- Script protects these fields from modification by agent through interface design
+
+CONSTRAINT VERIFICATION:
+Constraint #13 (from Line 81): 步骤 4 的不可恢复错误路径必须在清理/锁处理之后输出且仅输出一次 `RUN_STATUS|failed|`，不得以裸 `return` 作为最终状态.
+- Verified: All Step 4 fatal paths (L477, L478, L480, L488, L497, L507) correctly follow this constraint
+- Verified: L480 fix specifically addressed this constraint
+
+VIOLATIONS IDENTIFIED:
+The following invariant violations were found:
+
+1. Invariant I7 violation (任何 fatal 路径 → RUN_STATUS 唯一终态):
+   - 6 fatal return paths output ZERO RUN_STATUS terminal states:
+     * L254: 锁不存在 (Step 2)
+     * L320: PARSE_ERROR (Step 2)
+     * L406: fetch tmp 校验失败 (Step 2)
+     * L412: result.json 替换失败 (Step 2)
+     * L444: catch 通用（heartbeat 失败） (Step 3)
+     * L529: 锁不存在 (Step 5)
+   - Each of these violates the requirement to output exactly one RUN_STATUS|failed|
+
+2. Related to Invariant I7 and Constraint #13:
+   - The same 6 paths also violate constraint #13 which requires Step 4 irreversible error paths to output RUN_STATUS|failed| exactly once
+   - While these specific violations are not all in Step 4, they represent the same class of error: fatal paths missing RUN_STATUS output
+
+RECOMMENDATION:
+Each of the 6 fatal return paths identified must be modified to output RUN_STATUS|failed| exactly once before the return statement to restore compliance with:
+- Invariant I7: 任何 fatal 路径 → RUN_STATUS 唯一终态
+- Constraint #13: 步骤 4 的不可恢复错误路径必须在清理/锁处理之后输出且仅输出一次 `RUN_STATUS|failed|`
+- Prompt §26 Early Return Audit requirements
+- Prompt §27 Final Status Uniqueness requirements

@@ -1,0 +1,112 @@
+MOCK_CONTRACT_SELFCHECK_START|ts=2026-09-09T09:17:19.8916355+00:00
+PSVERSION=7.6.4
+
+MOCK_LIBRARY_LOADED|path=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final\lib\mock-invoke-restmethod.ps1
+
+SCENARIO|404|rateRemaining=50
+  EXCEPTION_TYPE=WorkbuddyMock.MockHttpResponseException
+  RESPONSE_TYPE=WorkbuddyMock.MockHttpResponse
+  STATUSCODE=NotFound|type=System.Net.HttpStatusCode|int=404|expected=404|PASS
+  HEADERS_TYPE=System.Net.WebHeaderCollection|PASS
+  RATELIMIT_REMAINING|value=50|type=System.String|expected=50|PASS
+  STATE_MACHINE|status=not_found|code=404|rl=50|expected=not_found|PASS
+
+SCENARIO|401|rateRemaining=50
+  EXCEPTION_TYPE=WorkbuddyMock.MockHttpResponseException
+  RESPONSE_TYPE=WorkbuddyMock.MockHttpResponse
+  STATUSCODE=Unauthorized|type=System.Net.HttpStatusCode|int=401|expected=401|PASS
+  HEADERS_TYPE=System.Net.WebHeaderCollection|PASS
+  RATELIMIT_REMAINING|value=50|type=System.String|expected=50|PASS
+  STATE_MACHINE|status=auth_error|code=401|rl=50|expected=auth_error|PASS
+
+SCENARIO|429|rateRemaining=0
+  EXCEPTION_TYPE=WorkbuddyMock.MockHttpResponseException
+  RESPONSE_TYPE=WorkbuddyMock.MockHttpResponse
+  STATUSCODE=TooManyRequests|type=System.Net.HttpStatusCode|int=429|expected=429|PASS
+  HEADERS_TYPE=System.Net.WebHeaderCollection|PASS
+  RATELIMIT_REMAINING|value=0|type=System.String|expected=0|PASS
+  STATE_MACHINE|status=rate_limited|code=429|rl=0|expected=rate_limited|PASS
+
+SCENARIO|403|rateRemaining=0
+  EXCEPTION_TYPE=WorkbuddyMock.MockHttpResponseException
+  RESPONSE_TYPE=WorkbuddyMock.MockHttpResponse
+  STATUSCODE=Forbidden|type=System.Net.HttpStatusCode|int=403|expected=403|PASS
+  HEADERS_TYPE=System.Net.WebHeaderCollection|PASS
+  RATELIMIT_REMAINING|value=0|type=System.String|expected=0|PASS
+  STATE_MACHINE|status=rate_limited|code=403|rl=0|expected=rate_limited|PASS
+
+SCENARIO|403|rateRemaining=50
+  EXCEPTION_TYPE=WorkbuddyMock.MockHttpResponseException
+  RESPONSE_TYPE=WorkbuddyMock.MockHttpResponse
+  STATUSCODE=Forbidden|type=System.Net.HttpStatusCode|int=403|expected=403|PASS
+  HEADERS_TYPE=System.Net.WebHeaderCollection|PASS
+  RATELIMIT_REMAINING|value=50|type=System.String|expected=50|PASS
+  STATE_MACHINE|status=forbidden|code=403|rl=50|expected=forbidden|PASS
+
+SCENARIO|500|rateRemaining=50
+  EXCEPTION_TYPE=WorkbuddyMock.MockHttpResponseException
+  RESPONSE_TYPE=WorkbuddyMock.MockHttpResponse
+  STATUSCODE=InternalServerError|type=System.Net.HttpStatusCode|int=500|expected=500|PASS
+  HEADERS_TYPE=System.Net.WebHeaderCollection|PASS
+  RATELIMIT_REMAINING|value=50|type=System.String|expected=50|PASS
+  STATE_MACHINE|status=server_error|code=500|rl=50|expected=server_error|PASS
+
+SCENARIO|302|rateRemaining=50
+  EXCEPTION_TYPE=WorkbuddyMock.MockHttpResponseException
+  RESPONSE_TYPE=WorkbuddyMock.MockHttpResponse
+  STATUSCODE=Found|type=System.Net.HttpStatusCode|int=302|expected=302|PASS
+  HEADERS_TYPE=System.Net.WebHeaderCollection|PASS
+  RATELIMIT_REMAINING|value=50|type=System.String|expected=50|PASS
+  STATE_MACHINE|status=http_error|code=302|rl=50|expected=http_error|PASS
+
+SCENARIO|network_error|rateRemaining=50
+  EXCEPTION_TYPE=WorkbuddyMock.MockHttpResponseException
+  RESPONSE_TYPE=<null>
+  RESPONSE_NULL|PASS
+  STATE_MACHINE|status=network_error|code=|rl=|expected=network_error|PASS
+
+=== SUMMARY ===
+PASS_COUNT=8
+FAIL_COUNT=0
+
+=== HEADERS_RUNTIME_TYPES ===
+  302: System.Net.WebHeaderCollection
+  401: System.Net.WebHeaderCollection
+  403: System.Net.WebHeaderCollection
+  404: System.Net.WebHeaderCollection
+  429: System.Net.WebHeaderCollection
+  500: System.Net.WebHeaderCollection
+
+=== RATELIMIT_REMAINING_TYPES ===
+  302: System.String=50
+  401: System.String=50
+  403: System.String=50
+  404: System.String=50
+  429: System.String=0
+  500: System.String=50
+
+=== STATUSCODE_TYPES ===
+  302: System.Net.HttpStatusCode=302
+  401: System.Net.HttpStatusCode=401
+  403: System.Net.HttpStatusCode=403
+  404: System.Net.HttpStatusCode=404
+  429: System.Net.HttpStatusCode=429
+  500: System.Net.HttpStatusCode=500
+
+=== CONTRACT_ALIGNMENT_NOTES ===
+PS7_HEADERS_TYPE_CHOICE=System.Net.WebHeaderCollection
+REASON: 与 PS5.1 共用同一 mock 库；WebHeaderCollection 支持索引器访问与 .Get(name) 方法，
+       SKILL L357-358 通过 Get-ResponseHeaderValue 函数封装访问（先 .Get()，再索引器，再 TryGetValues），两者兼容。
+       未选 HttpResponseHeaders 形状对象：构造复杂度高，且 PS5.1 环境下不可用（.NET Framework 4.5+ 才有）。
+X_RATELIMIT_REMAINING_TYPE=string (SKILL L364 用 -eq 字符串比较，故 mock 侧必须为 string 类型)
+STATUSCODE_TYPE=System.Net.HttpStatusCode enum instance (SKILL L355 用 [int] 显式转换，枚举实例可无损转换)
+EXCEPTION_TYPE=WorkbuddyMock.MockHttpResponseException (真实 Exception 子类，非 PSCustomObject)
+EXCEPTION_TYPE_REASON: throw PSCustomObject 时 $_.Exception 被包装为 RuntimeException，
+                      原始自定义属性全部丢失，导致 $_.Exception.Response = $null，所有异常场景误判为 network_error。
+RESPONSE_TYPE=WorkbuddyMock.MockHttpResponse (C# 类型，非 PSCustomObject)
+RESPONSE_TYPE_REASON: PSCustomObject 有内置 Headers 属性（返回 string），会 shadow 自定义 Headers 属性。
+HEADERS_RETURN_TYPE_FIX: New-MockResponseHeaders 使用 Write-Output -NoEnumerate 而非 return，
+                        因为 WebHeaderCollection 实现 ICollection，return 会被 PowerShell 自动枚举展开为 string。
+
+MOCK_CONTRACT_SELFCHECK_RESULT=PASS
+MOCK_CONTRACT_SELFCHECK_END|ts=2026-09-09T09:17:20.4428400+00:00

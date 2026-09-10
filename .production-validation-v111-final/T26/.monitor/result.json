@@ -1,0 +1,235 @@
+{
+  "runAt": "2026-09-10T09:36:22.2855753+08:00",
+  "stats": {
+    "total": 6,
+    "apiOk": 4,
+    "apiErr": 2,
+    "synced": 1,
+    "yes": 2,
+    "uninstalled": 1,
+    "pendingReview": 4,
+    "newReleases": 3,
+    "flips": 0,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "vscode-normal",
+      "gitVer": "1.137.0",
+      "gitDate": "2026-09-09",
+      "localVer": "0.0.1",
+      "flag": "yes",
+      "prevFlag": "yes",
+      "latest": "1.137.0",
+      "publishedUtc": "2026-09-09T15:32:58Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    },
+    {
+      "repo": "facebook/react",
+      "name": "vscode-synced",
+      "gitVer": "v19.3.0",
+      "gitDate": "2026-09-01",
+      "localVer": "v19.3.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "v19.3.0",
+      "publishedUtc": "2026-09-09T18:01:33Z",
+      "status": "ok",
+      "cmp": "eq",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": false,
+      "reviewReasons": [],
+      "error": ""
+    },
+    {
+      "repo": "nodejs/node",
+      "name": "vscode-uninstalled",
+      "gitVer": "v26.8.2",
+      "gitDate": "2026-09-10",
+      "localVer": "未安装",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "v26.8.2",
+      "publishedUtc": "2026-09-09T16:07:48Z",
+      "status": "ok",
+      "cmp": "",
+      "isNew": true,
+      "isFlip": false,
+      "versionJump": true,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "version_jump"
+      ],
+      "error": ""
+    },
+    {
+      "repo": "python/cpython",
+      "name": "vscode-unsupported",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "版本不可比较",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "not_found",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "not_found"
+      ],
+      "error": "Response status code does not indicate success: 404 (Not Found)."
+    },
+    {
+      "repo": "workbuddy-v111-nonexistent-org-7f3a9c2e/nonexistent-repo-404",
+      "name": "nonexistent-404",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "1.0.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "not_found",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "not_found"
+      ],
+      "error": "Response status code does not indicate success: 404 (Not Found)."
+    },
+    {
+      "repo": "microsoft/TypeScript",
+      "name": "vscode-versionjump",
+      "gitVer": "v7.0.2",
+      "gitDate": "2026-08-21",
+      "localVer": "0.0.1",
+      "flag": "yes",
+      "prevFlag": "yes",
+      "latest": "v7.0.2",
+      "publishedUtc": "2026-08-20T18:09:49Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": false,
+      "versionJump": true,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "version_jump"
+      ],
+      "error": ""
+    }
+  ],
+  "review": {
+    "performed": true,
+    "items": [
+      {
+        "repo": "nodejs/node",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口前1项：v26.8.2 v24.21.0 v26.8.1 v26.8.0 v24.20.0|pre=True|draft=True|published= HTML 诊断 HTTP 200；页面标题仅供诊断：Releases · nodejs/node · GitHub",
+        "conclusion": "pending",
+        "reasons": [
+          "version_jump"
+        ],
+        "apiListStatus": "ok",
+        "apiList": [
+          {
+            "tag_name": "v26.8.2 v24.21.0 v26.8.1 v26.8.0 v24.20.0",
+            "published_at": "",
+            "prerelease": true,
+            "draft": true
+          }
+        ],
+        "htmlStatus": "200",
+        "htmlTitle": "Releases · nodejs/node · GitHub"
+      },
+      {
+        "repo": "python/cpython",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口前1项：|pre=False|draft=False|published= HTML 诊断 HTTP 200；页面标题仅供诊断：Releases · python/cpython · GitHub",
+        "conclusion": "pending",
+        "reasons": [
+          "not_found"
+        ],
+        "apiListStatus": "ok",
+        "apiList": [
+          {
+            "tag_name": "",
+            "published_at": "",
+            "prerelease": false,
+            "draft": false
+          }
+        ],
+        "htmlStatus": "200",
+        "htmlTitle": "Releases · python/cpython · GitHub"
+      },
+      {
+        "repo": "workbuddy-v111-nonexistent-org-7f3a9c2e/nonexistent-repo-404",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口复核请求失败。 HTML 诊断请求失败。",
+        "conclusion": "pending",
+        "reasons": [
+          "not_found"
+        ],
+        "apiListStatus": "error",
+        "apiList": [],
+        "htmlStatus": "error",
+        "htmlTitle": ""
+      },
+      {
+        "repo": "microsoft/TypeScript",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口前1项：v7.0.2 v6.0.3 v6.0.2 v6.0-rc v6.0-beta|pre=True|draft=True|published= HTML 诊断 HTTP 200；页面标题仅供诊断：Releases · microsoft/TypeScript · GitHub",
+        "conclusion": "pending",
+        "reasons": [
+          "version_jump"
+        ],
+        "apiListStatus": "ok",
+        "apiList": [
+          {
+            "tag_name": "v7.0.2 v6.0.3 v6.0.2 v6.0-rc v6.0-beta",
+            "published_at": "",
+            "prerelease": true,
+            "draft": true
+          }
+        ],
+        "htmlStatus": "200",
+        "htmlTitle": "Releases · microsoft/TypeScript · GitHub"
+      }
+    ]
+  }
+}

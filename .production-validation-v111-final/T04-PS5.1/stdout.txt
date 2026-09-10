@@ -1,0 +1,3 @@
+MOCK_LIBRARY_LOADED
+MOCK_SCENARIO|403|rateRemaining=0
+LOCK_SEEDED|pid=68332|path=.production-validation-v111-final\T04-PS5.1\.monitor\run.lock

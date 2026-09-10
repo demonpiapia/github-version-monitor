@@ -1,0 +1,49 @@
+ORCH|t39|base=.production-validation-v111-final/T39|pid=45364
+FIXTURE_OK|scenario=t38|rows=1|path=.production-validation-v111-final\T39\.output\GitHub���¼���б�.md
+BACKUP_OK|20260910-070235220
+FETCH_COMPLETE|apiOk=0 apiErr=1 total=1
+SUMMARY|total=1 apiOK=0 apiErr=1 synced=0 yes=0 uninstalled=0 pendingReview=1 newReleases=0 flips=0 token=set
+{
+  "stats": {
+    "total": 1,
+    "apiOk": 0,
+    "apiErr": 1,
+    "synced": 0,
+    "yes": 0,
+    "uninstalled": 0,
+    "pendingReview": 1,
+    "newReleases": 0,
+    "flips": 0,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "workbuddy-v111-nonexistent-org-7f3a9c2e/nonexistent-repo-404",
+      "name": "nonexistent-repo-404",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "1.0.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "not_found",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "not_found"
+      ],
+      "error": "Response status code does not indicate success: 404 (Not Found)."
+    }
+  ]
+}
+REVIEW_WRITE_OK|������ɣ�1 �stats/items ���ֲ��䡣
+INJECT|inline_step5|afterLine=116|injectionLines=2|codeLen=6536
+COMMIT_OK|��ԭ���滻�� md�������� 1��yes/no У��ͨ����repo ����һ�£���
+RUNTIME_ERROR|�ͷ���ǰ ownership У��ʧ�ܣ����� PID �뵱ǰ���̲�һ�»������ɶ�����δɾ�����ļ���
+RUN_STATUS|failed|�� md �ύ״̬���ɷ��ϣ���������δ��ȫ�ͷš�
+SENTINEL|AFTER_STEP5

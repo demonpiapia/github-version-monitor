@@ -1,0 +1,55 @@
+D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final\lib\step2-mock-harness.ps1 : ËùÔÚÎ»
+ÖÃ D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final\lib\step2.ps1:19 ×Ö·û: 43
++     $startTok = if ($prev -match 'start=([^;\r\n]+)') { $Matches[1] } ...
++                                           ~
+"[" ºóÃæÈ±ÉÙÀàÐÍÃû³Æ¡£
+ËùÔÚÎ»ÖÃ D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final\lib\step2.ps1:19 ×Ö·û: 44
++     $startTok = if ($prev -match 'start=([^;\r\n]+)') { $Matches[1] } ...
++                                            ~
+±í´ïÊ½ÖÐÈ±ÉÙÓÒ¡°)¡±¡£
+ËùÔÚÎ»ÖÃ D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final\lib\step2.ps1:13 ×Ö·û: 33
++ if (-not (Test-Path $lockPath)) {
++                                 ~
+Óï¾ä¿é»òÀàÐÍ¶¨ÒåÖÐÈ±ÉÙÓÒ¡°}¡±¡£
+ËùÔÚÎ»ÖÃ D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final\lib\step2.ps1:19 ×Ö·û: 51
++     $startTok = if ($prev -match 'start=([^;\r\n]+)') { $Matches[1] } ...
++                                                   ~
+±í´ïÊ½»òÓï¾äÖÐ°üº¬ÒâÍâµÄ±ê¼Ç¡°)¡±¡£
+ËùÔÚÎ»ÖÃ D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final\lib\step2.ps1:19 ×Ö·û: 113
++ ... ]+)') { $Matches[1] } else { [DateTimeOffset]::UtcNow.ToString('o') }
++                                                                     ~~~~~
+±í´ïÊ½»òÓï¾äÖÐ°üº¬ÒâÍâµÄ±ê¼Ç¡°o') }
+    $fs = [System.IO.File]::Open($lockPath, [System.IO.FileMode]::Open, [System.IO.FileAccess]::ReadWrite, [System.IO.F
+ileShare]::None)
+    $fs.SetLength(0)
+    $bytes = [System.Text.Encoding]::UTF8.GetBytes(("pid={0};start={1};step=2;beat={2}" -f $PID, $startTok, [DateTimeOf
+fset]::UtcNow.ToString('o')))
+    $fs.Write($bytes, 0, $bytes.Length)
+    $fs.Close()
+} catch [System.IO.IOException] {
+    Write-Output 'LOCKED¡±¡£
+ËùÔÚÎ»ÖÃ D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final\lib\step2.ps1:28 ×Ö·û: 1
++ } catch {
++ ~
+±í´ïÊ½»òÓï¾äÖÐ°üº¬ÒâÍâµÄ±ê¼Ç¡°}¡±¡£
+ËùÔÚÎ»ÖÃ D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final\lib\step2.ps1:80 ×Ö·û: 585
++ ... rseErrors+='ç¼ºå°‘é¡¶éƒ¨â€œæœ€è¿‘æ ¸å¯¹æ—¶é—´â€è¡Œ'};foreach($anchor in @('ç»“è®º','æ›´æ–°æ‘˜è¦ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+±í´ïÊ½»òÓï¾äÖÐ°üº¬ÒâÍâµÄ±ê¼Ç¡°ç¼ºå°‘é¡¶éƒ¨â€œæœ€è¿‘æ ¸å¯¹æ—¶é—´â€è¡Œ'};foreach($anchor in @('ç»“è®º','æ›´æ–°æ‘˜è¦','å¤‡æ
+³¨','æ ¸å¯¹æ–¹æ³•')){if($text-notmatch ('¡±¡£
+ËùÔÚÎ»ÖÃ D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final\lib\step2.ps1:80 ×Ö·û: 585
++ ... rseErrors+='ç¼ºå°‘é¡¶éƒ¨â€œæœ€è¿‘æ ¸å¯¹æ—¶é—´â€è¡Œ'};foreach($anchor in @('ç»“è®º','æ›´æ–°æ‘˜è¦ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+¡°if¡±Óï¾äÖÐµÄ±í´ïÊ½ºóÃæÈ±ÉÙÓÒ¡°)¡±¡£
+ËùÔÚÎ»ÖÃ D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final\lib\step2.ps1:80 ×Ö·û: 794
++ ... Errors+=('ç¼ºå°‘å†™å›žé”šç‚¹ï¼?# {0}'-f $anchor)}};$linkRe=[regex]'\[([^\]]+)\] ...
++                                                                  ~
+"[" ºóÃæÈ±ÉÙÀàÐÍÃû³Æ¡£
+ËùÔÚÎ»ÖÃ D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final\lib\step2.ps1:80 ×Ö·û: 827
++ ... chor)}};$linkRe=[regex]'\[([^\]]+)\]\(https?://github\.com/([^/]+)/([ ...
++                                                                  ~
+"[" ºóÃæÈ±ÉÙÀàÐÍÃû³Æ¡£
+²¢Î´±¨¸æËùÓÐ·ÖÎö´íÎó¡£Çë¸üÕý±¨¸æµÄ´íÎó²¢ÖØÊÔ¡£
+    + CategoryInfo          : ParserError: (:) [step2-mock-harness.ps1], ParseException
+    + FullyQualifiedErrorId : MissingTypename,step2-mock-harness.ps1
+ 

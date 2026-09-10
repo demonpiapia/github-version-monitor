@@ -1,0 +1,4 @@
+===== STEP 7-FIX / 7.1 / 8 APPEND (sub-agent instance 2) =====
+APPEND_TS=2026-09-09T17:20:57.063+08:00
+STDERR_CONTENT=<empty (all commands exited 0, no stderr output)>
+===== END APPEND =====

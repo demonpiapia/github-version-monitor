@@ -1,0 +1,30 @@
+diff --git a/SKILL-v1.10.md b/SKILL-v1.11.md
+index 8044a99..f544479 100644
+--- a/SKILL-v1.10.md
++++ b/SKILL-v1.11.md
+@@ -5,7 +5,7 @@ description: GitHub 项目版本监测（自动化版·纯 PowerShell）——
+ 
+ # GitHub 项目版本监测（自动化版·纯 PowerShell）
+ 
+-> 版本：v1.10
++> 版本：v1.11
+ > 生产执行基准：PowerShell 7.x；PowerShell 5.1 仅作兼容性验证环境。
+ 
+ ## 0. 受众与职责
+@@ -477,7 +477,7 @@ function Release-LockSafely { try{$raw=Get-Content $lockPath -Raw -ErrorAction S
+ try{$raw=Get-Content $lockPath -Raw -ErrorAction Stop;if($raw-notmatch('pid='+[regex]::Escape([string]$PID)+';')){throw 'ownership mismatch'};$startTok=if($raw-match 'start=([^;\r\n]+)'){$Matches[1]}else{[DateTimeOffset]::UtcNow.ToString('o')};$fs=[IO.File]::Open($lockPath,[IO.FileMode]::Open,[IO.FileAccess]::ReadWrite,[IO.FileShare]::None);try{$fs.SetLength(0);$b=[Text.Encoding]::UTF8.GetBytes(('pid={0};start={1};step=4;beat={2}'-f $PID,$startTok,[DateTimeOffset]::UtcNow.ToString('o')));$fs.Write($b,0,$b.Length)}finally{$fs.Close()}}catch{Write-Output ('RUNTIME_ERROR|步骤4 heartbeat 失败：{0}'-f $_.Exception.Message);Write-Output 'RUN_STATUS|failed|步骤4 heartbeat 失败，整轮终止。';return}
+ try { $doc=Get-Content $resultPath -Raw|ConvertFrom-Json } catch { Write-Output ('RUNTIME_ERROR|读取 result.json 失败：{0}'-f $_.Exception.Message); $released=Release-LockSafely; if (-not $released) { Write-Output 'RUNTIME_ERROR|读取 result.json 失败后锁释放失败，保留锁供陈锁机制接管。' }; Write-Output 'RUN_STATUS|failed|读取 result.json 失败，整轮终止。'; return };$origStats=$doc.stats|ConvertTo-Json -Depth 8 -Compress;$origItems=$doc.items|ConvertTo-Json -Depth 8 -Compress;$candidates=@($doc.items|Where-Object{$_.review-eq $true});$reviewItems=@();$headers=@{'User-Agent'='workbuddy-version-monitor';'Accept'='application/vnd.github+json';'X-GitHub-Api-Version'='2026-03-10'};if($env:GITHUB_TOKEN){$headers['Authorization']='Bearer '+$env:GITHUB_TOKEN}
+ foreach($it in $candidates){if($it.status-eq 'rate_limited'){$reviewItems+=[PSCustomObject]@{repo=$it.repo;sources=@('releases_latest');finding='主查询已限流；不重试、不追加复核请求。';conclusion='pending';reasons=@($it.reviewReasons);apiListStatus='skipped_rate_limited';apiList=@();htmlStatus='skipped_rate_limited';htmlTitle=''};continue};$apiList=@();$apiListStatus='error';$htmlStatus='error';$htmlTitle='';$parts=@();try{$apiList=@(Invoke-RestMethod -Uri "https://api.github.com/repos/$($it.repo)/releases?per_page=5" -Headers $headers -TimeoutSec 20)|ForEach-Object{$pub='';if($_.published_at){try{$pub=ConvertTo-UtcIso $_.published_at}catch{}};[PSCustomObject]@{tag_name=[string]$_.tag_name;published_at=$pub;prerelease=[bool]$_.prerelease;draft=[bool]$_.draft}};$apiListStatus='ok'}catch{$parts+='列表接口复核请求失败。'};if($apiListStatus-eq 'ok' -and $apiList.Count -gt 0){$parts+=('列表接口前{0}项：{1}'-f $apiList.Count,(($apiList|ForEach-Object{"$($_.tag_name)|pre=$($_.prerelease)|draft=$($_.draft)|published=$($_.published_at)"})-join '; '))}elseif($apiListStatus-eq 'ok'){$parts+='列表接口返回空集合。'};try{$html=Invoke-WebRequest -Uri "https://github.com/$($it.repo)/releases" -Headers @{'User-Agent'='workbuddy-version-monitor'} -TimeoutSec 20 -UseBasicParsing;$htmlStatus=[string]$html.StatusCode;$htmlTitle=[regex]::Match([string]$html.Content,'<title>\s*(?<t>.*?)\s*</title>','IgnoreCase').Groups['t'].Value;$parts+=('HTML 诊断 HTTP {0}；页面标题仅供诊断：{1}'-f $htmlStatus,$htmlTitle)}catch{$parts+='HTML 诊断请求失败。'};$reviewItems+=[PSCustomObject]@{repo=$it.repo;sources=@('releases_api','html');finding=($parts-join ' ');conclusion='pending';reasons=@($it.reviewReasons);apiListStatus=$apiListStatus;apiList=@($apiList);htmlStatus=$htmlStatus;htmlTitle=$htmlTitle}}
+-$doc.review=[PSCustomObject]@{performed=$true;items=@($reviewItems)};$newStats=$doc.stats|ConvertTo-Json -Depth 8 -Compress;$newItems=$doc.items|ConvertTo-Json -Depth 8 -Compress;if($newStats-ne $origStats-or $newItems-ne $origItems){Remove-Item $tmpPath -Force -ErrorAction SilentlyContinue;Write-Output 'REVIEW_WRITE_ERROR|review 修改了 stats/items，拒绝覆盖 result.json。';$released=Release-LockSafely;if(-not $released){Write-Output 'RUNTIME_ERROR|review stats/items 完整性失败后锁释放失败，保留锁供陈锁机制接管。'};Write-Output 'RUN_STATUS|failed|review 程序事实完整性校验失败，整轮终止。'};try {
++$doc.review=[PSCustomObject]@{performed=$true;items=@($reviewItems)};$newStats=$doc.stats|ConvertTo-Json -Depth 8 -Compress;$newItems=$doc.items|ConvertTo-Json -Depth 8 -Compress;if($newStats-ne $origStats-or $newItems-ne $origItems){Remove-Item $tmpPath -Force -ErrorAction SilentlyContinue;Write-Output 'REVIEW_WRITE_ERROR|review 修改了 stats/items，拒绝覆盖 result.json。';$released=Release-LockSafely;if(-not $released){Write-Output 'RUNTIME_ERROR|review stats/items 完整性失败后锁释放失败，保留锁供陈锁机制接管。'};Write-Output 'RUN_STATUS|failed|review 程序事实完整性校验失败，整轮终止。';return};try {
+     $doc|ConvertTo-Json -Depth 8|Set-Content -Path $tmpPath -Encoding UTF8
+ } catch {
+     Remove-Item $tmpPath -Force -ErrorAction SilentlyContinue
+@@ -765,6 +765,7 @@ FETCH_COMPLETE
+ 
+ ## 15. Changelog
+ 
++- **v1.11（2026-09-09 唯一失败终态回归修复轮）**：①修复 v1.10 T38-stats-items P1：Step 4 `stats/items` 程序事实完整性失败分支在输出 `RUN_STATUS|failed|` 后补齐 `return`，阻止落入后续 JSON 校验路径 ②确保该失败路径只输出一次 `RUN_STATUS|failed|`，满足 constraint #13 的唯一最终终态要求 ③其余 v1.10 行为与生产路径保持不变。
+ - **v1.10（2026-09-09 review 失败终态闭环修复轮）**：①修复 v1.9 T38：Step 4 `result.review.tmp` 写入失败、临时 JSON 校验失败、原子替换失败及其他不可恢复 review 错误均在清理与锁处理后明确输出 `RUN_STATUS|failed|`，不再以裸 `return` 作为终态 ②补齐步骤 4 `result.json` 读取失败与 heartbeat 失败的最终失败状态输出 ③新增 invariant：任何不可恢复提前终止路径都必须产生唯一 `RUN_STATUS|failed|` 终态；其余 v1.9 行为与生产路径保持不变。
+ - **v1.9（2026-09-08 运行时异常清理与锁释放修复轮）**：①修复 v1.8 T38：Step 4 `result.review.tmp` 写入失败现在进入受保护异常分支，清理临时文件并尝试释放运行锁，最终不进入 Step 5 ②修复 v1.8 T23：Step 5 主 md 临时文件写入/读取失败现在清理临时文件、释放运行锁并输出 `RUN_STATUS|failed|`；主 md 原子替换失败同样清理临时文件并进入统一 failed 终态 ③将异常路径的 `tmp` 清理、lock release、最终失败状态形成显式闭环 ④保留 v1.8 的 `$commitSucceeded`、`.output` 状态路径、PS7 生产基准与其他核心能力不变。
+ - **v1.8（2026-09-08 生产验证 P1 修复 + 状态路径同步轮）**：①修复 v1.7 T37/T43 暴露的 `$commitSucceeded` 状态遗漏：主 md 原子替换成功后立即置 `$commitSucceeded=$true`，确保正常提交可正确输出 `RUN_STATUS|success|` ②将 `COMMIT_OK|` 与 `$commitSucceeded=$true` 的对应关系、以及 `RUN_STATUS|success|` 必须同时满足 commit 与 lock release 成功写入 invariant ③将持久化状态文件路径统一为 `.output/GitHub更新监测列表.md`，并同步所有解析、写回、汇报引用 ④其余 v1.7 能力保持不变。

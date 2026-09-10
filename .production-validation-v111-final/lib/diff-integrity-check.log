@@ -1,0 +1,7 @@
+HUNKS=3 ADDED=3 DELETED=2
+CAP PASS=30 FAIL=0
+FORBIDDEN PASS=9 FAIL=0
+HAS_RETURN=True
+PURE_INSERTION=True inserted=;return firstDiff=545
+OVERALL=PASS
+OUT=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final\diff-integrity.md

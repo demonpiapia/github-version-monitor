@@ -1,0 +1,46 @@
+ORCH|t38-result-read|base=.production-validation-v111-final\T38-result-read|pid=16404
+FIXTURE_OK|scenario=t38|rows=1|path=.production-validation-v111-final\T38-result-read\.output\GitHub更新监测列表.md
+BACKUP_OK|20260910-063355755
+FETCH_COMPLETE|apiOk=0 apiErr=1 total=1
+SUMMARY|total=1 apiOK=0 apiErr=1 synced=0 yes=0 uninstalled=0 pendingReview=1 newReleases=0 flips=0 token=set
+{
+  "stats": {
+    "total": 1,
+    "apiOk": 0,
+    "apiErr": 1,
+    "synced": 0,
+    "yes": 0,
+    "uninstalled": 0,
+    "pendingReview": 1,
+    "newReleases": 0,
+    "flips": 0,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "workbuddy-v111-nonexistent-org-7f3a9c2e/nonexistent-repo-404",
+      "name": "nonexistent-repo-404",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "1.0.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "not_found",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "not_found"
+      ],
+      "error": "Response status code does not indicate success: 404 (Not Found)."
+    }
+  ]
+}
+INJECT|result_json_deleted|path=.production-validation-v111-final\T38-result-read\.monitor\result.json
+RUNTIME_ERROR|读取 result.json 失败：Cannot find path 'D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final\T38-result-read\.monitor\result.json' because it does not exist.
+RUN_STATUS|failed|读取 result.json 失败，整轮终止。

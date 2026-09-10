@@ -1,0 +1,6 @@
+PASS step1.ps1 L161-L230 bytes=2988 zero-diff
+PASS step2.ps1 L240-L422 bytes=14137 zero-diff
+PASS step3.ps1 L432-L451 bytes=1571 zero-diff
+PASS step4.ps1 L473-L509 bytes=5866 zero-diff
+PASS step5-full.ps1 L521-L654 bytes=6439 zero-diff
+VERIFY_EXTRACT_ALL_PASS

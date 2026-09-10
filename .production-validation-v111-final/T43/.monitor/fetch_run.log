@@ -1,0 +1,1 @@
+[2026-09-10 08:03:56] items=6 apiOK=4 apiErr=2 yes=2 uninstalled=1 pendingReview=4 newReleases=3 flips=0 token=set；结果写入 result.json；无 HTML 回退，API 失败项保留上轮状态。

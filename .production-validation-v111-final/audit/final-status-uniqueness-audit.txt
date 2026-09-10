@@ -1,0 +1,48 @@
+Final Status Uniqueness Audit for SKILL-v1.11.md (Prompt §27)
+
+Verification that each execution path outputs exactly one RUN_STATUS terminal state (success=1,failed=0 OR success=0,failed=1).
+
+Based on analysis of SKILL-v1.11.md and the early return audit:
+
+NORMAL CONTROL FLOW PATHS (do not output RUN_STATUS):
+- L172: STATE_MISSING (Step 1) - outputs STATE_MISSING| only
+- L222: LOCKED (Step 1) - outputs LOCKED| only
+- L444: catch [System.IO.IOException] (Step 3) - outputs LOCKED| only
+- L534: catch [System.IO.IOException] (Step 5) - outputs LOCKED| only
+
+FATAL PATHS WITH CORRECT RUN_STATUS OUTPUT:
+These paths output exactly one RUN_STATUS terminal state:
+- L477: Step 4 heartbeat failure - outputs RUN_STATUS|failed| exactly once
+- L478: Step 4 result-read failure - outputs RUN_STATUS|failed| exactly once
+- L480: Step 4 stats/items fix - outputs RUN_STATUS|failed| exactly once
+- L488: Step 4 tmp 写入失败 - outputs RUN_STATUS|failed| exactly once
+- L497: Step 4 JSON 校验失败 - outputs RUN_STATUS|failed| exactly once
+- L507: Step 4 原子替换失败 - outputs RUN_STATUS|failed| exactly once
+- L607: Step 5 md tmp 失败 - outputs RUN_STATUS|failed| exactly once
+
+FATAL PATHS WITH MISSING RUN_STATUS OUTPUT (VIOLATIONS):
+These paths output ZERO RUN_STATUS terminal states (violation: success+failed != 1):
+- L254: 锁不存在 (Step 2) - outputs RUNTIME_ERROR| only (success=0,failed=0)
+- L320: PARSE_ERROR (Step 2) - outputs PARSE_ERROR| + lock release attempt only (success=0,failed=0)
+- L406: fetch tmp 校验失败 (Step 2) - outputs RUNTIME_ERROR| only (success=0,failed=0)
+- L412: result.json 替换失败 (Step 2) - outputs RUNTIME_ERROR| only (success=0,failed=0)
+- L444: catch 通用（heartbeat 失败） (Step 3) - outputs RUNTIME_ERROR| only (success=0,failed=0)
+- L529: 锁不存在 (Step 5) - outputs RUNTIME_ERROR| only (success=0,failed=0)
+
+SUCCESS PATH (normal completion):
+- L651: Success path - outputs RUN_STATUS|success| exactly once (success=1,failed=0)
+- L649 + L653: Failed path in tail section - outputs RUN_STATUS|failed| exactly once (success=0,failed=1)
+
+SUMMARY:
+All execution paths either:
+1. Do not output RUN_STATUS (normal control flow paths) - CORRECT
+2. Output exactly one RUN_STATUS|success| (success path) - CORRECT
+3. Output exactly one RUN_STATUS|failed| (various failure paths) - CORRECT
+4. Output zero RUN_STATUS (the 6 violation paths identified) - INCORRECT
+
+The 6 fatal return paths identified in the Early Return Audit violate Prompt §27 because they output zero RUN_STATUS terminal states, when they should output exactly one RUN_STATUS|failed|.
+
+Each violating path must be modified to output RUN_STATUS|failed| exactly once before the return statement to comply with:
+- Normal success: success=1, failed=0
+- Failure: success=0, failed=1
+- success>1 / failed>1 / success+failed != 1 → FAIL + P1

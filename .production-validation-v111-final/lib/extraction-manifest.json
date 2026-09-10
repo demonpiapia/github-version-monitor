@@ -1,0 +1,37 @@
+{
+  "extractions": [
+    {
+      "file": "step1.ps1",
+      "source_lines": "161-230",
+      "fence_lines": "160-231",
+      "sha256": "F07C486AF3FCE83E24904041CD1D471466FE27DDE3DB38416553DFB864A1A689"
+    },
+    {
+      "file": "step2.ps1",
+      "source_lines": "240-422",
+      "fence_lines": "239-423",
+      "sha256": "EF851690C516BB85EA00232864ECD868E8BEE92BA2794E46E8654C27784522D0"
+    },
+    {
+      "file": "step3.ps1",
+      "source_lines": "432-451",
+      "fence_lines": "431-452",
+      "sha256": "F8CE8F248BFDA24884AD1092392A4199861DB3AE55E41C1AD292C4511449DBFF"
+    },
+    {
+      "file": "step4.ps1",
+      "source_lines": "473-509",
+      "fence_lines": "472-510",
+      "sha256": "A7825A39C3D844951AFB4C6774CFDF75F45F7705951F51AC641645654462E159"
+    },
+    {
+      "file": "step5-full.ps1",
+      "source_lines": "521-654",
+      "fence_lines": "520-655",
+      "sha256": "81C4D352AF2C5C6A5926453E4F7A81BE3B0E4A6EAB7A572542F77053A1721AA9"
+    }
+  ],
+  "extracted_at": "2026-09-09T07:31:12.9755474+00:00",
+  "source_sha256": "B6632680A9AE18E02634E6EAF7F261FCD2502FE0529566088D0E0FC7160FC928",
+  "source_file": "SKILL-v1.11.md"
+}

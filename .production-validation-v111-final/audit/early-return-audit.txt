@@ -1,0 +1,53 @@
+Early Return Audit for SKILL-v1.11.md (Prompt §26)
+
+Analysis of all return statements in SKILL-v1.11.md:
+
+NORMAL CONTROL FLOW RETURNS (non-error paths that do NOT require RUN_STATUS):
+- L172: STATE_MISSING (Step 1) - normal control flow, outputs STATE_MISSING|
+- L222: LOCKED (Step 1) - normal control flow, outputs LOCKED|
+- L444: catch [System.IO.IOException] (Step 3) - normal control flow, outputs LOCKED|
+- L534: catch [System.IO.IOException] (Step 5) - normal control flow, outputs LOCKED|
+
+FUNCTION INTERNAL RETURNS (internal function returns, not whole-script termination):
+- L248: Release-LockSafely function internal returns
+- L266, L269: version parsing function internal returns
+- L277, L280, L294, L296, L297, L299: version comparison function internal returns
+- L300-305: version comparison function internal returns
+- L310-313: time conversion function internal returns
+- L326-329: header value function internal returns
+- L476: Release-LockSafely function internal return (Step 4)
+- L477: heartbeat function internal return (part of try/catch but function-internal)
+- L478: result-read function internal return (part of try/catch but function-internal)
+
+FATAL RETURNS (whole-script termination paths requiring exactly one RUN_STATUS):
+- L254: 锁不存在 (Step 2) - outputs RUNTIME_ERROR| but MISSING RUN_STATUS|failed|
+- L320: PARSE_ERROR (Step 2) - outputs PARSE_ERROR| + attempts lock release but MISSING RUN_STATUS|failed|
+- L406: fetch tmp 校验失败 (Step 2) - outputs RUNTIME_ERROR| but MISSING RUN_STATUS|failed|
+- L412: result.json 替换失败 (Step 2) - outputs RUNTIME_ERROR| but MISSING RUN_STATUS|failed|
+- L444: catch 通用（heartbeat 失败） (Step 3) - outputs RUNTIME_ERROR| but MISSING RUN_STATUS|failed|
+- L529: 锁不存在 (Step 5) - outputs RUNTIME_ERROR| but MISSING RUN_STATUS|failed|
+
+FATAL RETURNS THAT CORRECTLY OUTPUT RUN_STATUS|failed| EXACTLY ONCE:
+- L477: Step 4 heartbeat failure - outputs RUNTIME_ERROR| + RUN_STATUS|failed| exactly once (same line)
+- L478: Step 4 result-read failure - outputs RUNTIME_ERROR| + RUN_STATUS|failed| exactly once (same line)
+- L480: Step 4 stats/items fix - outputs REVIEW_WRITE_ERROR| + RUN_STATUS|failed| exactly once
+- L488: Step 4 tmp 写入失败 - outputs REVIEW_WRITE_ERROR| + RUN_STATUS|failed| exactly once
+- L497: Step 4 JSON 校验失败 - outputs REVIEW_WRITE_ERROR| + RUN_STATUS|failed| exactly once
+- L507: Step 4 原子替换失败 - outputs REVIEW_WRITE_ERROR| + RUN_STATUS|failed| exactly once
+- L607: Step 5 md tmp 失败 - outputs RUN_STATUS|failed|主 md 未提交。 exactly once
+
+SUMMARY:
+Total fatal return paths: 13
+Fatal paths missing RUN_STATUS|failed|: 6 (L254, L320, L406, L412, L444, L529)
+Fatal paths correctly outputting RUN_STATUS|failed| exactly once: 7 (L477, L478, L480, L488, L497, L507, L607)
+
+VIOLATIONS FOUND:
+The following fatal return paths violate Prompt §26 requirement to output terminal status exactly once:
+1. L254: 锁不存在 (Step 2) - outputs RUNTIME_ERROR| only
+2. L320: PARSE_ERROR (Step 2) - outputs PARSE_ERROR| + lock release attempt only
+3. L406: fetch tmp 校验失败 (Step 2) - outputs RUNTIME_ERROR| only
+4. L412: result.json 替换失败 (Step 2) - outputs RUNTIME_ERROR| only
+5. L444: catch 通用（heartbeat 失败） (Step 3) - outputs RUNTIME_ERROR| only
+6. L529: 锁不存在 (Step 5) - outputs RUNTIME_ERROR| only
+
+Each of these paths must be modified to output RUN_STATUS|failed| exactly once before the return statement.

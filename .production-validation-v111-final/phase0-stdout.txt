@@ -1,0 +1,126 @@
+[phase0] start_time=2026-09-09T15:14:03.0603439+08:00
+[phase0] pwsh=7.6.4
+[phase0] root=D:\AI\Workspace\automatic\github-version-monitor
+[phase0] base=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final
+
+=== STEP1: create clean-room directory tree ===
+[dir] base already exists
+[dir] exists  lib
+[dir] exists  T22
+[dir] exists  T23
+[dir] exists  T37
+[dir] exists  T38-A
+[dir] exists  T38-B
+[dir] exists  T38-C
+[dir] exists  T38-heartbeat
+[dir] exists  T38-result-read
+[dir] exists  T38-stats-items
+[dir] exists  T39
+[dir] exists  T43
+[dir] exists  T46
+[dir] exists  T04-PS7
+[dir] exists  T04-PS5.1
+[dir] exists  T05-PS5.1
+[dir] exists  T18
+[dir] exists  T26
+[dir] exists  runtime-artifact
+[dir] exists  lock-concurrency
+[dir] exists  lock-ownership
+[dir] exists  lock-stale-alive
+[dir] exists  lock-stale-dead
+[dir] exists  process-kill
+[dir] exists  audit
+[dir] exists  .selfreview
+[dir] requested_count=26
+[assert] .monitor pre-created=False
+
+=== STEP1.1: directory listing vs expected ===
+[actual] count=26
+[actual] .selfreview
+[actual] audit
+[actual] lib
+[actual] lock-concurrency
+[actual] lock-ownership
+[actual] lock-stale-alive
+[actual] lock-stale-dead
+[actual] process-kill
+[actual] runtime-artifact
+[actual] T04-PS5.1
+[actual] T04-PS7
+[actual] T05-PS5.1
+[actual] T18
+[actual] T22
+[actual] T23
+[actual] T26
+[actual] T37
+[actual] T38-A
+[actual] T38-B
+[actual] T38-C
+[actual] T38-heartbeat
+[actual] T38-result-read
+[actual] T38-stats-items
+[actual] T39
+[actual] T43
+[actual] T46
+[diff] missing_count=0
+[diff] extra_count=0
+[diff] RESULT=OK (actual == expected, 26 dirs, no .monitor)
+
+=== STEP2: old validation dir existence (Test-Path) ===
+[old] .production-validation-v110-final exists=True
+[old] .production-validation-v19-final exists=True
+[old] .production-validation-v17-final exists=True
+[old] .production-validation-v18-final exists=True
+[old] OLD_EVIDENCE_USED_AS_CURRENT_PASS=NO (Phase 0 仅创建空目录，未从旧目录复制任何 fixture/stdout/result)
+
+=== STEP3: SHA256 baseline ===
+[sha256] 4F7E1170B655F73C847B445570CB68DFDAEB5B4F2C6961AF19A946490123DA42  SKILL-v1.10.md
+[sha256] B6632680A9AE18E02634E6EAF7F261FCD2502FE0529566088D0E0FC7160FC928  SKILL-v1.11.md
+[sha256] 7396981A2FBF019D3DAD0C906A2B6E9C05D36C4746F35E0C0063FD1F3EB19CD3  .output/GitHub更新监测列表.md
+
+=== STEP3.1: sha256 file existence + non-empty verify ===
+[sha256-verify] v110.sha256 size=82 content="4F7E1170B655F73C847B445570CB68DFDAEB5B4F2C6961AF19A946490123DA42  SKILL-v1.10.md"
+[sha256-verify] v111.sha256 size=82 content="B6632680A9AE18E02634E6EAF7F261FCD2502FE0529566088D0E0FC7160FC928  SKILL-v1.11.md"
+[sha256-verify] state.sha256 size=103 content="7396981A2FBF019D3DAD0C906A2B6E9C05D36C4746F35E0C0063FD1F3EB19CD3  .output/GitHub更新监测列表.md"
+
+=== STEP4: spot check subdirs empty ===
+[spot] T22 item_count=0
+[spot] T37 item_count=0
+[spot] T38-A item_count=0
+
+=== STEP5: git tracking status before add ===
+[git] ls-files SKILL-v1.11.md => "SKILL-v1.11.md" (empty = untracked)
+[git] ls-files .GPT prompt => ".GPT/Production Validation Prompt — SKILL-v1.11 Targeted Validation.md" (empty = untracked)
+
+=== STEP5.1: git add (only 2 files) ===
+[git] add exit_code=0
+
+=== STEP5.2: git status --short ===
+[status] A  ".GPT/Production Validation Prompt — SKILL-v1.11 Targeted Validation.md"
+[status]  M .Template/通用执行计划制定补充prompt.md
+[status] A  SKILL-v1.11.md
+[status] ?? ".GPT/GPT → New Conversation Handoff — github-version-monitor.md"
+[status] ?? .exec-plan/exec-plan-v1.11-a-codexCLI-review.md
+[status] ?? .exec-plan/exec-plan-v1.11-a.md
+[status] ?? .exec-plan/exec-plan-v1.11-b-zoo-review.md
+[status] ?? .exec-plan/exec-plan-v1.11-b.md
+[status] ?? .exec-plan/exec-plan-v1.11-c.md
+[status] ?? .production-validation-v111-final/
+
+=== STEP5.3: staged verification ===
+[staged] count=2
+[staged] .GPT/Production Validation Prompt — SKILL-v1.11 Targeted Validation.md
+[staged] SKILL-v1.11.md
+[staged] both_target_files_staged=True
+
+=== STEP6: prohibition assertions ===
+[git] HEAD=f7ec148
+[git] commit NOT executed (commit belongs to Phase 13)
+[assert] .monitor pre-created=False
+[assert] A  ".GPT/Production Validation Prompt — SKILL-v1.11 Targeted Validation.md"
+[assert] A  SKILL-v1.11.md
+
+[phase0] end_time=2026-09-09T15:14:03.7867639+08:00
+[phase0] duration_sec=0.726
+[phase0] RESULT=COMPLETED
+[phase0] DONE

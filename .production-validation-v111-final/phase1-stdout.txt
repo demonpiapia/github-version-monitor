@@ -1,0 +1,78 @@
+SRC=D:\AI\Workspace\automatic\github-version-monitor\SKILL-v1.11.md
+SRC_TOTAL_LINES=776
+POWERSHELL_BLOCKS=5
+  BLOCK open=L160 code=L161-L230 close=L231 (code_lines=70)
+  BLOCK open=L239 code=L240-L422 close=L423 (code_lines=183)
+  BLOCK open=L431 code=L432-L451 close=L452 (code_lines=20)
+  BLOCK open=L472 code=L473-L509 close=L510 (code_lines=37)
+  BLOCK open=L520 code=L521-L654 close=L655 (code_lines=134)
+EXTRACTED step1.ps1 <- code L161-L230 (fence L160-L231) sha256=F07C486AF3FCE83E24904041CD1D471466FE27DDE3DB38416553DFB864A1A689
+EXTRACTED step2.ps1 <- code L240-L422 (fence L239-L423) sha256=EF851690C516BB85EA00232864ECD868E8BEE92BA2794E46E8654C27784522D0
+EXTRACTED step3.ps1 <- code L432-L451 (fence L431-L452) sha256=F8CE8F248BFDA24884AD1092392A4199861DB3AE55E41C1AD292C4511449DBFF
+EXTRACTED step4.ps1 <- code L473-L509 (fence L472-L510) sha256=A7825A39C3D844951AFB4C6774CFDF75F45F7705951F51AC641645654462E159
+EXTRACTED step5-full.ps1 <- code L521-L654 (fence L520-L655) sha256=81C4D352AF2C5C6A5926453E4F7A81BE3B0E4A6EAB7A572542F77053A1721AA9
+MANIFEST=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final\lib\extraction-manifest.json
+EXTRACT_DONE
+
+
+===== STEP 7-FIX / 7.1 / 8 APPEND (sub-agent instance 2, resume_from=Step7-fix) =====
+APPEND_TS=2026-09-09T17:20:57.063+08:00
+SUBAGENT_INSTANCE=2
+RESUME_FROM=Step7-fix
+
+--- MOCK_FIX_APPLIED ---
+FILE=lib/mock-invoke-restmethod.ps1
+CHANGES:
+  1) New-MockHttpException: return PSCustomObject → return New-Object WorkbuddyMock.MockHttpResponseException(, )
+     REASON: throw PSCustomObject 时 .Exception 被包装为 RuntimeException，原始自定义属性全部丢失 → .Exception.Response =  → 所有异常场景误判为 network_error。
+  2) New-MockHttpResponse: return PSCustomObject → return New-Object WorkbuddyMock.MockHttpResponse(...)
+     REASON: PSCustomObject 有内置 Headers 属性（返回 string），会 shadow 自定义 Headers 属性。
+  3) New-MockResponseHeaders: return  → Write-Output -NoEnumerate 
+     REASON: WebHeaderCollection 实现 ICollection，return 会被 PowerShell 自动枚举展开为 string。
+  4) Add-Type 类型定义：新增 WorkbuddyMock.MockHttpResponse 类（StatusCode + Headers 属性）；MockHttpResponseException 保留。
+  5) 文件行尾从 LF 修正为 CRLF（PS5.1 解析 LF 行尾的 here-string 内嵌 C# 代码块会报 Unexpected token '}'）。
+
+--- PS51_SYNTAX_CHECK ---
+COMMAND=powershell.exe -NoProfile -NonInteractive -File lib\ps51-syntax-check.ps1
+RESULT=PASS
+mock-invoke-restmethod.ps1: PS51_SYNTAX_OK
+step2-mock-harness.ps1: PS51_SYNTAX_OK
+PS51_TOTAL_ERRORS=0
+
+--- MOCK_CONTRACT_SELFCHECK ---
+COMMAND=pwsh -NoProfile -NonInteractive -File lib\mock-contract-selfcheck.ps1
+RESULT=PASS
+PASS_COUNT=8
+FAIL_COUNT=0
+SCENARIOS:
+  404  → EXCEPTION_TYPE=WorkbuddyMock.MockHttpResponseException | RESPONSE_TYPE=WorkbuddyMock.MockHttpResponse | STATUSCODE=NotFound(int=404) | HEADERS_TYPE=System.Net.WebHeaderCollection | RL=50(string) | STATE_MACHINE=not_found | PASS
+  401  → STATUSCODE=Unauthorized(int=401) | HEADERS_TYPE=System.Net.WebHeaderCollection | RL=50(string) | STATE_MACHINE=auth_error | PASS
+  429  → STATUSCODE=TooManyRequests(int=429) | HEADERS_TYPE=System.Net.WebHeaderCollection | RL=0(string) | STATE_MACHINE=rate_limited | PASS
+  403+0  → STATUSCODE=Forbidden(int=403) | HEADERS_TYPE=System.Net.WebHeaderCollection | RL=0(string) | STATE_MACHINE=rate_limited | PASS
+  403+50 → STATUSCODE=Forbidden(int=403) | HEADERS_TYPE=System.Net.WebHeaderCollection | RL=50(string) | STATE_MACHINE=forbidden | PASS
+  500  → STATUSCODE=InternalServerError(int=500) | HEADERS_TYPE=System.Net.WebHeaderCollection | RL=50(string) | STATE_MACHINE=server_error | PASS
+  302  → STATUSCODE=Found(int=302) | HEADERS_TYPE=System.Net.WebHeaderCollection | RL=50(string) | STATE_MACHINE=http_error | PASS
+  network_error → RESPONSE_TYPE=<null> | STATE_MACHINE=network_error | PASS
+PS7_HEADERS_TYPE_CHOICE=System.Net.WebHeaderCollection
+X_RATELIMIT_REMAINING_TYPE=string
+STATUSCODE_TYPE=System.Net.HttpStatusCode enum instance
+
+--- STDOUT_VERIFICATION ---
+COMMAND=pwsh -NoProfile -NonInteractive -File lib\run-full-pipeline.ps1 -BaseDir T37\stdout-verify-base -Scenario normal
+EXIT_CODE=0
+BASE_PRECHECK: .monitor/ 未预创建
+PIPELINE_PID=44692
+STDOUT_MARKERS:
+  PIPELINE (L1) | FIXTURE_OK (L2) | BACKUP_OK (L3) | FETCH_COMPLETE (L4) | SUMMARY (L5) | RESULT_JSON_BLOCK (L6-40) | REVIEW_WRITE_OK (L41) | COMMIT_OK (L42) | RUN_STATUS|success (L43) | PIPELINE_DONE (L44)
+REQUIRED_CHAIN=BACKUP_OK → FETCH_COMPLETE → SUMMARY → COMMIT_OK → RUN_STATUS|success
+CHAIN_INTACT=YES
+STDERR_SIZE_BYTES=0
+STDOUT_PASS_THROUGH=PASS
+T37_T43_CAPTURE_STRATEGY=single_run_capture
+
+--- SKILL_V111_SHA256 ---
+ACTUAL=B6632680A9AE18E02634E6EAF7F261FCD2502FE0529566088D0E0FC7160FC928
+EXPECTED=B6632680A9AE18E02634E6EAF7F261FCD2502FE0529566088D0E0FC7160FC928
+MATCH=YES
+
+===== END APPEND =====

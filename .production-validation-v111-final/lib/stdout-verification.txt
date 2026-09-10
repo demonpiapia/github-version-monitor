@@ -1,0 +1,48 @@
+STDOUT_VERIFICATION_START|ts=2026-09-09T17:19:32+08:00
+PSVERSION=7.6.4
+BASE_DIR=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final\T37\stdout-verify-base
+SCENARIO=normal
+PIPELINE_PID=44692
+
+=== EXECUTION ===
+COMMAND=pwsh -NoProfile -NonInteractive -File lib\run-full-pipeline.ps1 -BaseDir <base> -Scenario normal
+EXIT_CODE=0
+BASE_PRECHECK: .monitor/ 未预创建（由 SKILL 自身初始化）
+FIXTURE: lib/create-fixture.ps1 生成 .output/GitHub更新监测列表.md（1 行，microsoft/vscode）
+
+=== STDOUT_MARKER_ANALYSIS ===
+PIPELINE_MARKER|present=YES|line=1|text=PIPELINE|full|base=...|scenario=normal|pid=44692
+FIXTURE_MARKER|present=YES|line=2|text=FIXTURE_OK|scenario=normal|rows=1|path=...
+BACKUP_MARKER|present=YES|line=3|text=BACKUP_OK|20260909-171932240
+FETCH_MARKER|present=YES|line=4|text=FETCH_COMPLETE|apiOk=1 apiErr=0 total=1
+SUMMARY_MARKER|present=YES|line=5|text=SUMMARY|total=1 apiOK=1 apiErr=0 synced=0 yes=1 uninstalled=0 pendingReview=0 newReleases=1 flips=0 token=set
+RESULT_JSON_BLOCK|present=YES|lines=6-40|text={ "stats": {...}, "items": [...] }
+REVIEW_MARKER|present=YES|line=41|text=REVIEW_WRITE_OK|复核完成：0 项；stats/items 保持不变。
+COMMIT_MARKER|present=YES|line=42|text=COMMIT_OK|已原子替换主 md（数据行 1，yes/no 校验通过，repo 集合一致）。
+RUNSTATUS_MARKER|present=YES|line=43|text=RUN_STATUS|success|fetch + 必要 review + commit + lock release 完成。
+PIPELINE_DONE_MARKER|present=YES|line=44|text=PIPELINE_DONE
+
+=== REQUIRED_CHAIN_CHECK ===
+EXPECTED_CHAIN=BACKUP_OK → FETCH_COMPLETE → SUMMARY → COMMIT_OK → RUN_STATUS|success
+ACTUAL_CHAIN=BACKUP_OK(L3) → FETCH_COMPLETE(L4) → SUMMARY(L5) → COMMIT_OK(L42) → RUN_STATUS|success(L43)
+CHAIN_INTACT=YES
+
+=== STDERR_ANALYSIS ===
+STDERR_FILE=lib/stdout-verify-stderr.log
+STDERR_SIZE_BYTES=0
+STDERR_CONTENT=<empty>
+
+=== CONCLUSION ===
+STDOUT_PASS_THROUGH=PASS
+REASON: 单进程 pwsh 内 & step1..5 顺序调用，所有 step 的 Write-Output 均透传至编排器 stdout；
+       无中间报错、无标记缺失、无乱序、无截断。
+T37_T43_CAPTURE_STRATEGY=single_run_capture
+STRATEGY_RATIONALE: 由于 stdout 透传正常，T37/T43 采用单次执行捕获 stdout（run-full-pipeline.ps1 一次执行），
+                    无需逐 step 执行 + 拼接，也无需按 §0.5 锁 PID 一致性机制处理 step 间锁。
+
+=== CLEANUP ===
+BASE_DIR_RETAINED=YES
+REASON: 保留 T37/stdout-verify-base/ 作为证据（含 .output/、.monitor/、result.json、run.lock 释放后状态），
+       供 Phase 12 self-review 独立复核 stdout 链完整性。
+
+STDOUT_VERIFICATION_END|ts=2026-09-09T17:20:00+08:00

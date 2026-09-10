@@ -1,0 +1,1 @@
+ = [System.IO.File]::ReadAllBytes('..\\lib\\step1.ps1'); if (.Length -ge 3 -and [0] -eq 0xEF -and [1] -eq 0xBB -and [2] -eq 0xBF) {  = [System.Text.Encoding]::UTF8.GetString(,3,.Length-3) } else {  = [System.Text.Encoding]::UTF8.GetString() }; System.Text.ASCIIEncoding = [System.Text.UTF8Encoding]::new(); Invoke-Expression 

@@ -1,0 +1,47 @@
+ORCH|t38-stats-items|base=.production-validation-v111-final\T38-stats-items|pid=71400
+FIXTURE_OK|scenario=t38|rows=1|path=.production-validation-v111-final\T38-stats-items\.output\GitHub更新监测列表.md
+BACKUP_OK|20260910-063200081
+FETCH_COMPLETE|apiOk=0 apiErr=1 total=1
+SUMMARY|total=1 apiOK=0 apiErr=1 synced=0 yes=0 uninstalled=0 pendingReview=1 newReleases=0 flips=0 token=set
+{
+  "stats": {
+    "total": 1,
+    "apiOk": 0,
+    "apiErr": 1,
+    "synced": 0,
+    "yes": 0,
+    "uninstalled": 0,
+    "pendingReview": 1,
+    "newReleases": 0,
+    "flips": 0,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "workbuddy-v111-nonexistent-org-7f3a9c2e/nonexistent-repo-404",
+      "name": "nonexistent-repo-404",
+      "gitVer": "",
+      "gitDate": "",
+      "localVer": "1.0.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "not_found",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "not_found"
+      ],
+      "error": "Response status code does not indicate success: 404 (Not Found)."
+    }
+  ]
+}
+ASSERT|stats.total=1|not_equal_999=True
+INJECT|inline_step4|afterLine=6|injectionLines=2|codeLen=5928
+REVIEW_WRITE_ERROR|review 修改了 stats/items，拒绝覆盖 result.json。
+RUN_STATUS|failed|review 程序事实完整性校验失败，整轮终止。

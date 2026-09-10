@@ -1,0 +1,5 @@
+SNAPSHOT|after-step4|ts=2026-09-10T00:41:35.4128680+00:00|pid=37396
+FILES|count=3
+FILE|name=fetch_run.log|size=198|sha256=052562E8C78AEE3286CE4A7C24A269DB927AF2089B5413337E5214EF09B8E5E6|preview=[2026-09-10 08:41:33] items=1 apiOK=0 apiErr=1 yes=0 uninstalled=0 pendingReview=1 newReleases=0 flips=0 token=set；结果写入 result.json；无 HTML 回退，API 失败项保留上轮状态。\r\n
+FILE|name=result.json|size=1440|sha256=4ED06C7D16DA8BFF2A5D603B1A04CB370F9F539F815447C763A66988C20F7740|preview={\r\n  "runAt": "2026-09-10T08:41:33.4940885+08:00",\r\n  "stats": {\r\n    "total": 1,\r\n    "apiOk": 0,\r\n    "apiErr": 1,\r\n    "synced": 0,\r\n    "yes": 0,\r\n    "uninstalled": 0,\r\n    "pendingReview": 1,\r\n ...
+FILE|name=run.lock|size=95|sha256=93E36F0C9D506FED807C0C5D66046AD69B40A828C29BC855F6680D95C5F13982|preview=pid=37396;start=2026-09-10T00:41:31.9779137+00:00;step=4;beat=2026-09-10T00:41:33.5980759+00:00

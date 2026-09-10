@@ -1,0 +1,4 @@
+DEBUG Env at start: 
+DEBUG Base: D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final
+DEBUG Md path: D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final\.output\GitHub更新监测列表.md
+STATE_MISSING|状态文件 .output\GitHub更新监测列表.md 不存在；不创建空清单。需提供初始清单（releases 链接 + 本地版本）后重跑。

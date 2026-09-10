@@ -1,0 +1,48 @@
+MOCK_LIBRARY_LOADED
+MOCK_SCENARIO|404|rateRemaining=0
+LOCK_SEEDED|pid=68188|path=.production-validation-v111-final\T04-PS7\.monitor\run.lock
+FETCH_COMPLETE|apiOk=0 apiErr=1 total=1
+SUMMARY|total=1 apiOK=0 apiErr=1 synced=0 yes=1 uninstalled=0 pendingReview=1 newReleases=0 flips=0 token=set
+{
+  "stats": {
+    "total": 1,
+    "apiOk": 0,
+    "apiErr": 1,
+    "synced": 0,
+    "yes": 1,
+    "uninstalled": 0,
+    "pendingReview": 1,
+    "newReleases": 0,
+    "flips": 0,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "vscode",
+      "gitVer": "1.137.0",
+      "gitDate": "2026-09-01",
+      "localVer": "0.0.1",
+      "flag": "yes",
+      "prevFlag": "yes",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "network_error",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "api_failure"
+      ],
+      "error": "Cannot index into a null array."
+    }
+  ]
+}
+REQUEST_COUNT|latest=0|reviewApi=0|html=0|other=0
+RESULT_SUMMARY|total=1|apiOk=0|apiErr=1|pendingReview=1
+RESULT_ITEMS|microsoft/vscode=network_error/flag=yes/review=True
+LOCK_CLEANED
+MOCK_HARNESS_DONE

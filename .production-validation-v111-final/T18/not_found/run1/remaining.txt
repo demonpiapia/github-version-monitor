@@ -1,0 +1,4 @@
+RUNTIME_ERROR|步骤3 heartbeat 失败：Cannot find path 'D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final\lib\.monitor\run.lock' because it does not exist.
+RUNTIME_ERROR|步骤4 heartbeat 失败：Cannot find path 'D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v111-final\lib\.monitor\run.lock' because it does not exist.
+RUN_STATUS|failed|步骤4 heartbeat 失败，整轮终止。
+RUNTIME_ERROR|运行锁不存在（步骤1未执行或锁已丢失），本轮终止。
