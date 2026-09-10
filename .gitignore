@@ -3,4 +3,7 @@
 .env.*
 .backup/
 .codebuddy/
+.trash/
+.tmp-seg/
+.workbuddy/
 .vscode/
