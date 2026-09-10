@@ -1,0 +1,9 @@
+PHASE4_BEGIN_STDERR
+
+-- T3-api-failure/stderr.txt (1 lines) --
+
+
+-- T4-write-failure/stderr.txt (1 lines) --
+
+
+PHASE4_END_STDERR

@@ -1,0 +1,124 @@
+{
+  "runAt": "2026-09-11T00:19:37.7142881+08:00",
+  "stats": {
+    "total": 2,
+    "apiOk": 0,
+    "apiErr": 2,
+    "synced": 0,
+    "yes": 0,
+    "uninstalled": 1,
+    "pendingReview": 2,
+    "newReleases": 0,
+    "flips": 0,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "vscode",
+      "gitVer": "v1.0.0",
+      "gitDate": "2026-01-15",
+      "localVer": "v1.0.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "server_error",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "api_failure"
+      ],
+      "error": "Internal Server Error (mock 500)"
+    },
+    {
+      "repo": "PowerShell/PowerShell",
+      "name": "PowerShell",
+      "gitVer": "v1.0.0",
+      "gitDate": "2026-01-15",
+      "localVer": "未安装",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "server_error",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "api_failure"
+      ],
+      "error": "Internal Server Error (mock 500)"
+    }
+  ],
+  "review": {
+    "performed": true,
+    "items": [
+      {
+        "repo": "microsoft/vscode",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口前2项：v1.0.0|pre=False|draft=False|published=; v1.0.1-rc.1|pre=True|draft=False|published= HTML 诊断 HTTP 200；页面标题仅供诊断：https://github.com/microsoft/vscode/releases - Mock Release Page",
+        "conclusion": "pending",
+        "reasons": [
+          "api_failure"
+        ],
+        "apiListStatus": "ok",
+        "apiList": [
+          {
+            "tag_name": "v1.0.0",
+            "published_at": "",
+            "prerelease": false,
+            "draft": false
+          },
+          {
+            "tag_name": "v1.0.1-rc.1",
+            "published_at": "",
+            "prerelease": true,
+            "draft": false
+          }
+        ],
+        "htmlStatus": "200",
+        "htmlTitle": "https://github.com/microsoft/vscode/releases - Mock Release Page"
+      },
+      {
+        "repo": "PowerShell/PowerShell",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口前2项：v1.0.0|pre=False|draft=False|published=; v1.0.1-rc.1|pre=True|draft=False|published= HTML 诊断 HTTP 200；页面标题仅供诊断：https://github.com/PowerShell/PowerShell/releases - Mock Release Page",
+        "conclusion": "pending",
+        "reasons": [
+          "api_failure"
+        ],
+        "apiListStatus": "ok",
+        "apiList": [
+          {
+            "tag_name": "v1.0.0",
+            "published_at": "",
+            "prerelease": false,
+            "draft": false
+          },
+          {
+            "tag_name": "v1.0.1-rc.1",
+            "published_at": "",
+            "prerelease": true,
+            "draft": false
+          }
+        ],
+        "htmlStatus": "200",
+        "htmlTitle": "https://github.com/PowerShell/PowerShell/releases - Mock Release Page"
+      }
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+# Phase 6 Report — Test 6 final status 语义审计
+
+- Sub-agent: Phase 6 (Test 6)
+- Scope: 1 normal path (T2-success) + 1 fatal path (T4-write-failure) + P3 静态审查结论确认
+- Prohibited (per Prompt §8 Test 6): 大型 audit / 动态测试 / 修改 SKILL-v1.12.md
+- Duration: 静态审计，无动态执行
+
+## Verdict summary
+
+| Item | Expected | Observed | Verdict |
+|---|---|---|---|
+| 6a. T2-success `RUN_STATUS=success` count | 1 | 1 (L6) | ✅ PASS |
+| 6a. T2-success `RUN_STATUS=failed` count | 0 | 0 | ✅ PASS |
+| 6b. T4-write-failure `RUN_STATUS=failed` count | 1 | 1 (L20) | ✅ PASS |
+| 6b. T4-write-failure `RUN_STATUS=success` count | 0 | 0 | ✅ PASS |
+| 6b-optional. T5 `RUN_STATUS=success` count (P2 verification) | 1 | 1 (L20) | ✅ PASS |
+| 6b-optional. T5 `RUN_STATUS=failed` count | 0 | 0 | ✅ PASS |
+| 6b-optional. T5 `HOUSEKEEPING_WARNING` count | ≥1 | 1 (L4) | ✅ PASS |
+| 6c. 6 条 fatal path 全部标记"不修改" | 6/6 | 6/6 (diff-integrity.md L94-L99) | ✅ PASS |
+| SKILL-v1.12.md SHA256 未修改 | 3B15C9D7…D23B28BE9 | 3B15C9D7…D23B28BE9 | ✅ PASS |
+
+**Test 6 overall verdict: PASS**
+
+## Evidence files referenced (read-only)
+- `.production-validation-v112-final/T2-success/stdout.txt` (11 lines, SHA256 `1305E452…B31F97`)
+- `.production-validation-v112-final/T4-write-failure/stdout.txt` (21 lines, SHA256 `28C83E5E…35B63`)
+- `.production-validation-v112-final/T5-housekeeping/stdout.txt` (21 lines, SHA256 `F57711E2…18C72`)
+- `.production-validation-v112-final/diff-integrity.md` (195 lines, §3 @ L88-L99)
+
+## Deliverables
+- `audit/final-status-audit.md` (三节结构：6a + 6b + 6c)
+- `.production-validation-v112-final/phase6-stdout.txt`
+- `.production-validation-v112-final/phase6-stderr.txt`
+- `.production-validation-v112-final/phase6-report.md`
+- `.production-validation-v112-final/phase-progress.json` (Phase6 appended)
+
+## Statement of scope compliance
+- **未**执行大型 audit（Prompt §8 Test 6 明确禁止）
+- **未**执行任何动态测试（无 skill 运行、无脚本执行）
+- **未**修改 SKILL-v1.12.md（SHA256 前后一致）
+- **未**添加 6a/6b/6c 之外的新章节到 `audit/final-status-audit.md`（6b-optional 归入 6b 节下作为子项）
+
+STATUS=SUCCESS

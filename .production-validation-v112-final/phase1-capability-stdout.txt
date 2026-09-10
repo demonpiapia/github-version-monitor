@@ -1,0 +1,89 @@
+=== P3: fatal path search in v1.12 ===
+
+--- L254: Step 2 lock not exist → RUNTIME_ERROR → return ---
+  L164: 锁模型：原子创建 + heartbeat + PID 存活检查。运行期间不持有持续 OS 文件句柄锁。陈锁（heartbeat 超 30 分钟）只有在锁内 PID 确认死亡时才允许接管；任何不确定一律保守 `LOCKED|`。
+  L232:     Write-Output 'LOCKED|另一轮监测持有运行锁（或陈锁判定不确定，保守不抢），本轮直接退出。'
+  L244: 输出含 `LOCKED|` 时，本轮到此为止，不做任何其他动作。
+  L264:     Write-Output 'RUNTIME_ERROR|运行锁不存在（步骤1未执行或锁已丢失），本轮终止。'
+  L276:     Write-Output 'LOCKED|运行锁被另一进程独占持有（异常并发），本轮退出。'
+  L455: } catch [System.IO.IOException] { Write-Output 'LOCKED|运行锁无法独占刷新 heartbeat，本轮退出。'; return } catch { Write-Output ('RUNTIME_ERROR|步骤3 heartbeat 失败：{0}'-f $_.Exception.Message); retu
+  L545: if (-not (Test-Path $lockPath)) { Write-Output 'RUNTIME_ERROR|运行锁不存在（步骤1未执行或锁已丢失），本轮终止。'; return }
+  L550: } catch [System.IO.IOException] { Write-Output 'LOCKED|运行锁被另一进程独占持有（异常并发），本轮退出。'; return }
+
+--- L320: Step 2 PARSE_ERROR → return ---
+  L98: `.output/GitHub更新监测列表.md` 必须满足以下 contract；任何异常均 `PARSE_ERROR|`，主 md 不写回：
+  L248: 先刷新锁 heartbeat，然后一段 PowerShell 完成：fail-closed 解析（数据行必须 exactly 6 列且第 2 列为合法 releases 链接，任何 schema 异常 → 整轮 `PARSE_ERROR|`，无静默 `continue` 路径）→ 每仓库 1 次 `releases/latest`（状态机分类；403 仅在 
+  L331: if($parseErrors.Count -gt 0 -or $repos.Count -eq 0){Write-Output 'PARSE_ERROR|状态文件 schema 校验失败，本轮终止，不写回主 md。';$parseErrors|ForEach-Object{Write-Output "  问题：$_"};try{$rawLock=Get-C
+  L436: - 输出 `PARSE_ERROR|` → 本轮终止，把问题行原样回报，不写回主 md（锁已释放）。
+  L707: | `PARSE_ERROR\|` | 步骤 2 | 状态文件行 schema 异常 | failed |
+  L729: 锁释放路径：`PARSE_ERROR` / `REVIEW_WRITE_ERROR` / `VALIDATE_ERROR` 显式释放；步骤 5 释放前确认锁内 PID 等于当前进程 PID；未捕获异常可能导致锁滞留——heartbeat 随之停止，30 分钟后经"锁内 PID 死亡确认"由下一轮安全接管。
+
+--- L406: Step 2 result.fetch.tmp JSON validation fail → RUNTIME_ERROR → return ---
+  L409: $tmpResult=Join-Path $monitorDir 'result.fetch.tmp'
+  L415:     Write-Output 'RUNTIME_ERROR|result.fetch.tmp JSON 结构校验失败，未替换 result.json。'
+  L790: - **v1.7（2026-09-07 从仓库 v1.6 正确派生的生产兼容修复轮）**：①完整保留 v1.6 的 `versionJump` / `dateSuspicious` / `reviewReasons` / schema contract / `result.fetch.tmp` / `RUN_STATUS` / 404→`not_found`
+
+--- L412: Step 2 result.json replacement fail → RUNTIME_ERROR → return ---
+  L415:     Write-Output 'RUNTIME_ERROR|result.fetch.tmp JSON 结构校验失败，未替换 result.json。'
+  L421:     Write-Output ('RUNTIME_ERROR|result.json 原子替换失败：{0}'-f $_.Exception.Message)
+  L427:     '[{0}] items={1} apiOK={2} apiErr={3} yes={4} uninstalled={5} pendingReview={6} newReleases={7} flips={8} token={9}；结果写入 result.json；无 HTML 回退，API 失败项保留上轮状态。' -f
+  L494: try { $doc=Get-Content $resultPath -Raw|ConvertFrom-Json } catch { Write-Output ('RUNTIME_ERROR|读取 result.json 失败：{0}'-f $_.Exception.Message); $released=Release-LockSafely; if (-n
+  L496: $doc.review=[PSCustomObject]@{performed=$true;items=@($reviewItems)};$newStats=$doc.stats|ConvertTo-Json -Depth 8 -Compress;$newItems=$doc.items|ConvertTo-Json -Depth 8 -Compress;i
+  L521:     if (-not $released) { Write-Output 'RUNTIME_ERROR|review 原子替换失败后锁释放失败，保留锁供陈锁机制接管。' }
+  L647:         Write-Output ('RUNTIME_ERROR|主 md 原子替换失败：{0}' -f $_.Exception.Message)
+  L787: - **v1.10（2026-09-09 review 失败终态闭环修复轮）**：①修复 v1.9 T38：Step 4 `result.review.tmp` 写入失败、临时 JSON 校验失败、原子替换失败及其他不可恢复 review 错误均在清理与锁处理后明确输出 `RUN_STATUS|failed|`，不再以裸 `return` 作为终态 ②补齐步
+
+--- L444: Step 3 heartbeat fail → RUNTIME_ERROR → return ---
+  L455: } catch [System.IO.IOException] { Write-Output 'LOCKED|运行锁无法独占刷新 heartbeat，本轮退出。'; return } catch { Write-Output ('RUNTIME_ERROR|步骤3 heartbeat 失败：{0}'-f $_.Exception.Message); retu
+
+--- L529: Step 5 lock not exist → RUNTIME_ERROR → return ---
+
+=== Step 7: Capability retention evidence ===
+  [output md path] hits=12 first=L3,L37,L91
+  [.monitor/] hits=12 first=L37,L162,L178
+  [versionJump] hits=7 first=L83,L114,L124
+  [dateSuspicious] hits=7 first=L83,L114,L124
+  [reviewReasons] hits=4 first=L114,L392,L495
+  [schema validation] hits=13 first=L57,L80,L92
+  [strict lowercase yes/no] hits=2 first=L80,L103
+  [404 not_found] hits=10 first=L77,L123,L139
+  [rate_limited] hits=11 first=L42,L82,L121
+  [network_error] hits=2 first=L142,L378
+  [auth_error] hits=3 first=L145,L372,L438
+  [forbidden] hits=3 first=L146,L375,L438
+  [server_error] hits=2 first=L141,L376
+  [invalid_response] hits=2 first=L143,L362
+  [metadata_incomplete] hits=2 first=L144,L359
+  [http_error] hits=2 first=L147,L377
+  [result.fetch.tmp] hits=3 first=L409,L415,L790
+  [result.review.tmp] hits=6 first=L485,L491,L741
+  [run.lock] hits=9 first=L205,L262,L448
+  [heartbeat] hits=17 first=L164,L202,L203
+  [ownership] hits=9 first=L447,L451,L493
+  [atomic result persistence] hits=21 first=L37,L84,L108
+  [atomic review persistence] hits=23 first=L37,L84,L108
+  [atomic md commit] hits=40 first=L81,L84,L85
+  [commitSucceeded] hits=7 first=L85,L130,L637
+  [COMMIT_OK] hits=6 first=L85,L130,L644
+  [RUN_STATUS|success|] hits=4 first=L85,L130,L667
+  [RUN_STATUS|failed|] hits=14 first=L87,L130,L493
+  [Get-ResponseHeaderValue] hits=3 first=L335,L369,L790
+  [Compare-Ver] hits=8 first=L30,L76,L301
+  [ConvertTo-NormVer] hits=3 first=L286,L304,L392
+  [ConvertTo-UtcIso] hits=4 first=L319,L354,L495
+
+=== Step 8: Forbidden item check (added lines only) ===
+Total added lines in diff: 26
+  [OK]   mock URL: NOT FOUND in added lines
+  [OK]   forced success: NOT FOUND in added lines
+  [OK]   debug bypass: NOT FOUND in added lines
+  [OK]   test-only branch: NOT FOUND in added lines
+  [OK]   hardcoded token: NOT FOUND in added lines
+  [OK]   hardcoded test repo: NOT FOUND in added lines
+  [OK]   skip schema: NOT FOUND in added lines
+  [OK]   skip lock: NOT FOUND in added lines
+  [OK]   skip commit: NOT FOUND in added lines
+  [OK]   full SemVer parser: NOT FOUND in added lines
+  [OK]   new API request: NOT FOUND in added lines
+  [FAIL] new review source: FOUND +- **v1.12（2026-09-10 最小修改与定向验证轮）**：①P1：强制 PowerShell 7.x ONLY，移除 PS5.1 兼容性声明，Step 1 代码块新增 PS7 版本检查，执行契约显式指定绝对路径与 pwsh.exe + 同会话顺序执行声明 ②P2：Step 3 backup/trash housekeeping 清理包裹独立 try/catch，失败时输出 HOUSEKEEPING_WARNING 并继续，不阻断核心业务流程；heartbeat 保持不变（lock ownership ≠ housekeeping）；§9 协议表新增 HOUSEKEEPING_WARNING 登记 ③P3：逐个审查 v1.11 审计识别的 6 条 fatal path（L254/L320/L406/L412/L444/L529），结论为均不需要修改（均有明确错误状态输出，§9 表已将其判定为 failed） ④§9 协议表 RUNTIME_ERROR 阶段列扩展为"步骤 1/2/4/5" ⑤不扩展 SemVer / 不增加 API 请求 / 不扩大 review / 不重新设计 lock / 完全忽略 PS5.1。
+  [OK]   lock rewrite: NOT FOUND in added lines

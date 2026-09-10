@@ -1,0 +1,70 @@
+PHASE2_TOOL_RUN_LOG_STDOUT
+=========================
+Phase: 2 - Code Extraction + Harness Tooling
+Executed: 2026-09-10 (Asia/Hong_Kong UTC+8)
+Working dir: D:\AI\Workspace\automatic\github-version-monitor
+
+---------------------------------------------------------------
+[STEP A] Extraction run: pwsh -File lib/extract-code.ps1 -SourcePath SKILL-v1.12.md -OutDir lib/
+---------------------------------------------------------------
+SOURCE_EOL=LF
+SOURCE_LINE_COUNT=795
+OPEN_FENCE_COUNT=5
+LINES_SPLIT_COUNT=795
+LINE_BYTE_START_COUNT=794
+ACTUAL_SOURCE_BYTES=63322
+WROTE=step1.ps1 SHA256=F8CE7D677527D54565063B6591AD2A7E6D43D908CFB0EEBD3347A841E5C2CCA0 BYTES=3649 LINES=167-241 BODYDIFF=True
+WROTE=step2.ps1 SHA256=D623FF739BA910CB11AFA9E8454CA437B5EFB912DDD5BC7792DD746010BE6D05 BYTES=14752 LINES=251-433 BODYDIFF=True
+WROTE=step3.ps1 SHA256=5A6D523726E46303B4A2E4181A4832868B58CDD7A061B2B8D6E529FC5F955169 BYTES=1850 LINES=443-467 BODYDIFF=True
+WROTE=step4.ps1 SHA256=57CE64F8FC73E50C2B068BF9510F1DB2FED2DC64324036810713C54A3FA79A62 BYTES=6441 LINES=489-525 BODYDIFF=True
+WROTE=step5-full.ps1 SHA256=41C8DD7285A103D66119241A5D20324E73FBE21E42BA431FD18DF5F12E3F59C9 BYTES=7457 LINES=537-670 BODYDIFF=True
+VERDICT=PASS
+
+---------------------------------------------------------------
+[STEP B] Parse check for all 13 lib/*.ps1 files
+---------------------------------------------------------------
+create-fixture.ps1: PARSE_OK=True
+extract-code.ps1: PARSE_OK=True
+lock-holder.ps1: PARSE_OK=True
+mock-invoke-restmethod.ps1: PARSE_OK=True
+run-full-pipeline.ps1: PARSE_OK=True
+step1.ps1: PARSE_OK=True
+step2.ps1: PARSE_OK=True
+step3.ps1: PARSE_OK=True
+step4.ps1: PARSE_OK=True
+step5-full.ps1: PARSE_OK=True
+t3-mock-harness.ps1: PARSE_OK=True
+t4-write-failure-harness.ps1: PARSE_OK=True
+t5-housekeeping-harness.ps1: PARSE_OK=True
+
+---------------------------------------------------------------
+[STEP C] EAP=Stop top-level verification for 4 orchestrators
+---------------------------------------------------------------
+run-full-pipeline.ps1: EAP_STOP_TOP_LINE=8
+t3-mock-harness.ps1: EAP_STOP_TOP_LINE=9
+t4-write-failure-harness.ps1: EAP_STOP_TOP_LINE=10
+t5-housekeeping-harness.ps1: EAP_STOP_TOP_LINE=8
+
+---------------------------------------------------------------
+[STEP D] SKILL-v1.12.md final hash verification (read-only)
+---------------------------------------------------------------
+SKILL SHA256: 3B15C9D7B3B37ADDB185489EBE2E8B89617867787F5EB83979FF066D23B28BE9
+Expected:     3B15C9D7B3B37ADDB185489EBE2E8B89617867787F5EB83979FF066D23B28BE9
+MATCH:        True
+
+---------------------------------------------------------------
+[STEP E] Spot-check: step1.ps1 PS7 check (P1-d)
+---------------------------------------------------------------
+HIT line 3 : if ($PSVersionTable.PSVersion.Major -lt 7) {
+HIT line 4 :     Write-Output ("RUNTIME_ERROR|PowerShell 7.x required, current: {0}" -f $PSVersionTable.PSVersion.ToString())
+
+---------------------------------------------------------------
+[STEP F] Spot-check: step3.ps1 HOUSEKEEPING_WARNING try/catch (P2-a)
+---------------------------------------------------------------
+HIT line 17 : try {
+HIT line 23 : } catch {
+HIT line 24 :     Write-Output ("HOUSEKEEPING_WARNING|backup/trash cleanup failed: {0}" -f $_.Exception.Message)
+
+---------------------------------------------------------------
+PHASE 2 TOOLING COMPLETE. No tests executed (Phase 3-6).
+---------------------------------------------------------------

@@ -1,0 +1,148 @@
+{
+  "test_id": "T4-write-failure",
+  "scenario": "core_write_failure_via_external_file_share_read_lock",
+  "overall": "PASS",
+  "pass_count": 18,
+  "fail_count": 0,
+  "total_count": 18,
+  "counts": {
+    "RUN_STATUS_SUCCESS": 0,
+    "RUN_STATUS_FAILED": 1,
+    "COMMIT_OK": 0,
+    "BACKUP_OK": 1,
+    "FETCH_COMPLETE": 1,
+    "REVIEW_WRITE_OK": 1,
+    "RUNTIME_ERROR": 1,
+    "PARSE_ERROR": 0,
+    "LOCKED": 0,
+    "VALIDATE_ERROR": 0,
+    "PS_VERSION_LINE": 0,
+    "RUN_STATUS_OBSERVED": 0,
+    "HARNESS_START_MARKER": 0,
+    "HARNESS_END_MARKER": 0,
+    "LOCKHOLDER_OPENED_OK_LINE": 0,
+    "STEP4_DONE_TS_LINE": 0,
+    "LOCK_STARTED_TS_LINE": 0,
+    "LOCKHOLDER_PID_LINE": 0
+  },
+  "checks": [
+    {
+      "item": "md_unchanged",
+      "expected": "SHA256 before == SHA256 after",
+      "actual": "before=1E78021C874C19BD8AF7D3FE62ED8F9673DC57998711E9E29FA4AD8847B5B5F7 / after=1E78021C874C19BD8AF7D3FE62ED8F9673DC57998711E9E29FA4AD8847B5B5F7 / equal=True",
+      "verdict": "PASS"
+    },
+    {
+      "item": "md_tmp_cleaned",
+      "expected": "False",
+      "actual": "False",
+      "verdict": "PASS"
+    },
+    {
+      "item": "backup_retained",
+      "expected": ">=1",
+      "actual": "1",
+      "verdict": "PASS"
+    },
+    {
+      "item": "RUN_STATUS_failed_count",
+      "expected": "1",
+      "actual": "1",
+      "verdict": "PASS"
+    },
+    {
+      "item": "RUN_STATUS_success_count",
+      "expected": "0",
+      "actual": "0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "COMMIT_OK_count",
+      "expected": "0",
+      "actual": "0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "lock_released_after_run",
+      "expected": "False",
+      "actual": "False",
+      "verdict": "PASS"
+    },
+    {
+      "item": "lockholder_process_stopped",
+      "expected": "False",
+      "actual": "False",
+      "verdict": "PASS"
+    },
+    {
+      "item": "lockholder_OPENED_OK_marker_written",
+      "expected": "OPENED_OK present",
+      "actual": "OPENED_OK pid=56456 target=D:\\AI\\Workspace\\automatic\\github-version-monitor\\.production-validation-v112-final\\T4-write-failure\\.output\\GitHub更新监测列表.md ts=2026-09-10T16:13:37.2247990+00:00",
+      "verdict": "PASS"
+    },
+    {
+      "item": "step1_backup_ok_observed",
+      "expected": ">=1",
+      "actual": "1",
+      "verdict": "PASS"
+    },
+    {
+      "item": "step2_fetch_complete_observed",
+      "expected": ">=1",
+      "actual": "1",
+      "verdict": "PASS"
+    },
+    {
+      "item": "step4_review_write_ok_observed",
+      "expected": ">=1",
+      "actual": "1",
+      "verdict": "PASS"
+    },
+    {
+      "item": "RUNTIME_ERROR_present_in_stdout",
+      "expected": ">=1",
+      "actual": "1",
+      "verdict": "PASS"
+    },
+    {
+      "item": "PARSE_ERROR_count",
+      "expected": "0",
+      "actual": "0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "LOCKED_count",
+      "expected": "0",
+      "actual": "0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "stdout_no_PS_VERSION_line",
+      "expected": "0",
+      "actual": "0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "stdout_no_RUN_STATUS_OBSERVED_line",
+      "expected": "0",
+      "actual": "0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "stdout_no_harness_markers",
+      "expected": "0",
+      "actual": "0",
+      "verdict": "PASS"
+    }
+  ],
+  "sha256_before": "1E78021C874C19BD8AF7D3FE62ED8F9673DC57998711E9E29FA4AD8847B5B5F7",
+  "sha256_after": "1E78021C874C19BD8AF7D3FE62ED8F9673DC57998711E9E29FA4AD8847B5B5F7",
+  "md_changed": false,
+  "lock_after": false,
+  "tmp_exists": false,
+  "backup_count": 1,
+  "lockholder_pid": 56456,
+  "lockholder_started_ts": "2026-09-10T16:13:36.814Z",
+  "step4_done_ts": "2026-09-10T16:13:36.812Z",
+  "lockholder_still_running": false
+}

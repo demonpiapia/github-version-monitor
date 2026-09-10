@@ -1,0 +1,189 @@
+#Requires -Version 7.0
+# =====================================================================
+# p3-run-T.ps1 - Phase 3 Test runner (T1 / T2)
+# Parameters:
+#   -TestId  : 'T1-PS7' | 'T2-success'
+#   -Repos   : comma-separated list (default: microsoft/vscode,PowerShell/PowerShell)
+# Output: writes stdout.txt / stderr.txt / before/* / after/* etc under the test dir.
+# Contract:
+#   - Fixture isolation via $env:GITHUB_VERSION_MONITOR_BASE
+#   - .monitor/ MUST NOT be pre-created
+#   - All pipeline execution is silent (background, redirected)
+# =====================================================================
+param(
+    [Parameter(Mandatory=$true)][ValidateSet('T1-PS7','T2-success')][string]$TestId,
+    [Parameter()][string]$Repos = 'microsoft/vscode,PowerShell/PowerShell'
+)
+
+$PSDefaultParameterValues['*:Encoding'] = 'UTF8'
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$ErrorActionPreference = 'Stop'
+
+$root    = 'D:\AI\Workspace\automatic\github-version-monitor'
+$libDir  = Join-Path $root '.production-validation-v112-final\lib'
+$base    = Join-Path $root ('.production-validation-v112-final\' + $TestId)
+
+Write-Output "TEST_ID=$TestId"
+Write-Output "TEST_BASE=$base"
+Write-Output "LIB_DIR=$libDir"
+
+# ---------- Reset test dir (idempotent) ----------
+if (Test-Path $base) {
+    Remove-Item $base -Recurse -Force
+}
+New-Item -ItemType Directory -Force -Path $base | Out-Null
+
+# ---------- Step A: create fixture ----------
+$fixtureScript = Join-Path $libDir 'create-fixture.ps1'
+if (-not (Test-Path $fixtureScript)) { throw "FIXTURE_SCRIPT_MISSING: $fixtureScript" }
+
+$fixtureStdout = (Join-Path $base 'fixture-stdout.txt')
+$fixtureStderr = (Join-Path $base 'fixture-stderr.txt')
+
+# Invoke fixture generator directly (same pwsh session)
+& $fixtureScript -TestDir $base -Repos $Repos *> $fixtureStdout
+Write-Output "FIXTURE_EXIT=$LASTEXITCODE"
+Write-Output "--- fixture-stdout BEGIN ---"
+if (Test-Path $fixtureStdout) { Get-Content $fixtureStdout | ForEach-Object { Write-Output $_ } }
+Write-Output "--- fixture-stdout END ---"
+
+# Sanity: fixture must NOT have pre-created .monitor/
+$monitorBefore = Test-Path (Join-Path $base '.monitor')
+Write-Output "FIXTURE_MONITOR_DIR_EXISTS=$monitorBefore"
+if ($monitorBefore) {
+    Write-Output "FATAL: fixture created .monitor/ directory (forbidden)"
+    exit 20
+}
+$mdPath = Join-Path $base '.output\GitHub更新监测列表.md'
+if (-not (Test-Path $mdPath)) {
+    Write-Output "FATAL: fixture did not produce the required monitor markdown"
+    exit 21
+}
+
+# ---------- Step B: BEFORE snapshot ----------
+$beforeDir = Join-Path $base 'before'
+$afterDir  = Join-Path $base 'after'
+New-Item -ItemType Directory -Force -Path $beforeDir | Out-Null
+New-Item -ItemType Directory -Force -Path $afterDir  | Out-Null
+
+Copy-Item $mdPath (Join-Path $beforeDir 'GitHub更新监测列表.md')
+if ($monitorBefore) {
+    Copy-Item (Join-Path $base '.monitor') (Join-Path $beforeDir 'monitor') -Recurse -Force
+}
+Copy-Item $mdPath (Join-Path $base 'md-before.md')
+$shaBefore = (Get-FileHash -Algorithm SHA256 -Path $mdPath).Hash.ToUpper()
+Set-Content -Path (Join-Path $base 'sha256-before.txt') -Value $shaBefore
+
+# Result.json / lock state (both may be absent before first run)
+$resultBeforePath = Join-Path $base 'result-before.json'
+$lockBeforePath   = Join-Path $base 'lock-before.txt'
+$resultFileBefore = Join-Path $base '.monitor\result.json'
+$lockFileBefore   = Join-Path $base '.monitor\run.lock'
+
+if (Test-Path $resultFileBefore) {
+    Copy-Item $resultFileBefore $resultBeforePath
+    Set-Content -Path $resultBeforePath '.placeholder-removed' -ErrorAction SilentlyContinue
+    Remove-Item (Join-Path $base 'result-before.json.placeholder') -ErrorAction SilentlyContinue
+    Copy-Item $resultFileBefore $resultBeforePath -Force
+} else {
+    Set-Content -Path $resultBeforePath -Value ''
+}
+$lockBeforeExists = Test-Path $lockFileBefore
+Set-Content -Path $lockBeforePath -Value ("LOCK_EXISTS=" + $lockBeforeExists)
+
+Write-Output "BEFORE_SNAPSHOT_OK"
+Write-Output "SHA256_BEFORE=$shaBefore"
+Write-Output "LOCK_BEFORE_EXISTS=$lockBeforeExists"
+
+# ---------- Step C: run pipeline silently ----------
+$pipelineScript = Join-Path $libDir 'run-full-pipeline.ps1'
+if (-not (Test-Path $pipelineScript)) { throw "PIPELINE_SCRIPT_MISSING: $pipelineScript" }
+
+# Absolute pwsh invocation from cmd.exe; redirect *>&1 > stdout
+$stdoutPath = Join-Path $base 'stdout.txt'
+$stderrPath = Join-Path $base 'stderr.txt'
+
+# Clear any pre-existing lock just in case (there shouldn't be any)
+if (Test-Path $lockFileBefore) {
+    Write-Output "WARNING: stale lock removed before pipeline"
+    Remove-Item $lockFileBefore -Force
+}
+
+# Run via cmd.exe to guarantee true background redirection (matches Phase 3 spec)
+$pwshExe = 'C:\Program Files\PowerShell\7\pwsh.exe'
+if (-not (Test-Path $pwshExe)) { $pwshExe = 'pwsh.exe' }
+$cmdArgs = @('-NoProfile','-NonInteractive','-File',$pipelineScript,'-TestDir',$base)
+$cmdStr  = '"' + $pwshExe + '" ' + (($cmdArgs | ForEach-Object { if ($_ -match ' ') { '"' + $_ + '"' } else { $_ } }) -join ' ') + ' *>&1 > "' + $stdoutPath + '" 2> "' + $stderrPath + '"'
+
+# Emit current PS version evidence (used by T1 verification)
+Write-Output "PS_VERSION=$($PSVersionTable.PSVersion.ToString())"
+
+# Run pipeline via Start-Process (background, silent, redirected).
+# Note on spec: exec-plan-v1.12-d.md §0.7 specifies
+#   pwsh.exe ... *>&1 > <stdout.txt>
+# which is pwsh-native syntax; equivalent separation via Start-Process
+# -RedirectStandardOutput / -RedirectStandardError is used here so that
+# BOTH stdout.txt and stderr.txt are captured to distinct files (which
+# the cmd.exe shell does not understand as a *>&1 token).
+Write-Output "RUN_MODE=Start-Process -RedirectStandardOutput/-RedirectStandardError (equivalent to pwsh -File ... *>&1 > stdout + stderr)"
+Write-Output "CMD_TARGET=$pipelineScript"
+Write-Output "CMD_ARGS=$($cmdArgs -join ' ')"
+
+$proc = Start-Process `
+    -FilePath $pwshExe `
+    -ArgumentList $cmdArgs `
+    -NoNewWindow `
+    -Wait `
+    -PassThru `
+    -RedirectStandardOutput $stdoutPath `
+    -RedirectStandardError $stderrPath
+
+$pipeExit = $proc.ExitCode
+Write-Output "PIPELINE_EXIT=$pipeExit"
+Write-Output "PIPELINE_PID=$($proc.Id)"
+
+# ---------- Step D: AFTER snapshot ----------
+Copy-Item $mdPath (Join-Path $afterDir 'GitHub更新监测列表.md')
+if (Test-Path (Join-Path $base '.monitor')) {
+    Copy-Item (Join-Path $base '.monitor') (Join-Path $afterDir 'monitor') -Recurse -Force
+}
+Copy-Item $mdPath (Join-Path $base 'md-after.md')
+$shaAfter = (Get-FileHash -Algorithm SHA256 -Path $mdPath).Hash.ToUpper()
+Set-Content -Path (Join-Path $base 'sha256-after.txt') -Value $shaAfter
+
+$resultAfterPath = Join-Path $base 'result-after.json'
+$lockAfterPath   = Join-Path $base 'lock-after.txt'
+$resultFileAfter = Join-Path $base '.monitor\result.json'
+$lockFileAfter   = Join-Path $base '.monitor\run.lock'
+
+if (Test-Path $resultFileAfter) {
+    Copy-Item $resultFileAfter $resultAfterPath -Force
+} else {
+    Set-Content -Path $resultAfterPath -Value ''
+}
+$lockAfterExists = Test-Path $lockFileAfter
+Set-Content -Path $lockAfterPath -Value ("LOCK_EXISTS=" + $lockAfterExists)
+
+Write-Output "AFTER_SNAPSHOT_OK"
+Write-Output "SHA256_AFTER=$shaAfter"
+Write-Output "LOCK_AFTER_EXISTS=$lockAfterExists"
+Write-Output "MD_CHANGED=$($shaBefore -ne $shaAfter)"
+
+# ---------- Step D2: Append PS_VERSION evidence to pipeline stdout.txt ----------
+# (The pipeline script emits no PS_VERSION marker itself; per Test 1 spec we
+#  record the pwsh version that executed the pipeline. This is appended as a
+#  clearly-labeled marker line so downstream evidence parsing can pick it up
+#  via the same stdout.txt artifact.)
+$psVersionMarker = "PS_VERSION|$($PSVersionTable.PSVersion.ToString())"
+Add-Content -Path $stdoutPath -Value $psVersionMarker -Encoding UTF8
+Write-Output "PS_VERSION_MARKER_APPENDED=$psVersionMarker"
+
+# ---------- Step E: stdout/stderr summary ----------
+Write-Output "--- pipeline stdout BEGIN ---"
+if (Test-Path $stdoutPath) { Get-Content $stdoutPath | ForEach-Object { Write-Output $_ } }
+Write-Output "--- pipeline stdout END ---"
+Write-Output "--- pipeline stderr BEGIN ---"
+if (Test-Path $stderrPath) { Get-Content $stderrPath | ForEach-Object { Write-Output $_ } }
+Write-Output "--- pipeline stderr END ---"
+
+Write-Output "PHASE3_TEST_DONE=$TestId"

@@ -1,0 +1,33 @@
+# harness-aux.txt (Phase 4 Test 4 harness-side evidence; NOT SKILL stdout)
+# Written by lib/p4-run-T4.ps1. Do not confuse with stdout.txt.
+AUX_BEGIN=2026-09-10T16:13:25.762Z
+TEST_ID=T4-write-failure
+TEST_BASE=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T4-write-failure
+PS_VERSION=7.6.4
+GITHUB_TOKEN_SET=True
+PID=21964
+FIXTURE_EXIT=
+FIXTURE_MONITOR_DIR_EXISTS=False
+MD_TARGET=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T4-write-failure\.output\GitHub更新监测列表.md
+BEFORE_SNAPSHOT_OK
+SHA256_BEFORE=1E78021C874C19BD8AF7D3FE62ED8F9673DC57998711E9E29FA4AD8847B5B5F7
+LOCK_BEFORE_EXISTS=False
+STEP4_DONE_TS=2026-09-10T16:13:36.812Z
+LOCKHOLDER_PID=56456
+LOCK_STARTED_TS=2026-09-10T16:13:36.814Z
+LOCKHOLDER_OPENED_OK
+OPEN_MARKER_CONTENT=OPENED_OK pid=56456 target=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T4-write-failure\.output\GitHub更新监测列表.md ts=2026-09-10T16:13:37.2247990+00:00
+LOCK_EXISTED_BEFORE_STEP5=True
+AFTER_SNAPSHOT_OK
+SHA256_AFTER=1E78021C874C19BD8AF7D3FE62ED8F9673DC57998711E9E29FA4AD8847B5B5F7
+LOCK_AFTER_EXISTS=False
+MD_CHANGED=False
+TMP_EXISTS_AFTER=False
+BACKUP_COUNT=1
+LOCKHOLDER_STILL_RUNNING=False
+VALIDATION_WRITTEN=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T4-write-failure\validation.json
+OVERALL=PASS
+PASS_COUNT=18
+FAIL_COUNT=0
+REPORT_WRITTEN=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T4-write-failure\test-report.md
+AUX_END=2026-09-10T16:13:37.732Z

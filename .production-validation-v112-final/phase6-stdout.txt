@@ -1,0 +1,62 @@
+# Phase 6 attempt 2 — PowerShell 原生证据（未美化）
+# 全部命令为 pwsh -NoProfile -File .production-validation-v112-final/audit/run-audit.ps1 的原始 stdout
+# 生成时间 UTC: <timestamp>
+
+=== COMMAND: Get-FileHash -Algorithm SHA256 + Get-Content ... .Count + regex Matches ===
+
+PATH=.production-validation-v112-final/T2-success/stdout.txt
+SHA256=9ABB57AA8CB8CC985813C8936E5EFB0BDD3DD156DC24F429F89E05EFFC762825
+LINE_COUNT=84
+----GREP----
+SUCCESS_LINE_82: RUN_STATUS|success|fetch + 必要 review + commit + lock release 完成。
+RUN_STATUS_SUCCESS_COUNT=1
+RUN_STATUS_FAILED_COUNT=0
+HOUSEKEEPING_WARNING_COUNT=0
+====END====
+
+PATH=.production-validation-v112-final/T4-write-failure/stdout.txt
+SHA256=21035D407BE5EE0E77D508F5E1267E3D55D55059751609B198AC88EC9F308A15
+LINE_COUNT=83
+----GREP----
+FAILED_LINE_81: RUN_STATUS|failed|主 md 未提交。
+RUN_STATUS_SUCCESS_COUNT=0
+RUN_STATUS_FAILED_COUNT=1
+HOUSEKEEPING_WARNING_COUNT=0
+====END====
+
+PATH=.production-validation-v112-final/T5-housekeeping/stdout.txt
+SHA256=B4B9814DA14EF086C216EDA70A174D0A94CB9DDBB28A3813C7DE62B41860CD5B
+LINE_COUNT=83
+----GREP----
+HW_LINE_74: HOUSEKEEPING_WARNING|backup/trash cleanup failed: Cannot find path 'D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T5-housekeeping\.monitor\backups' because it does not exist.
+SUCCESS_LINE_81: RUN_STATUS|success|fetch + 必要 review + commit + lock release 完成。
+RUN_STATUS_SUCCESS_COUNT=1
+RUN_STATUS_FAILED_COUNT=0
+HOUSEKEEPING_WARNING_COUNT=1
+====END====
+
+PATH=SKILL-v1.12.md
+SHA256=3B15C9D7B3B37ADDB185489EBE2E8B89617867787F5EB83979FF066D23B28BE9
+LINE_COUNT=794
+====END====
+
+=== READ_FILE: .production-validation-v112-final/diff-integrity.md §3 P3 review (L88-L103) ===
+
+88:## 3. P3 review — 6 fatal paths (post-P1/P2 line numbers)
+90:Per Prompt §6, P3 is review-only; no code modifications. Line numbers below are from `SKILL-v1.12.md` (post-shift). Each path was verified to have an explicit error status output (`RUNTIME_ERROR|` / `PARSE_ERROR|` / `LOCKED|`), therefore §9 table already classifies them as failed-terminal for this round — they are not "第 1 类" (truly fatal + no clear final state).
+92:| v1.11 line | v1.12 line | Path | Error status emitted | Classification | Decision |
+93:|---|---|---|---|---|---|
+94:| L254 | L264 | Step 2 lock missing → `RUNTIME_ERROR\|运行锁不存在（步骤1未执行或锁已丢失），本轮终止。` | `RUNTIME_ERROR\|` | 第 3 类：§9 已 failed | **不修改** |
+95:| L320 | L331 | Step 2 `PARSE_ERROR\|状态文件 schema 校验失败，本轮终止，不写回主 md。` + release-lock + return | `PARSE_ERROR\|` | 第 3 类 | **不修改** |
+96:| L406 | L415 | Step 2 `result.fetch.tmp` JSON schema check fail → `RUNTIME_ERROR\|result.fetch.tmp JSON 结构校验失败，未替换 result.json。` | `RUNTIME_ERROR\|` | 第 3 类 | **不修改** |
+97:| L412 | L421 | Step 2 `result.json` atomic replace fail → `RUNTIME_ERROR\|result.json 原子替换失败：{0}` | `RUNTIME_ERROR\|` | 第 3 类 | **不修改** |
+98:| L444 | L455 | Step 3 heartbeat fail → `LOCKED\|` or `RUNTIME_ERROR\|步骤3 heartbeat 失败：{0}` | `LOCKED\|` / `RUNTIME_ERROR\|` | 第 3 类 | **不修改**（heartbeat 代码未被 P2 触碰，diff hunk 4 从 `$backupDir` L456 开始） |
+99:| L529 | L545 | Step 5 lock missing → `RUNTIME_ERROR\|运行锁不存在（步骤1未执行或锁已丢失），本轮终止。` | `RUNTIME_ERROR\|` | 第 3 类 | **不修改** |
+101:Reason (unified): All 6 paths emit an explicit error marker that §9 already maps to `failed` (or `blocked` for `LOCKED\|`). §9 is declared the sole judging interface (L701: "本表是本轮结果的唯一判定接口"). Therefore no P3 modification is required.
+103:P3 conclusion: **6/6 不修改**.
+
+=== BACKUP OF ATTEMPT-1 ARTIFACTS ===
+BACKUP=phase6-stdout.txt -> phase6-stdout.txt.attempt1_20260911_004702
+BACKUP=phase6-stderr.txt -> phase6-stderr.txt.attempt1_20260911_004702
+BACKUP=phase6-report.md -> phase6-report.md.attempt1_20260911_004702
+BACKUP=phase-progress.json -> phase-progress.json.attempt1_20260911_004702

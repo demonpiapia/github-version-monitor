@@ -1,0 +1,63 @@
+#Requires -Version 7.0
+param(
+    [Parameter(Mandatory=$true)][string]$TestDir
+)
+
+$PSDefaultParameterValues['*:Encoding'] = 'UTF8'
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$ErrorActionPreference = 'Stop'   # F2: orchestrator-level EAP=Stop for production-like semantics
+
+# =====================================================================
+# run-full-pipeline.ps1
+# Purpose: T2 single-process full pipeline execution.
+# Contract:
+#   - Sets $env:GITHUB_VERSION_MONITOR_BASE to the given test-dir so all
+#     steps share the same isolated state.
+#   - Invokes step1..step5 in sequence via same-process `&` calls (NOT
+#     -File subprocesses) so that PID-lock ownership is preserved across
+#     step 1's CreateNew lock and step 3/4/5's ownership checks.
+#   - Emits a step-by-step log line and captures each step's output.
+# =====================================================================
+
+if (-not (Test-Path $TestDir)) { throw "TESTDIR_NOT_FOUND: $TestDir" }
+
+$env:GITHUB_VERSION_MONITOR_BASE = $TestDir
+$libDir = $PSScriptRoot
+if (-not $libDir) { $libDir = (Resolve-Path '.').Path }
+
+$steps = @(
+    @{ Name = 'step1';    File = 'step1.ps1' },
+    @{ Name = 'step2';    File = 'step2.ps1' },
+    @{ Name = 'step3';    File = 'step3.ps1' },
+    @{ Name = 'step4';    File = 'step4.ps1' },
+    @{ Name = 'step5';    File = 'step5-full.ps1' }
+)
+
+Write-Output "PIPELINE_START"
+Write-Output "TESTDIR=$TestDir"
+Write-Output "GITHUB_VERSION_MONITOR_BASE=$env:GITHUB_VERSION_MONITOR_BASE"
+Write-Output "GITHUB_TOKEN_SET=" + (Test-Path 'env:GITHUB_TOKEN')
+Write-Output "PID=$PID"
+
+$allRunStatuses = @()
+foreach ($s in $steps) {
+    $path = Join-Path $libDir $s.File
+    if (-not (Test-Path $path)) { throw "STEP_FILE_MISSING: $path" }
+    Write-Output ("--- {0} BEGIN ({1}) ---" -f $s.Name, $s.File)
+    $output = & $path
+    if ($null -ne $output) {
+        if ($output -is [System.Collections.IEnumerable] -and -not ($output -is [string])) {
+            foreach ($line in $output) { Write-Output $line }
+        } else {
+            Write-Output $output
+        }
+    }
+    Write-Output ("--- {0} END ---" -f $s.Name)
+}
+
+Write-Output "PIPELINE_END"
+# Phase 3-fix: observation of RUN_STATUS markers was moved out of stdout
+# so the SKILL stdout remains free of harness-side annotations (see
+# harness-fix-log.md record D). Downstream observers should read
+# <TestDir>/run-status-sidecar.txt produced by the harness after the
+# pipeline exits, not grep the SKILL stdout for a second marker copy.

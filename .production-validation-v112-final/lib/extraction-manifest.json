@@ -1,0 +1,120 @@
+{
+  "phase": 2,
+  "phase_name": "code_extraction_and_harness_tooling",
+  "spec": ".exec-plan/exec-plan-v1.12-d.md#L556-L628",
+  "source_skill": "SKILL-v1.12.md",
+  "source_skill_sha256_expected": "3B15C9D7B3B37ADDB185489EBE2E8B89617867787F5EB83979FF066D23B28BE9",
+  "source_skill_sha256_actual": "3B15C9D7B3B37ADDB185489EBE2E8B89617867787F5EB83979FF066D23B28BE9",
+  "source_skill_sha256_match": true,
+  "source_line_count": 795,
+  "source_byte_count": 63322,
+  "source_eol": "LF",
+  "open_fences_count": 5,
+  "extraction_timestamp_utc": "2026-09-10T14:05:38Z",
+  "extraction_method": "raw_byte_slice_between_fences; byte_exactness_verified_via_slice_compare",
+  "extracted_files": [
+    {
+      "file": "lib/step1.ps1",
+      "role": "Step 1: state check + PS7 check + lock + backup",
+      "contains_p1_d": "RUNTIME_ERROR|PowerShell 7.x required",
+      "source_open_fence_line": 166,
+      "source_close_fence_line": 242,
+      "source_body_start_line": 167,
+      "source_body_end_line": 241,
+      "bytes": 3649,
+      "sha256": "F8CE7D677527D54565063B6591AD2A7E6D43D908CFB0EEBD3347A841E5C2CCA0",
+      "byte_diff_vs_source_slice": "EMPTY (byte-exact)"
+    },
+    {
+      "file": "lib/step2.ps1",
+      "role": "Step 2: parse + query + state machine + stats",
+      "source_open_fence_line": 250,
+      "source_close_fence_line": 434,
+      "source_body_start_line": 251,
+      "source_body_end_line": 433,
+      "bytes": 14752,
+      "sha256": "D623FF739BA910CB11AFA9E8454CA437B5EFB912DDD5BC7792DD746010BE6D05",
+      "byte_diff_vs_source_slice": "EMPTY (byte-exact)"
+    },
+    {
+      "file": "lib/step3.ps1",
+      "role": "Step 3: housekeeping with try/catch (P2-a)",
+      "contains_p2_a": "HOUSEKEEPING_WARNING|backup/trash cleanup failed",
+      "source_open_fence_line": 442,
+      "source_close_fence_line": 468,
+      "source_body_start_line": 443,
+      "source_body_end_line": 467,
+      "bytes": 1850,
+      "sha256": "5A6D523726E46303B4A2E4181A4832868B58CDD7A061B2B8D6E529FC5F955169",
+      "byte_diff_vs_source_slice": "EMPTY (byte-exact)"
+    },
+    {
+      "file": "lib/step4.ps1",
+      "role": "Step 4: review (list + HTML diagnostic)",
+      "source_open_fence_line": 488,
+      "source_close_fence_line": 526,
+      "source_body_start_line": 489,
+      "source_body_end_line": 525,
+      "bytes": 6441,
+      "sha256": "57CE64F8FC73E50C2B068BF9510F1DB2FED2DC64324036810713C54A3FA79A62",
+      "byte_diff_vs_source_slice": "EMPTY (byte-exact)"
+    },
+    {
+      "file": "lib/step5-full.ps1",
+      "role": "Step 5: commit + lock release + RUN_STATUS",
+      "source_open_fence_line": 536,
+      "source_close_fence_line": 671,
+      "source_body_start_line": 537,
+      "source_body_end_line": 670,
+      "bytes": 7457,
+      "sha256": "41C8DD7285A103D66119241A5D20324E73FBE21E42BA431FD18DF5F12E3F59C9",
+      "byte_diff_vs_source_slice": "EMPTY (byte-exact)"
+    }
+  ],
+  "extracted_all_byte_exact": true,
+  "extraction_verdict": "PASS",
+  "supporting_lib_files": {
+    "lib/extract-code.ps1": "C3C645F0A765BF73796247BBABA1BDE107BC72E53DDFB3C7F4225E3FACD293DB",
+    "lib/create-fixture.ps1": "C040442EA69E4BE59D7FE21FEB20481B729CB4AFDAAF85AE24E6630BD2F29D69",
+    "lib/run-full-pipeline.ps1": "8A22117B9A51D9188A7561F2BDD499D50B095E0905C4D27C256E3B174AA5B2AF",
+    "lib/t3-mock-harness.ps1": "A6B82BF190F53B3201EF14FDE4BAEB5DDBD8138EB761D782A6B0FCB852C799AB",
+    "lib/t4-write-failure-harness.ps1": "105B1C52FD88268C43A7C6D3D7F1017E30D6A1C307C2719368331E4A4B517260",
+    "lib/t5-housekeeping-harness.ps1": "52DB1CD6C719A6A1FA53CB9299974941838022F34028A017E8E4BB3261D5B019",
+    "lib/lock-holder.ps1": "12AEF14F17C2FD1745C9ECFF0D9BB83E11F7D9AD87CBAA8F48B61D95E3199778",
+    "lib/mock-invoke-restmethod.ps1": "ED8ACE25D4B75934A23CA3947A77CBE0C0E62F2ACFBA2D81335975FD6A960CA4",
+    "lib/mock-contract-selfcheck.txt": "DA385D6984183454E1D1FB74C482DDC11D35591BD594327CDE70A4E76A2D9B5A"
+  },
+  "orchestrator_eap_stop_verification": {
+    "run-full-pipeline.ps1":  { "top_eap_stop_line": 8,  "present": true },
+    "t3-mock-harness.ps1":    { "top_eap_stop_line": 9,  "present": true },
+    "t4-write-failure-harness.ps1": { "top_eap_stop_line": 10, "present": true },
+    "t5-housekeeping-harness.ps1":  { "top_eap_stop_line": 8,  "present": true }
+  },
+  "ps7_check_spot_check": {
+    "file": "lib/step1.ps1",
+    "contains": "RUNTIME_ERROR|PowerShell 7.x required",
+    "match": true,
+    "excerpt_lines_3_6": [
+      "if ($PSVersionTable.PSVersion.Major -lt 7) {",
+      "    Write-Output (\"RUNTIME_ERROR|PowerShell 7.x required, current: {0}\" -f $PSVersionTable.PSVersion.ToString())",
+      "    return",
+      "}"
+    ]
+  },
+  "housekeeping_warning_spot_check": {
+    "file": "lib/step3.ps1",
+    "contains": "HOUSEKEEPING_WARNING|backup/trash cleanup failed",
+    "match": true,
+    "excerpt_lines_17_25": [
+      "try {",
+      "    New-Item -ItemType Directory -Force -Path $trashDir | Out-Null",
+      "    Get-ChildItem $backupDir -Filter 'GitHub更新监测列表.backup.*.md' |",
+      "      Sort-Object Name -Descending | Select-Object -Skip 1 |",
+      "      Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-3) } |",
+      "      ForEach-Object { Move-Item $_.FullName (Join-Path $trashDir $_.Name) -Force }",
+      "} catch {",
+      "    Write-Output (\"HOUSEKEEPING_WARNING|backup/trash cleanup failed: {0}\" -f $_.Exception.Message)",
+      "}"
+    ]
+  }
+}

@@ -1,0 +1,92 @@
+=== Phase 8 stdout capture (exec log) ===
+Timestamp_utc: 2026-09-10T17:12:50Z
+Timestamp_local: 2026-09-11T01:12:50+08:00
+Executor: Phase 8 sub-agent (Zoo, Final Report + Commit)
+
+-------------------------------------------------------------------
+[STEP 1] SHA256 recompute via .production-validation-v112-final/phase8-sha256.ps1
+-------------------------------------------------------------------
+=== SHA256 BASELINE RECOMPUTE (Phase 8 sub-agent) ===
+Timestamp_utc=2026-09-10T17:08:19Z
+PSVersionTable.PSVersion=7.6.4
+PSVersionTable.PSVersion.Major=7
+PSVersionTable.PSVersion.Minor=6
+PSVersionTable.PSVersion.Patch=4
+pwsh_exe=C:\Program Files\PowerShell\7\pwsh.exe
+OS=Microsoft Windows 10.0.22621
+
+=== Three SHA256 recompute ===
+FILE=SKILL-v1.11.md
+  SHA256_actual   = B6632680A9AE18E02634E6EAF7F261FCD2502FE0529566088D0E0FC7160FC928
+  SHA256_baseline = B6632680A9AE18E02634E6EAF7F261FCD2502FE0529566088D0E0FC7160FC928
+  SIZE_bytes      = 61435
+  RESULT          = MATCH
+FILE=SKILL-v1.12.md
+  SHA256_actual   = 3B15C9D7B3B37ADDB185489EBE2E8B89617867787F5EB83979FF066D23B28BE9
+  SHA256_baseline = 3B15C9D7B3B37ADDB185489EBE2E8B89617867787F5EB83979FF066D23B28BE9
+  SIZE_bytes      = 63322
+  RESULT          = MATCH
+FILE=.output\GitHub更新监测列表.md
+  SHA256_actual   = 7396981A2FBF019D3DAD0C906A2B6E9C05D36C4746F35E0C0063FD1F3EB19CD3
+  SHA256_baseline = 7396981A2FBF019D3DAD0C906A2B6E9C05D36C4746F35E0C0063FD1F3EB19CD3
+  SIZE_bytes      = 8269
+  RESULT          = MATCH
+
+=== Env token ===
+  GITHUB_TOKEN available=True len=93
+  GH_TOKEN available=False
+  GITHUB_PAT available=False
+  GH_PAT available=False
+
+=== Environment restore checks ===
+  T4 sha256-after.txt exists: True
+  stray lock-ish files found: 70 (all pre-existing in .production-validation-v110-final/ and prior validation dirs; not v1.12 runtime)
+
+=== No external test processes ===
+  suspicious processes: 0 (pwsh.exe count=1 is this pwsh session)
+
+-------------------------------------------------------------------
+[STEP 2] git diff --check (working tree state)
+-------------------------------------------------------------------
+Command: git diff --check
+Exit code: 0
+Output:
+  warning: in the working copy of '.Template/通用执行计划制定补充prompt.md', LF will be replaced by CRLF the next time Git touches it
+
+Note: single pre-existing warning unrelated to v1.12 scope (Phase 0 touch).
+No whitespace errors introduced by v1.12.
+
+-------------------------------------------------------------------
+[STEP 3] Environment restore confirmations
+-------------------------------------------------------------------
+T4 lock-after.txt:            LOCK_EXISTS=False
+T4 open-marker.txt:           OPENED_OK pid=56456 target=...T4-write-failure\.output\GitHub更新监测列表.md ts=2026-09-10T16:13:37.2247990+00:00
+tasklist PID=56456:           terminated (no match)
+tasklist lock-holder.exe:     no process
+ACL restore needed:           False (T5 Scheme B is delete-only)
+
+-------------------------------------------------------------------
+[STEP 4] Hard constraint compliance
+-------------------------------------------------------------------
+SKILL-v1.11.md exists and hash matches baseline:      MATCH (B6632680...0FC928)
+SKILL-v1.12.md exists and hash matches baseline:      MATCH (3B15C9D7...28BE9)
+.output/GitHub更新监测列表.md unchanged:                MATCH (7396981A...19CD3)
+production-validation-report-v17-final.md:             preserved
+production-validation-report-v18-final.md:             preserved
+production-validation-report-v19-final.md:             preserved
+production-validation-report-v110-final.md:            preserved
+production-validation-report-v111-final.md:            preserved
+Production Gate declared OPEN:                         NO (Prompt §10 forbids)
+
+-------------------------------------------------------------------
+[STEP 5] Conservation
+-------------------------------------------------------------------
+EXECUTED=6 PASS=6 FAIL=0 BLOCKED=0
+Formula: 6 = 6 + 0 + 0   HOLDS
+
+-------------------------------------------------------------------
+[STEP 6] Report + JSON
+-------------------------------------------------------------------
+production-validation-report-v112-final.md:   generated at repository root
+.phase-progress.json final_verdict:           ALL_PHASES_PASS
+Phase 8 section appended:                     yes

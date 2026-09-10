@@ -1,0 +1,154 @@
+{
+  "test_id": "T5-housekeeping",
+  "scenario": "housekeeping_failure_via_scheme_B_delete_backups_dir",
+  "overall": "PASS",
+  "pass_count": 18,
+  "fail_count": 0,
+  "total_count": 18,
+  "counts": {
+    "RUN_STATUS_SUCCESS": 1,
+    "RUN_STATUS_FAILED": 0,
+    "COMMIT_OK": 1,
+    "BACKUP_OK": 1,
+    "FETCH_COMPLETE": 1,
+    "REVIEW_WRITE_OK": 1,
+    "HOUSEKEEPING_WARNING": 1,
+    "RUNTIME_ERROR": 0,
+    "PARSE_ERROR": 0,
+    "LOCKED": 0,
+    "PS_VERSION_LINE": 0,
+    "RUN_STATUS_OBSERVED": 0
+  },
+  "checks": [
+    {
+      "item": "HOUSEKEEPING_WARNING_count",
+      "expected": "1",
+      "actual": "1",
+      "verdict": "PASS"
+    },
+    {
+      "item": "RUN_STATUS_success_count",
+      "expected": "1",
+      "actual": "1",
+      "verdict": "PASS"
+    },
+    {
+      "item": "RUN_STATUS_failed_count",
+      "expected": "0",
+      "actual": "0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "COMMIT_OK_count",
+      "expected": "1",
+      "actual": "1",
+      "verdict": "PASS"
+    },
+    {
+      "item": "BACKUP_OK_count",
+      "expected": "1",
+      "actual": "1",
+      "verdict": "PASS"
+    },
+    {
+      "item": "FETCH_COMPLETE_count",
+      "expected": "1",
+      "actual": "1",
+      "verdict": "PASS"
+    },
+    {
+      "item": "REVIEW_WRITE_OK_count_or_zero (triggered)",
+      "expected": ">=0",
+      "actual": "1",
+      "verdict": "PASS"
+    },
+    {
+      "item": "RUNTIME_ERROR_count",
+      "expected": "0",
+      "actual": "0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "PARSE_ERROR_count",
+      "expected": "0",
+      "actual": "0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "LOCKED_count",
+      "expected": "0",
+      "actual": "0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "stdout_no_PS_VERSION_line",
+      "expected": "0",
+      "actual": "0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "stdout_no_RUN_STATUS_OBSERVED_line",
+      "expected": "0",
+      "actual": "0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "md_updated",
+      "expected": "True",
+      "actual": "True",
+      "verdict": "PASS"
+    },
+    {
+      "item": "lock_released_after_run",
+      "expected": "False",
+      "actual": "False",
+      "verdict": "PASS"
+    },
+    {
+      "item": "step3_not_terminated_by_harness_exception",
+      "expected": "False",
+      "actual": "False",
+      "verdict": "PASS"
+    },
+    {
+      "item": "scheme_b_delete_result",
+      "expected": "True",
+      "actual": "True",
+      "verdict": "PASS"
+    },
+    {
+      "item": "backups_absent_before_step3",
+      "expected": "True",
+      "actual": "True",
+      "verdict": "PASS"
+    },
+    {
+      "item": "pre_backup_dir_existed_with_content",
+      "expected": "True",
+      "actual": "True (files=1)",
+      "verdict": "PASS"
+    }
+  ],
+  "sha256_before": "457D852E5AE1DD001B5016D3D271F639472A2C28E7C254F13F9838ED19E0E74F",
+  "sha256_after": "3458F02697A8AEE698BA2E6493EB3FE368976E9F05E8DBA7625403DD224739CB",
+  "md_changed": true,
+  "lock_after": false,
+  "step3_terminated": false,
+  "step3_exception_type": "",
+  "step3_exception_msg": "",
+  "delete_result": true,
+  "delete_begin_ts": "2026-09-10T16:33:59.749Z",
+  "delete_end_ts": "2026-09-10T16:33:59.756Z",
+  "delete_exception_type": "",
+  "delete_exception_msg": "",
+  "pre_backup_dir_exists_before_delete": true,
+  "pre_backup_content_count": 1,
+  "backups_absent_before_step3": true,
+  "backups_dir_exists_after_run": false,
+  "step2_done_ts": "2026-09-10T16:33:59.748Z",
+  "step3_begin_ts": "2026-09-10T16:33:59.781Z",
+  "step3_end_ts": "2026-09-10T16:33:59.801Z",
+  "housekeeping_warning_lines": [
+    "HOUSEKEEPING_WARNING|backup/trash cleanup failed: Cannot find path 'D:\\AI\\Workspace\\automatic\\github-version-monitor\\.production-validation-v112-final\\T5-housekeeping\\.monitor\\backups' because it does not exist."
+  ]
+}

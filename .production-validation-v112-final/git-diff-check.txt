@@ -1,0 +1,2 @@
+warning: in the working copy of 'SKILL-v1.11.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'SKILL-v1.12.md', LF will be replaced by CRLF the next time Git touches it

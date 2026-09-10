@@ -1,0 +1,253 @@
+{
+  "test_id": "T3-api-failure",
+  "scenario": "server_500",
+  "overall": "FAIL",
+  "pass_count": 33,
+  "fail_count": 2,
+  "total_count": 35,
+  "counts": {
+    "RUN_STATUS_SUCCESS": 1,
+    "RUN_STATUS_FAILED": 0,
+    "COMMIT_OK": 1,
+    "BACKUP_OK": 1,
+    "FETCH_COMPLETE": 1,
+    "REVIEW_WRITE_OK": 1,
+    "RUNTIME_ERROR": 0,
+    "PARSE_ERROR": 0,
+    "LOCKED": 0,
+    "VALIDATE_ERROR": 0,
+    "PS_VERSION_LINE": 0,
+    "RUN_STATUS_OBSERVED": 0,
+    "HARNESS_START_MARKER": 0,
+    "HARNESS_END_MARKER": 0
+  },
+  "checks": [
+    {
+      "item": "api_item_status[microsoft/vscode]",
+      "expected": "server_error",
+      "actual": "network_error",
+      "verdict": "FAIL"
+    },
+    {
+      "item": "api_item_status[PowerShell/PowerShell]",
+      "expected": "server_error",
+      "actual": "network_error",
+      "verdict": "FAIL"
+    },
+    {
+      "item": "api_item_gitVer_unchanged[microsoft/vscode]",
+      "expected": "v1.0.0",
+      "actual": "v1.0.0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "api_item_gitDate_unchanged[microsoft/vscode]",
+      "expected": "2026-01-15",
+      "actual": "2026-01-15",
+      "verdict": "PASS"
+    },
+    {
+      "item": "api_item_flag_unchanged[microsoft/vscode]",
+      "expected": "no",
+      "actual": "no",
+      "verdict": "PASS"
+    },
+    {
+      "item": "api_item_gitVer_unchanged[PowerShell/PowerShell]",
+      "expected": "v1.0.0",
+      "actual": "v1.0.0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "api_item_gitDate_unchanged[PowerShell/PowerShell]",
+      "expected": "2026-01-15",
+      "actual": "2026-01-15",
+      "verdict": "PASS"
+    },
+    {
+      "item": "api_item_flag_unchanged[PowerShell/PowerShell]",
+      "expected": "no",
+      "actual": "no",
+      "verdict": "PASS"
+    },
+    {
+      "item": "api_item_review_true[microsoft/vscode]",
+      "expected": "True",
+      "actual": "True",
+      "verdict": "PASS"
+    },
+    {
+      "item": "api_item_review_true[PowerShell/PowerShell]",
+      "expected": "True",
+      "actual": "True",
+      "verdict": "PASS"
+    },
+    {
+      "item": "api_item_reason_api_failure[microsoft/vscode]",
+      "expected": "api_failure in reviewReasons",
+      "actual": "api_failure",
+      "verdict": "PASS"
+    },
+    {
+      "item": "api_item_reason_api_failure[PowerShell/PowerShell]",
+      "expected": "api_failure in reviewReasons",
+      "actual": "api_failure",
+      "verdict": "PASS"
+    },
+    {
+      "item": "md_after_gitVer_unchanged[microsoft/vscode]",
+      "expected": "v1.0.0",
+      "actual": "v1.0.0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "md_after_gitDate_unchanged[microsoft/vscode]",
+      "expected": "2026-01-15",
+      "actual": "2026-01-15",
+      "verdict": "PASS"
+    },
+    {
+      "item": "md_after_flag_unchanged[microsoft/vscode]",
+      "expected": "no",
+      "actual": "no",
+      "verdict": "PASS"
+    },
+    {
+      "item": "md_after_gitVer_unchanged[PowerShell/PowerShell]",
+      "expected": "v1.0.0",
+      "actual": "v1.0.0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "md_after_gitDate_unchanged[PowerShell/PowerShell]",
+      "expected": "2026-01-15",
+      "actual": "2026-01-15",
+      "verdict": "PASS"
+    },
+    {
+      "item": "md_after_flag_unchanged[PowerShell/PowerShell]",
+      "expected": "no",
+      "actual": "no",
+      "verdict": "PASS"
+    },
+    {
+      "item": "stats.apiOk",
+      "expected": "0",
+      "actual": "0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "stats.apiErr",
+      "expected": "2",
+      "actual": "2",
+      "verdict": "PASS"
+    },
+    {
+      "item": "stats.pendingReview",
+      "expected": "2",
+      "actual": "2",
+      "verdict": "PASS"
+    },
+    {
+      "item": "RUN_STATUS_success_count",
+      "expected": ">=1",
+      "actual": "1",
+      "verdict": "PASS"
+    },
+    {
+      "item": "RUN_STATUS_failed_count",
+      "expected": "0",
+      "actual": "0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "COMMIT_OK_count",
+      "expected": ">=1",
+      "actual": "1",
+      "verdict": "PASS"
+    },
+    {
+      "item": "BACKUP_OK_count",
+      "expected": ">=1",
+      "actual": "1",
+      "verdict": "PASS"
+    },
+    {
+      "item": "FETCH_COMPLETE_count",
+      "expected": ">=1",
+      "actual": "1",
+      "verdict": "PASS"
+    },
+    {
+      "item": "REVIEW_WRITE_OK_count",
+      "expected": ">=1",
+      "actual": "1",
+      "verdict": "PASS"
+    },
+    {
+      "item": "RUNTIME_ERROR_count",
+      "expected": "0",
+      "actual": "0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "PARSE_ERROR_count",
+      "expected": "0",
+      "actual": "0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "stdout_no_PS_VERSION_line",
+      "expected": "0",
+      "actual": "0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "stdout_no_RUN_STATUS_OBSERVED_line",
+      "expected": "0",
+      "actual": "0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "stdout_no_harness_start_end_marker",
+      "expected": "0",
+      "actual": "0",
+      "verdict": "PASS"
+    },
+    {
+      "item": "lock_released_after_run",
+      "expected": "False",
+      "actual": "False",
+      "verdict": "PASS"
+    },
+    {
+      "item": "md_tmp_cleaned",
+      "expected": "False",
+      "actual": "False",
+      "verdict": "PASS"
+    },
+    {
+      "item": "backup_exists_under_monitor_backups",
+      "expected": ">=1",
+      "actual": "1",
+      "verdict": "PASS"
+    }
+  ],
+  "stats": {
+    "total": 2,
+    "apiOk": 0,
+    "apiErr": 2,
+    "synced": 0,
+    "yes": 0,
+    "uninstalled": 1,
+    "pendingReview": 2,
+    "newReleases": 0,
+    "flips": 0,
+    "token": "set"
+  },
+  "md_changed": true,
+  "lock_after": false,
+  "tmp_exists": false,
+  "backup_count": 1,
+  "mock_config": "MOCK_SCENARIO=server_500; MOCK_SCENARIO_LIST=list-success; HTML=200+fixed_body"
+}

@@ -1,0 +1,37 @@
+# Phase 6 attempt 2 — raw PowerShell evidence (未美化)
+# command: pwsh -NoProfile -File .production-validation-v112-final/audit/run-audit.ps1
+# exit_code: 0
+# (OutputEncoding 行因 script scope 不支持被 pwsh 报红，但脚本主体正常运行；下方为真实输出)
+
+PATH=.production-validation-v112-final/T2-success/stdout.txt
+SHA256=9ABB57AA8CB8CC985813C8936E5EFB0BDD3DD156DC24F429F89E05EFFC762825
+LINE_COUNT=84
+----GREP----
+SUCCESS_LINE_82: RUN_STATUS|success|fetch + 必要 review + commit + lock release 完成。
+RUN_STATUS_SUCCESS_COUNT=1
+RUN_STATUS_FAILED_COUNT=0
+HOUSEKEEPING_WARNING_COUNT=0
+====END====
+PATH=.production-validation-v112-final/T4-write-failure/stdout.txt
+SHA256=21035D407BE5EE0E77D508F5E1267E3D55D55059751609B198AC88EC9F308A15
+LINE_COUNT=83
+----GREP----
+FAILED_LINE_81: RUN_STATUS|failed|主 md 未提交。
+RUN_STATUS_SUCCESS_COUNT=0
+RUN_STATUS_FAILED_COUNT=1
+HOUSEKEEPING_WARNING_COUNT=0
+====END====
+PATH=.production-validation-v112-final/T5-housekeeping/stdout.txt
+SHA256=B4B9814DA14EF086C216EDA70A174D0A94CB9DDBB28A3813C7DE62B41860CD5B
+LINE_COUNT=83
+----GREP----
+HW_LINE_74: HOUSEKEEPING_WARNING|backup/trash cleanup failed: Cannot find path 'D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T5-housekeeping\.monitor\backups' because it does not exist.
+SUCCESS_LINE_81: RUN_STATUS|success|fetch + 必要 review + commit + lock release 完成。
+RUN_STATUS_SUCCESS_COUNT=1
+RUN_STATUS_FAILED_COUNT=0
+HOUSEKEEPING_WARNING_COUNT=1
+====END====
+PATH=SKILL-v1.12.md
+SHA256=3B15C9D7B3B37ADDB185489EBE2E8B89617867787F5EB83979FF066D23B28BE9
+LINE_COUNT=794
+====END====

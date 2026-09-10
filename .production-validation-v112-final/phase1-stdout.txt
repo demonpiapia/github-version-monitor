@@ -1,0 +1,25 @@
+=== Phase 1 stdout ===
+SHA256 (v1.12): 3B15C9D7B3B37ADDB185489EBE2E8B89617867787F5EB83979FF066D23B28BE9
+SHA256 (v1.11 baseline): B6632680A9AE18E02634E6EAF7F261FCD2502FE0529566088D0E0FC7160FC928
+git diff --no-index (U3 default) exit code: 1 (expected, files differ)
+U3 hunk count: 6
+U0 hunk count: 7
+Hunk headers (U3):
+  @@ -5,8 +5,8 @@ description: GitHub 项目版本监测（自动化版·纯 PowerShell）——
+  @@ -41,6 +41,12 @@ description: GitHub 项目版本监测（自动化版·纯 PowerShell）——
+  @@ -159,6 +165,11 @@ Agent 禁止修改：
+  @@ -444,11 +455,16 @@ try {
+  @@ -689,13 +705,14 @@ GitHub 监测完成：监测 N 项，本轮 M 项需更新、K 项未安装、E
+  @@ -765,6 +782,7 @@ FETCH_COMPLETE
+Hunk headers (-U0):
+  @@ -8,2 +8,2 @@ description: GitHub 项目版本监测（自动化版·纯 PowerShell）——
+  @@ -43,0 +44,6 @@ description: GitHub 项目版本监测（自动化版·纯 PowerShell）——
+  @@ -161,0 +168,5 @@ $ErrorActionPreference = 'Stop'
+  @@ -447,5 +458,10 @@ $trashDir  = Join-Path $base '.monitor\trash'
+  @@ -692 +708 @@ GitHub 监测完成：监测 N 项，本轮 M 项需更新、K 项未安装、E
+  @@ -698,0 +715 @@ GitHub 监测完成：监测 N 项，本轮 M 项需更新、K 项未安装、E
+  @@ -767,0 +785 @@ FETCH_COMPLETE
+git diff --check exit code: 1
+--- git diff --check output ---
+warning: in the working copy of 'SKILL-v1.11.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'SKILL-v1.12.md', LF will be replaced by CRLF the next time Git touches it

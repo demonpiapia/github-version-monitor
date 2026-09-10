@@ -1,0 +1,6 @@
+FIXTURE_WRITTEN=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T4-write-failure\.output\GitHub更新监测列表.md
+FIXTURE_SHA256=1E78021C874C19BD8AF7D3FE62ED8F9673DC57998711E9E29FA4AD8847B5B5F7
+FIXTURE_REPOS=microsoft/vscode,PowerShell/PowerShell
+FIXTURE_REPO_COUNT=2
+FIXTURE_TESTDIR=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T4-write-failure
+FIXTURE_MONITOR_DIR_ABSENT=YES

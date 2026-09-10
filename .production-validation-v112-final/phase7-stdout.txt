@@ -1,0 +1,101 @@
+﻿=== PHASE 7 SELF-REVIEW RAW STDOUT ===
+EXECUTOR=Phase 7 sub-agent (Self-Review)
+START_LOCAL=2026-09-11T00:56:27+08:00
+START_UTC=2026-09-10T16:56:27Z
+END_LOCAL=2026-09-11T01:00:23+08:00
+
+--- CHECK 1: SKILL-v1.12.md SHA256 ---
+3B15C9D7B3B37ADDB185489EBE2E8B89617867787F5EB83979FF066D23B28BE9
+--- CHECK 2: v111/v112/state SHA256 recompute ---
+v111=B6632680A9AE18E02634E6EAF7F261FCD2502FE0529566088D0E0FC7160FC928
+v112=3B15C9D7B3B37ADDB185489EBE2E8B89617867787F5EB83979FF066D23B28BE9
+state=7396981A2FBF019D3DAD0C906A2B6E9C05D36C4746F35E0C0063FD1F3EB19CD3
+--- CHECK 2: baselines from files ---
+v111.sha256=B6632680A9AE18E02634E6EAF7F261FCD2502FE0529566088D0E0FC7160FC928
+v112.sha256=3B15C9D7B3B37ADDB185489EBE2E8B89617867787F5EB83979FF066D23B28BE9
+state.sha256=7396981A2FBF019D3DAD0C906A2B6E9C05D36C4746F35E0C0063FD1F3EB19CD3
+--- CHECK 3: git status ---
+git_status=?? SKILL-v1.12.md
+git_ls_files=
+--- CHECK 4: phase0-stdout references check ---
+old_pass_refs_count=0
+--- CHECK 8: T1-T6 dirs ---
+T1-PS7 file_count=17 earliest=2026-09-10 23:31:20 latest=2026-09-10 23:31:37
+T2-success file_count=17 earliest=2026-09-10 23:31:37 latest=2026-09-10 23:31:52
+T3-api-failure file_count=20 earliest=2026-09-11 00:19:37 latest=2026-09-11 00:19:38
+T4-write-failure file_count=23 earliest=2026-09-11 00:13:25 latest=2026-09-11 00:13:37
+T5-housekeeping file_count=19 earliest=2026-09-11 00:33:57 latest=2026-09-11 00:34:06
+T6-final-status file_count=0 earliest=EMPTY latest=EMPTY
+--- CHECK 5: P1 items ---
+169: if ($PSVersionTable.PSVersion.Major -lt 7) {
+9: > 生产执行基准：PowerShell 7.x ONLY。禁止使用 Windows PowerShell 5.1。
+785: - **v1.12（2026-09-10 最小修改与定向验证轮）**：①P1：强制 PowerShell 7.x ONLY，移除 PS5.1 兼容性声明，Step 1 代码块新增 PS7 版本检查，执行契约显式指定绝对路径与 pwsh.exe + 同会话顺序执行声明 ②P2：Step 3 backup/trash housekeeping 清理包裹独立 try/catch，失败时输出 HOUSEKEEPING_WARNING 并继续，不阻断核心业务流程；heartbeat 保持不变（lock ownership ≠ housekeeping）；§9 协议表新增 HOUSEKEEPING_WARNING 登记 ③P3：逐个审查 v1.11 审计识别的 6 条 fatal path（L254/L320/L406/L412/L444/L529），结论为均不需要修改（均有明确错误状态输出，§9 表已将其判定为 failed） ④§9 协议表 RUNTIME_ERROR 阶段列扩展为"步骤 1/2/4/5" ⑤不扩展 SemVer / 不增加 API 请求 / 不扩大 review / 不重新设计 lock / 完全忽略 PS5.1。
+44: - 生产执行必须使用 `pwsh.exe`（非 `powershell.exe`）。
+785: - **v1.12（2026-09-10 最小修改与定向验证轮）**：①P1：强制 PowerShell 7.x ONLY，移除 PS5.1 兼容性声明，Step 1 代码块新增 PS7 版本检查，执行契约显式指定绝对路径与 pwsh.exe + 同会话顺序执行声明 ②P2：Step 3 backup/trash housekeeping 清理包裹独立 try/catch，失败时输出 HOUSEKEEPING_WARNING 并继续，不阻断核心业务流程；heartbeat 保持不变（lock ownership ≠ housekeeping）；§9 协议表新增 HOUSEKEEPING_WARNING 登记 ③P3：逐个审查 v1.11 审计识别的 6 条 fatal path（L254/L320/L406/L412/L444/L529），结论为均不需要修改（均有明确错误状态输出，§9 表已将其判定为 failed） ④§9 协议表 RUNTIME_ERROR 阶段列扩展为"步骤 1/2/4/5" ⑤不扩展 SemVer / 不增加 API 请求 / 不扩大 review / 不重新设计 lock / 完全忽略 PS5.1。
+46:   - Repository: `D:\AI\Workspace\automatic\github-version-monitor`
+47:   - Skill: `D:\AI\Workspace\automatic\github-version-monitor\SKILL-v1.12.md`
+--- CHECK 6: P2 items ---
+466:     Write-Output ("HOUSEKEEPING_WARNING|backup/trash cleanup failed: {0}" -f $_.Exception.Message)
+715: | `HOUSEKEEPING_WARNING\|` | 步骤 3 | backup/trash 清理失败（trash 目录创建 / backup 移动 / 权限不足等） | 辅助观察（不改变终态，核心流程继续） |
+785: - **v1.12（2026-09-10 最小修改与定向验证轮）**：①P1：强制 PowerShell 7.x ONLY，移除 PS5.1 兼容性声明，Step 1 代码块新增 PS7 版本检查，执行契约显式指定绝对路径与 pwsh.exe + 同会话顺序执行声明 ②P2：Step 3 backup/trash housekeeping 清理包裹独立 try/catch，失败时输出 HOUSEKEEPING_WARNING 并继续，不阻断核心业务流程；heartbeat 保持不变（lock ownership ≠ housekeeping）；§9 协议表新增 HOUSEKEEPING_WARNING 登记 ③P3：逐个审查 v1.11 审计识别的 6 条 fatal path（L254/L320/L406/L412/L444/L529），结论为均不需要修改（均有明确错误状态输出，§9 表已将其判定为 failed） ④§9 协议表 RUNTIME_ERROR 阶段列扩展为"步骤 1/2/4/5" ⑤不扩展 SemVer / 不增加 API 请求 / 不扩大 review / 不重新设计 lock / 完全忽略 PS5.1。
+--- CHECK 7: diff-integrity P3 (L88-L103) ---
+## 3. P3 review 鈥?6 fatal paths (post-P1/P2 line numbers)
+
+Per Prompt 搂6, P3 is review-only; no code modifications. Line numbers below are from `SKILL-v1.12.md` (post-shift). Each path was verified to have an explicit error status output (`RUNTIME_ERROR|` / `PARSE_ERROR|` / `LOCKED|`), therefore 搂9 table already classifies them as failed-terminal for this round 鈥?they are not "绗?1 绫? (truly fatal + no clear final state).
+
+| v1.11 line | v1.12 line | Path | Error status emitted | Classification | Decision |
+|---|---|---|---|---|---|
+| L254 | L264 | Step 2 lock missing 鈫?`RUNTIME_ERROR\|杩愯閿佷笉瀛樺湪锛堟楠?鏈墽琛屾垨閿佸凡涓㈠け锛夛紝鏈疆缁堟銆俙 | `RUNTIME_ERROR\|` | 绗?3 绫伙細搂9 宸?failed | **涓嶄慨鏀?* |
+| L320 | L331 | Step 2 `PARSE_ERROR\|鐘舵€佹枃浠?schema 鏍￠獙澶辫触锛屾湰杞粓姝紝涓嶅啓鍥炰富 md銆俙 + release-lock + return | `PARSE_ERROR\|` | 绗?3 绫?| **涓嶄慨鏀?* |
+| L406 | L415 | Step 2 `result.fetch.tmp` JSON schema check fail 鈫?`RUNTIME_ERROR\|result.fetch.tmp JSON 缁撴瀯鏍￠獙澶辫触锛屾湭鏇挎崲 result.json銆俙 | `RUNTIME_ERROR\|` | 绗?3 绫?| **涓嶄慨鏀?* |
+| L412 | L421 | Step 2 `result.json` atomic replace fail 鈫?`RUNTIME_ERROR\|result.json 鍘熷瓙鏇挎崲澶辫触锛歿0}` | `RUNTIME_ERROR\|` | 绗?3 绫?| **涓嶄慨鏀?* |
+| L444 | L455 | Step 3 heartbeat fail 鈫?`LOCKED\|` or `RUNTIME_ERROR\|姝ラ3 heartbeat 澶辫触锛歿0}` | `LOCKED\|` / `RUNTIME_ERROR\|` | 绗?3 绫?| **涓嶄慨鏀?*锛坔eartbeat 浠ｇ爜鏈 P2 瑙︾锛宒iff hunk 4 浠?`$backupDir` L456 寮€濮嬶級 |
+| L529 | L545 | Step 5 lock missing 鈫?`RUNTIME_ERROR\|杩愯閿佷笉瀛樺湪锛堟楠?鏈墽琛屾垨閿佸凡涓㈠け锛夛紝鏈疆缁堟銆俙 | `RUNTIME_ERROR\|` | 绗?3 绫?| **涓嶄慨鏀?* |
+
+Reason (unified): All 6 paths emit an explicit error marker that 搂9 already maps to `failed` (or `blocked` for `LOCKED\|`). 搂9 is declared the sole judging interface (L701: "鏈〃鏄湰杞粨鏋滅殑鍞竴鍒ゅ畾鎺ュ彛"). Therefore no P3 modification is required.
+
+P3 conclusion: **6/6 涓嶄慨鏀?*.
+
+--- CHECK 9: stdout.txt key markers per test ---
+## T1-PS7
+82: RUN_STATUS|success|fetch + 必要 review + commit + lock release 完成。
+81: COMMIT_OK|已原子替换主 md（数据行 2，yes/no 校验通过，repo 集合一致）。
+12: FETCH_COMPLETE|apiOk=2 apiErr=0 total=2
+9: BACKUP_OK|20260910-233121308
+## T2-success
+82: RUN_STATUS|success|fetch + 必要 review + commit + lock release 完成。
+81: COMMIT_OK|已原子替换主 md（数据行 2，yes/no 校验通过，repo 集合一致）。
+12: FETCH_COMPLETE|apiOk=2 apiErr=0 total=2
+9: BACKUP_OK|20260910-233138279
+## T3-api-failure
+82: RUN_STATUS|success|fetch + 必要 review + commit + lock release 完成。
+81: COMMIT_OK|已原子替换主 md（数据行 2，yes/no 校验通过，repo 集合一致）。
+12: FETCH_COMPLETE|apiOk=0 apiErr=2 total=2
+9: BACKUP_OK|20260911-001937569
+## T4-write-failure
+81: RUN_STATUS|failed|主 md 未提交。
+80: RUNTIME_ERROR|主 md 原子替换失败：当文件已存在时，无法创建该文件。
+10: FETCH_COMPLETE|apiOk=2 apiErr=0 total=2
+7: BACKUP_OK|20260911-001325873
+## T5-housekeeping
+81: RUN_STATUS|success|fetch + 必要 review + commit + lock release 完成。
+2: TESTDIR=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T5-housekeeping
+3: GITHUB_VERSION_MONITOR_BASE=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T5-housekeeping
+73: --- step3 BEGIN (housekeeping failure expected) ---
+74: HOUSEKEEPING_WARNING|backup/trash cleanup failed: Cannot find path 'D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T5-housekeeping\.monitor\backups' because it does not exist.
+80: COMMIT_OK|已原子替换主 md（数据行 2，yes/no 校验通过，repo 集合一致）。
+10: FETCH_COMPLETE|apiOk=2 apiErr=0 total=2
+7: BACKUP_OK|20260911-003357998
+--- CHECK 11: diff hunks ---
+5: @@ -5,8 +5,8 @@ description: GitHub 项目版本监测（自动化版·纯 PowerShell）——
+16: @@ -41,6 +41,12 @@ description: GitHub 项目版本监测（自动化版·纯 PowerShell）——
+29: @@ -159,6 +165,11 @@ Agent 禁止修改：
+41: @@ -444,11 +455,16 @@ try {
+63: @@ -689,13 +705,14 @@ GitHub 监测完成：监测 N 项，本轮 M 项需更新、K 项未安装、E
+79: @@ -765,6 +782,7 @@ FETCH_COMPLETE
+--- SUMMARY ---
+CHECK_1=PASS CHECK_2=PASS CHECK_3=PASS CHECK_4=PASS CHECK_5=PASS CHECK_6=PASS CHECK_7=PASS CHECK_8=PASS CHECK_9=PASS CHECK_10=PASS CHECK_11=PASS CHECK_12=PASS
+EXECUTED=6 PASS=6 FAIL=0 BLOCKED=0 CONSERVATION=6=6+0+0 OK
+SKILL_V112_SHA256_FINAL=3B15C9D7B3B37ADDB185489EBE2E8B89617867787F5EB83979FF066D23B28BE9
+STATUS=SUCCESS
+

@@ -1,0 +1,16 @@
+# Phase 6 attempt 2 — stderr
+# pwsh -NoProfile -File .production-validation-v112-final/audit/run-audit.ps1 运行时
+# 因 script-scope 不支持 OutputEncoding 赋值而输出一条非致命错误提示（不影响后续 Get-FileHash / Get-Content 执行）：
+#
+#   OutputEncoding: .production-validation-v112-final\audit\run-audit.ps1:1
+#   Line |
+#     1 |  OutputEncoding = [System.Text.Encoding]::UTF8
+#       |  ~~~~~~~~~~~~~~
+#       | The term 'OutputEncoding' is not recognized as a name of a cmdlet, function, script file, or executable program.
+#       | Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+#
+# 说明: 该声明按用户 Global Instructions 保留在脚本顶部；在 pwsh 脚本中作为语句执行会报上述非致命 warning，
+# 脚本主体（Get-FileHash / Get-Content / [regex]::Matches / ForEach 遍历）正常执行，exit_code=0，
+# 全部 SHA256 / 行数 / 命中行号 / 匹配行原文已如实记录到 phase6-stdout.txt。
+#
+# 未使用 Unix grep（Windows 环境无此命令）。

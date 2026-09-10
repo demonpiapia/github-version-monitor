@@ -1,0 +1,112 @@
+{
+  "runAt": "2026-09-10T23:31:22.9066461+08:00",
+  "stats": {
+    "total": 2,
+    "apiOk": 2,
+    "apiErr": 0,
+    "synced": 0,
+    "yes": 1,
+    "uninstalled": 1,
+    "pendingReview": 2,
+    "newReleases": 2,
+    "flips": 1,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "vscode",
+      "gitVer": "1.137.0",
+      "gitDate": "2026-09-09",
+      "localVer": "v1.0.0",
+      "flag": "yes",
+      "prevFlag": "no",
+      "latest": "1.137.0",
+      "publishedUtc": "2026-09-09T15:32:58Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": true,
+      "versionJump": true,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "version_jump"
+      ],
+      "error": ""
+    },
+    {
+      "repo": "PowerShell/PowerShell",
+      "name": "PowerShell",
+      "gitVer": "v7.6.6",
+      "gitDate": "2026-09-09",
+      "localVer": "未安装",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "v7.6.6",
+      "publishedUtc": "2026-09-08T20:28:01Z",
+      "status": "ok",
+      "cmp": "",
+      "isNew": true,
+      "isFlip": false,
+      "versionJump": true,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "version_jump"
+      ],
+      "error": ""
+    }
+  ],
+  "review": {
+    "performed": true,
+    "items": [
+      {
+        "repo": "microsoft/vscode",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口前1项：1.137.0 1.136.2 1.136.1 1.136.0 1.135.0|pre=True|draft=True|published= HTML 诊断 HTTP 200；页面标题仅供诊断：Releases · microsoft/vscode · GitHub",
+        "conclusion": "pending",
+        "reasons": [
+          "version_jump"
+        ],
+        "apiListStatus": "ok",
+        "apiList": [
+          {
+            "tag_name": "1.137.0 1.136.2 1.136.1 1.136.0 1.135.0",
+            "published_at": "",
+            "prerelease": true,
+            "draft": true
+          }
+        ],
+        "htmlStatus": "200",
+        "htmlTitle": "Releases · microsoft/vscode · GitHub"
+      },
+      {
+        "repo": "PowerShell/PowerShell",
+        "sources": [
+          "releases_api",
+          "html"
+        ],
+        "finding": "列表接口前1项：v7.6.6 v7.5.11 v7.4.20 v7.7.0-preview.4 v7.6.5|pre=True|draft=True|published= HTML 诊断 HTTP 200；页面标题仅供诊断：Releases · PowerShell/PowerShell · GitHub",
+        "conclusion": "pending",
+        "reasons": [
+          "version_jump"
+        ],
+        "apiListStatus": "ok",
+        "apiList": [
+          {
+            "tag_name": "v7.6.6 v7.5.11 v7.4.20 v7.7.0-preview.4 v7.6.5",
+            "published_at": "",
+            "prerelease": true,
+            "draft": true
+          }
+        ],
+        "htmlStatus": "200",
+        "htmlTitle": "Releases · PowerShell/PowerShell · GitHub"
+      }
+    ]
+  }
+}

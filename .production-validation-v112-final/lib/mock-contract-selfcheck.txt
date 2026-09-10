@@ -1,0 +1,98 @@
+MOCK CONTRACT -> SKILL EXTRACTION EXPRESSION ALIGNMENT SELF-CHECK
+===============================================================
+Phase 2 Step 3 output: lib/mock-invoke-restmethod.ps1 self-consistency.
+
+Reference anchors in SKILL-v1.12.md (source line numbers):
+  - L342 $j.tag_name       -> step2.ps1 line 107 "$latest  = $j.tag_name"
+  - L343 $j.published_at   -> step2.ps1 line 104 "$pubUtc = ConvertTo-UtcIso $j.published_at"
+  - L362 $_.Exception.Response.StatusCode  -> step2.ps1 line 116
+  - L365 server_error branch ($code -ge 500)  -> step2.ps1 line 126
+  - L367 network_error else branch  -> step2.ps1 line 128
+  - L479 releases?per_page=5  -> step4.ps1 line 7 (list endpoint inside review loop)
+
+---------------------------------------------------------------
+Scenario | mock return / throw | SKILL access path | aligned?
+---------------------------------------------------------------
+success  | PSCustomObject{     | step2 L102->L107  | YES
+         |  tag_name=string,   |   '$j.tag_name'     |   - tag_name is a string NoteProperty
+         |  published_at=ISO   | step2 L104          |   - published_at is a string NoteProperty; ConvertTo-UtcIso
+         |  string, prerelease |   '$j.published_at' |     accepts string per step2 L74.
+         |  =false, draft      |                     |   - metadata_incomplete branch not triggered (both present).
+         |  =false, name       |                     |   - invalid_response branch not triggered (tag_name non-empty).
+         | }                   |                     |
+         |                     |                     |
+not_found| Exception with      | step2 L116          | YES
+         |   Exception.Response|   'if ($_.Exception. |   - Response note-property present
+         |   as NoteProperty;  |    Response -and     |   - StatusCode = 404 -> status='not_found' -> review=true
+         |   StatusCode=404    |    Response.StatusCode)|   - not_found branch clears newGitVer/newGitDate; flag preserved
+         |   (HTTP/NotFound)   | step2 L123          |
+         |                     |   'elseif code -eq 404 -> not_found' |
+         |                     |
+server_500|Exception with      | step2 L116          | YES
+         |  Response.NoteProp; |   'if ($_.Exception. |   - StatusCode = 500 -> status='server_error'
+         |  StatusCode=500     |    Response -and     |   - review=true; reasons+=api_failure; prev state preserved
+         |                     |    Response.StatusCode)|
+         |                     | step2 L126          |
+         |                     |   '$code -ge 500 -> server_error' |
+         |                     |
+rate_429 | Exception with      | step2 L116          | YES
+         |  Response.StatusCode|   'if Response and    |   - StatusCode=429 -> status='rate_limited'
+         |  =429, Headers has  |    Response.StatusCode' |   - review=true; rateRemaining='0' preserved in $out
+         |  X-RateLimit-Remaining='0' |  step2 L124           |
+         |                     |   'elseif code -eq 429 -> rate_limited' |
+         |                     |
+network  | Exception with NO   | step2 L116          | YES
+         |  .Exception.Response|   'if ($_.Exception.  |   - Response == $null -> $code = $null
+         |  (Response=$null)   |    Response -and     |   - falls to else at L128 -> status='network_error'
+         |                     |    Response.StatusCode' |   - review=true
+         |                     | step2 L128          |
+         |                     |   'else -> network_error' |
+         |                     |
+list-success (Step 4 review) | PSCustomObject[] with 2 items, | step4 L7 | YES
+         |  each having tag_name (string),  |    '$apiList=@(Invoke-RestMethod |   - .tag_name string cast at step4 L7
+         |  published_at (ISO string),       |     ...|ForEach-Object{$pub=...;    - .published_at fed to ConvertTo-UtcIso
+         |  prerelease (bool), draft (bool) |     [PSCustomObject]@{tag_name=[string]$_.tag_name...}})' |   - .prerelease/.draft bool cast explicit
+         |  (releases?per_page=5 endpoint)  |                     |
+         |                             |                     |
+list-500  | (variant) list-endpoint exception | step4 L7 catch | YES
+          |                            |  '$parts+='列表接口复核请求失败。''| - apiListStatus stays 'error'
+          |                            |                     | - HTML diagnostic still runs
+          |                            |
+HTML diagnostic (Invoke-WebRequest) DECISION:
+  - MOCKED to always return: [PSCustomObject]@{
+      StatusCode = 200;
+      Content    = "<html><head><title>$Uri - Mock Release Page</title></head>...";
+      Headers    = Dictionary[string,string];
+      RawContent = same body
+    }
+  - Rationale: avoids real network dependency for T3; deterministic
+    step4 HTML diagnostic path.
+  - SKILL step4 access: [string]$html.StatusCode (any value accepted) +
+    regex extract of <title> from Content. Mock body always contains
+    a well-formed <title> so the regex returns a non-empty value.
+  - Explicitly recorded per B6 revision.
+  - Aligned? YES.
+---------------------------------------------------------------
+
+ALIGNMENT VERDICT: PASS (all 6 scenarios + 1 HTML diagnostic decision aligned to SKILL code paths)
+
+Contract coverage summary:
+  Success path (normal success)                     : COVERED (latest endpoint)
+  API failure - 404 not_found                       : COVERED
+  API failure - 500 server_error                    : COVERED
+  API failure - 429 rate_limited (variant)          : COVERED
+  API failure - network (no Response)               : COVERED
+  List endpoint releases?per_page=5 (step4 review)  : COVERED
+  HTML diagnostic Invoke-WebRequest (decision doc.) : COVERED (200 + fixed body)
+
+Env knobs defined in mock-invoke-restmethod.ps1:
+  MOCK_SCENARIO       - drives /releases/latest responses
+  MOCK_SCENARIO_LIST  - drives /releases?per_page=5 responses
+  MOCK_TAG            - override tag_name in success scenario (default v1.0.0)
+  MOCK_PUBLISHED_AT   - override published_at in success scenario
+
+T3 harness list-endpoint decision:
+  MOCK_SCENARIO_LIST = 'list-success' (deterministic 2-item list) for all
+  T3 sub-scenarios. Rationale: isolates the primary-latest-failure branch
+  from any list-endpoint behavior. Review path in step4 proceeds with
+  a well-formed apiList; HTML diagnostic always returns 200.

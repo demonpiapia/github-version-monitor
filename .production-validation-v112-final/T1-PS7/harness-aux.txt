@@ -1,0 +1,25 @@
+# harness-aux.txt (Phase 3 harness-side evidence; NOT SKILL stdout)
+# Written by lib/p3-run-T.ps1. Do not confuse with stdout.txt.
+AUX_BEGIN=2026-09-10T15:31:20.725Z
+TEST_ID=T1-PS7
+TEST_BASE=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T1-PS7
+PS_VERSION=7.6.4
+GITHUB_TOKEN_SET=True
+FIXTURE_EXIT=
+FIXTURE_MONITOR_DIR_EXISTS=False
+BEFORE_SNAPSHOT_OK
+SHA256_BEFORE=2F03971663118E7348D87C29C965D2F70BE9FFC0459FF6FC0FB9858B4D2C3532
+LOCK_BEFORE_EXISTS=False
+RUN_MODE=Start-Process -RedirectStandardOutput/-RedirectStandardError (equivalent to pwsh -File ... *>&1 > stdout + stderr)
+CMD_TARGET=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\lib\run-full-pipeline.ps1
+CMD_ARGS=-NoProfile -NonInteractive -File D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\lib\run-full-pipeline.ps1 -TestDir D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T1-PS7
+PIPELINE_EXIT=0
+PIPELINE_PID=17120
+PIPELINE_END_MARKER=harness recorded exit at 2026-09-10T15:31:37.676Z
+AFTER_SNAPSHOT_OK
+SHA256_AFTER=B516F95DF2334F4CA87EBCF30E2033EDC6ECC90BAB1737C499899A96EEC1E8B4
+LOCK_AFTER_EXISTS=False
+MD_CHANGED=True
+PS_VERSION_MARKER=7.6.4
+RUN_STATUS_SIDECAR_WRITTEN=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T1-PS7\run-status-sidecar.txt
+AUX_END=2026-09-10T15:31:37.734Z

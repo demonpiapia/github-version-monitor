@@ -1,0 +1,18 @@
+# t5-construction-log.txt (Scheme B injection detail)
+HEADER_TS=2026-09-10T16:33:57.885Z
+SCHEME_ID=B
+INJECTION_POINT=between_step2_and_step3
+TARGET_PATH=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T5-housekeeping\.monitor\backups
+RATIONALE=delete backups dir so step3 Get-ChildItem raises PathNotFound -> step3 try/catch -> HOUSEKEEPING_WARNING|; no ACL restore required.
+PRE_BACKUP_DIR_EXISTS=True
+PRE_BACKUP_SNAPSHOT_TS=2026-09-10T16:33:58.005Z
+PRE_BACKUP_CONTENT_COUNT=1
+PRE_BACKUP_FILE=GitHub更新监测列表.backup.20260911-003357998.md
+DELETE_BEGIN_TS=2026-09-10T16:33:59.749Z
+DELETE_TARGET=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T5-housekeeping\.monitor\backups
+DELETE_END_TS=2026-09-10T16:33:59.756Z
+DELETE_RESULT=True
+DELETE_POST_BACKUPS_ABSENT=True
+STEP3_BEGIN_TS=2026-09-10T16:33:59.781Z
+STEP3_END_TS=2026-09-10T16:33:59.801Z
+STEP3_TERMINATED_BY_EXCEPTION=False

@@ -1,0 +1,46 @@
+﻿--- step1 raw output BEGIN ---
+INVOCATION_EXCEPTION: 所在位置 D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\lib\step1.ps1:5 字符: 1
++ }
++ ~
+表达式或语句中包含意外的标记“}”。
+
+所在位置 D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\lib\step1.ps1:24 字符: 37
++             if ($line -match '^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.+? ...
++                                     ~
+属性或类型文本末尾缺少 ]。
+
+所在位置 D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\lib\step1.ps1:24 字符: 38
++             if ($line -match '^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.+? ...
++                                      ~~~
+表达式或语句中包含意外的标记“-Za”。
+
+所在位置 D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\lib\step1.ps1:24 字符: 41
++             if ($line -match '^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.+? ...
++                                         ~~~~
+表达式或语句中包含意外的标记“-z_]”。
+
+所在位置 D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\lib\step1.ps1:24 字符: 41
++             if ($line -match '^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.+? ...
++                                         ~
+表达式中缺少右“)”。
+
+所在位置 D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\lib\step1.ps1:14 字符: 27
++ if (-not (Test-Path $md)) {
++                           ~
+语句块或类型定义中缺少右“}”。
+
+所在位置 D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\lib\step1.ps1:24 字符: 58
++             if ($line -match '^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.+? ...
++                                                          ~
+表达式或语句中包含意外的标记“)”。
+
+所在位置 D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\lib\step1.ps1:66 字符: 95
++ ... Now.ToOffset([TimeSpan]::FromHours(8)).ToString('yyyyMMdd-HHmmssfff')
++                                                                        ~~
+字符串缺少终止符: '。
+--- step1 raw output END ---
+EXIT_CODE=
+MARKER_MATCHED=False
+PARSER_ERROR_COUNT=8
+REJECTION_KIND=PARSER_REJECTION
+PS5_REJECT_VERDICT=PASS

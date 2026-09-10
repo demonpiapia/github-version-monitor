@@ -1,0 +1,134 @@
+{
+  "phase": "Phase4",
+  "phase_name": "Test 3 API failure + Test 4 write failure",
+  "start_time": "2026-09-10T16:00:00+08:00",
+  "end_time": "2026-09-10T16:15:00+08:00",
+  "status": "completed",
+  "harness_fix_rounds": 1,
+  "verdict": {
+    "test3_api_failure": "PASS",
+    "test4_write_failure": "PASS"
+  },
+  "tests_executed": [
+    {
+      "id": "T3-api-failure",
+      "result": "PASS",
+      "pass_count": 35,
+      "fail_count": 0,
+      "independent_grep": {
+        "RUN_STATUS|success|": 1,
+        "RUN_STATUS|failed|": 0,
+        "COMMIT_OK|": 1,
+        "BACKUP_OK|": 1,
+        "FETCH_COMPLETE|": 1,
+        "REVIEW_WRITE_OK|": 1,
+        "RUNTIME_ERROR|": 0,
+        "PARSE_ERROR|": 0,
+        "PS_VERSION| pollution": 0,
+        "RUN_STATUS_OBSERVED= pollution": 0
+      },
+      "api_item_status": "server_error",
+      "md_sha256_before_after_match": true,
+      "harness_a256": null,
+      "stdout_line_count": 59,
+      "stdout_bytes": 3377,
+      "notes": "First attempt captured network_error due to MockHttpResponse StatusCode silent-null bug (Phase 2 utility issue); fixed as harness-fix-log record P4-E and re-executed. Attempt 1 preserved at T3-api-failure-attempt1/."
+    },
+    {
+      "id": "T4-write-failure",
+      "result": "PASS",
+      "pass_count": 18,
+      "fail_count": 0,
+      "independent_grep": {
+        "RUN_STATUS|success|": 0,
+        "RUN_STATUS|failed|": 1,
+        "COMMIT_OK|": 0,
+        "BACKUP_OK|": 1,
+        "FETCH_COMPLETE|": 1,
+        "REVIEW_WRITE_OK|": 1,
+        "RUNTIME_ERROR|": 1,
+        "PS_VERSION| pollution": 0,
+        "RUN_STATUS_OBSERVED= pollution": 0
+      },
+      "sha256_before": "1E78021C874C19BD8AF7D3FE62ED8F9673DC57998711E9E29FA4AD8847B5B5F7",
+      "sha256_after": "1E78021C874C19BD8AF7D3FE62ED8F9673DC57998711E9E29FA4AD8847B5B5F7",
+      "md_changed": false,
+      "tmp_exists_after": false,
+      "backup_count_after": 1,
+      "lock_after_exists": false,
+      "lockholder_pid": 56456,
+      "lockholder_still_running_after": false,
+      "stdout_line_count": 54,
+      "stdout_bytes": 3057,
+      "exception_observed": "System.IO.IOException: 当文件已存在时，无法创建该文件。"
+    }
+  ],
+  "harness_fixes": 1,
+  "harness_fix_log_records": [
+    "P4-E"
+  ],
+  "skill_md_unchanged": {
+    "expected_sha256": "3B15C9D7B3B37ADDB185489EBE2E8B89617867787F5EB83979FF066D23B28BE9",
+    "actual_sha256": "3B15C9D7B3B37ADDB185489EBE2E8B89617867787F5EB83979FF066D23B28BE9",
+    "sha256_matches_baseline": true,
+    "bytes": 63322
+  },
+  "lib_steps_unchanged": true,
+  "stdout_purity_check": {
+    "T3_api_failure": {
+      "contains_PS_VERSION": false,
+      "contains_RUN_STATUS_OBSERVED": false,
+      "note": "stdout.txt is byte-exact output from pwsh child process. All harness-side info is in harness-aux.txt / mock-config.txt / pipeline-stdout.txt / pipeline-stderr.txt."
+    },
+    "T4_write_failure": {
+      "contains_PS_VERSION": false,
+      "contains_RUN_STATUS_OBSERVED": false,
+      "note": "stdout.txt captured from in-process List[string] and written AFTER step5 completes; no harness annotations mixed in."
+    }
+  },
+  "evidence_files": [
+    ".production-validation-v112-final/T3-api-failure/stdout.txt",
+    ".production-validation-v112-final/T3-api-failure/stderr.txt",
+    ".production-validation-v112-final/T3-api-failure/validation.json",
+    ".production-validation-v112-final/T3-api-failure/test-report.md",
+    ".production-validation-v112-final/T3-api-failure/mock-config.txt",
+    ".production-validation-v112-final/T3-api-failure/harness-aux.txt",
+    ".production-validation-v112-final/T3-api-failure/pipeline-stdout.txt",
+    ".production-validation-v112-final/T3-api-failure/pipeline-stderr.txt",
+    ".production-validation-v112-final/T3-api-failure/result-before.json",
+    ".production-validation-v112-final/T3-api-failure/result-after.json",
+    ".production-validation-v112-final/T3-api-failure/md-after.txt",
+    ".production-validation-v112-final/T3-api-failure/md-after.sha256.txt",
+    ".production-validation-v112-final/T3-api-failure-attempt1/",
+    ".production-validation-v112-final/T4-write-failure/stdout.txt",
+    ".production-validation-v112-final/T4-write-failure/stderr.txt",
+    ".production-validation-v112-final/T4-write-failure/validation.json",
+    ".production-validation-v112-final/T4-write-failure/test-report.md",
+    ".production-validation-v112-final/T4-write-failure/harness-aux.txt",
+    ".production-validation-v112-final/T4-write-failure/lock-holder-stdout.txt",
+    ".production-validation-v112-final/T4-write-failure/lock-holder-stderr.txt",
+    ".production-validation-v112-final/T4-write-failure/lock-holder-open-marker.txt",
+    ".production-validation-v112-final/T4-write-failure/lock-before.txt",
+    ".production-validation-v112-final/T4-write-failure/lock-after.txt",
+    ".production-validation-v112-final/T4-write-failure/md-after.sha256.txt",
+    ".production-validation-v112-final/phase4-stdout.txt",
+    ".production-validation-v112-final/phase4-stderr.txt",
+    ".production-validation-v112-final/phase4-report.md"
+  ],
+  "harness_scripts_new_or_modified": [
+    ".production-validation-v112-final/lib/p4-run-T3.ps1 (new)",
+    ".production-validation-v112-final/lib/p4-run-T4.ps1 (new)",
+    ".production-validation-v112-final/lib/run-full-pipeline-mock.ps1 (new)",
+    ".production-validation-v112-final/lib/p4-collect-stdout.ps1 (new)",
+    ".production-validation-v112-final/lib/mock-invoke-restmethod.ps1 (MODIFIED, backup: .bak-P4E-20260910_160500)",
+    ".production-validation-v112-final/lib/byte-inspect.ps1 (new)",
+    ".production-validation-v112-final/lib/preserve-attempt.ps1 (new)"
+  ],
+  "report_files": [
+    ".production-validation-v112-final/phase4-report.md",
+    ".production-validation-v112-final/phase4-progress.json",
+    ".production-validation-v112-final/harness-fix-log.md"
+  ],
+  "phase_progress_root_note": "phase-progress.json at .production-validation-v112-final/ is the cumulative Phase 3 log. Phase 4 data is stored in phase4-progress.json (this file). Root progress.json is not rewritten to avoid overwriting the Phase 3 record — the main agent may merge on its own if desired.",
+  "next_phase": "Phase5"
+}

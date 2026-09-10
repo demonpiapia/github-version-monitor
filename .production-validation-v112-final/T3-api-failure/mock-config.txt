@@ -1,0 +1,23 @@
+# mock-config.txt (Phase 4 Test 3 declarative mock contract)
+# Three decisions required by exec-plan-v1.12-d.md Phase 4 B6.
+MOCK_TARGET=lib/mock-invoke-restmethod.ps1 (dot-sourced before any step runs)
+
+SCENARIO_MAIN_LATEST=server_500
+SCENARIO_MAIN_LATEST_DESC=Invoke-RestMethod /repos/{repo}/releases/latest -> throws Exception with Response.StatusCode=500 (server_error branch in step2 L126)
+
+SCENARIO_LIST_ENDPOINT=list-success
+SCENARIO_LIST_ENDPOINT_DESC=Invoke-RestMethod /repos/{repo}/releases?per_page=5 -> returns 2-item PSCustomObject[] (deterministic; decouples review branch from primary-failure branch)
+
+SCENARIO_HTML_DIAGNOSTIC=200+fixed_html_with_title
+SCENARIO_HTML_DIAGNOSTIC_DESC=Invoke-WebRequest -> returns PSCustomObject{StatusCode=200; Content=html-with-title-body; RawContent=same}
+SCENARIO_HTML_DIAGNOSTIC_RATIONALE=avoids real-network dependency in T3; keeps step 4 HTML diagnostic branch deterministic; SKILL step4 accepts any StatusCode and only regex-extracts <title> from Content
+
+ENV_MOCK_SCENARIO=server_500
+ENV_MOCK_SCENARIO_LIST=list-success
+
+EXPECTED_STEP2_STATUS=server_error
+EXPECTED_STEP4_API_LIST_STATUS=ok
+EXPECTED_STEP4_HTML_STATUS=ok
+EXPECTED_OVERALL_RUN_STATUS=success
+
+Rationale_500_over_404_F1_D8=SKILL not_found contract sets gitVer and gitDate to empty string (special clear-state semantics); Prompt Test 3 requires unchanged-preserve-last-round-state; that maps to server_error / network_error branch, NOT not_found.

@@ -1,0 +1,86 @@
+diff --git a/SKILL-v1.11.md b/SKILL-v1.12.md
+index f544479..c5becd3 100644
+--- a/SKILL-v1.11.md
++++ b/SKILL-v1.12.md
+@@ -5,8 +5,8 @@ description: GitHub 项目版本监测（自动化版·纯 PowerShell）——
+ 
+ # GitHub 项目版本监测（自动化版·纯 PowerShell）
+ 
+-> 版本：v1.11
+-> 生产执行基准：PowerShell 7.x；PowerShell 5.1 仅作兼容性验证环境。
++> 版本：v1.12
++> 生产执行基准：PowerShell 7.x ONLY。禁止使用 Windows PowerShell 5.1。
+ 
+ ## 0. 受众与职责
+ 
+@@ -41,6 +41,12 @@ description: GitHub 项目版本监测（自动化版·纯 PowerShell）——
+ - 不派遣子 agent 编排。
+ - 每仓库正常路径只调 1 次 `releases/latest`；待核仓库除 `rate_limited` 外最多追加 1 次 `releases?per_page=5` 与 1 次 HTML 诊断请求。
+ - 凭证只放 `.env` 或系统环境变量，不写入本文件、状态文件或 git。
++- 生产执行必须使用 `pwsh.exe`（非 `powershell.exe`）。
++- 生产执行必须显式指定以下绝对路径：
++  - Repository: `D:\AI\Workspace\automatic\github-version-monitor`
++  - Skill: `D:\AI\Workspace\automatic\github-version-monitor\SKILL-v1.12.md`
++- Agent 不得根据当前 cwd、编辑器状态或默认 shell 推断路径。
++- 五个步骤代码块必须在同一 pwsh 7 会话中顺序执行。
+ 
+ ## 3. 职责边界（invariant）
+ 
+@@ -159,6 +165,11 @@ Agent 禁止修改：
+ 
+ ```powershell
+ $ErrorActionPreference = 'Stop'
++# PowerShell 7.x 强制检查
++if ($PSVersionTable.PSVersion.Major -lt 7) {
++    Write-Output ("RUNTIME_ERROR|PowerShell 7.x required, current: {0}" -f $PSVersionTable.PSVersion.ToString())
++    return
++}
+ # $base 解析顺序：环境变量 → 脚本所在目录 → 本机默认
+ $base = if ($env:GITHUB_VERSION_MONITOR_BASE) { $env:GITHUB_VERSION_MONITOR_BASE }
+         elseif ($PSScriptRoot) { $PSScriptRoot }
+@@ -444,11 +455,16 @@ try {
+ } catch [System.IO.IOException] { Write-Output 'LOCKED|运行锁无法独占刷新 heartbeat，本轮退出。'; return } catch { Write-Output ('RUNTIME_ERROR|步骤3 heartbeat 失败：{0}'-f $_.Exception.Message); return }
+ $backupDir = Join-Path $base '.monitor\backups'
+ $trashDir  = Join-Path $base '.monitor\trash'
+-New-Item -ItemType Directory -Force -Path $trashDir | Out-Null
+-Get-ChildItem $backupDir -Filter 'GitHub更新监测列表.backup.*.md' |
+-  Sort-Object Name -Descending | Select-Object -Skip 1 |
+-  Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-3) } |
+-  ForEach-Object { Move-Item $_.FullName (Join-Path $trashDir $_.Name) -Force }
++# housekeeping: backup/trash 清理 — 失败不阻断核心业务
++try {
++    New-Item -ItemType Directory -Force -Path $trashDir | Out-Null
++    Get-ChildItem $backupDir -Filter 'GitHub更新监测列表.backup.*.md' |
++      Sort-Object Name -Descending | Select-Object -Skip 1 |
++      Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-3) } |
++      ForEach-Object { Move-Item $_.FullName (Join-Path $trashDir $_.Name) -Force }
++} catch {
++    Write-Output ("HOUSEKEEPING_WARNING|backup/trash cleanup failed: {0}" -f $_.Exception.Message)
++}
+ ```
+ 
+ ### 步骤 4 · 异常复核（辅助证据通道·程序化收集·预算封顶）
+@@ -689,13 +705,14 @@ GitHub 监测完成：监测 N 项，本轮 M 项需更新、K 项未安装、E
+ | `STATE_MISSING\|` | 步骤 1 | 状态文件不存在 | blocked |
+ | `LOCKED\|` | 步骤 1~5 | 运行锁被持有，或陈锁判定不确定（保守不抢） | blocked |
+ | `PARSE_ERROR\|` | 步骤 2 | 状态文件行 schema 异常 | failed |
+-| `RUNTIME_ERROR\|` | 步骤 2/4/5 | 未预期运行错误（锁丢失 / heartbeat 失败 / 锁 ownership 校验失败） | failed |
++| `RUNTIME_ERROR\|` | 步骤 1/2/4/5 | 未预期运行错误（锁丢失 / heartbeat 失败 / 锁 ownership 校验失败） | failed |
+ | `FETCH_COMPLETE\|` | 步骤 2 | API 查询 + 状态机完成，`result.json` 落盘 | fetch 阶段成功（不代表整轮 success） |
+ | `REVIEW_WRITE_OK\|` | 步骤 4 | review 证据原子写回成功 | 辅助阶段成功 |
+ | `REVIEW_WRITE_ERROR\|` | 步骤 4 | review 写回失败（stats/items 变化 / JSON 结构校验未过 / 完整性校验未过） | failed（不执行步骤 5，不替换主 md，保留 backup，释放 `run.lock`） |
+ | `VALIDATE_ERROR\|` | 步骤 5 | 写回校验未过，主 md 未动 | failed |
+ | `COMMIT_OK\|` | 步骤 5 | 主 md 原子替换完成 | 非终态；最终以 `RUN_STATUS` 为准 |
+ | `BACKUP_OK\|` / `SUMMARY\|` | 步骤 1/2 | 备份完成 / 人类可读统计摘要（含 `synced`） | 辅助观察 |
++| `HOUSEKEEPING_WARNING\|` | 步骤 3 | backup/trash 清理失败（trash 目录创建 / backup 移动 / 权限不足等） | 辅助观察（不改变终态，核心流程继续） |
+ 
+ 整轮 success 的判定条件：
+ 
+@@ -765,6 +782,7 @@ FETCH_COMPLETE
+ 
+ ## 15. Changelog
+ 
++- **v1.12（2026-09-10 最小修改与定向验证轮）**：①P1：强制 PowerShell 7.x ONLY，移除 PS5.1 兼容性声明，Step 1 代码块新增 PS7 版本检查，执行契约显式指定绝对路径与 pwsh.exe + 同会话顺序执行声明 ②P2：Step 3 backup/trash housekeeping 清理包裹独立 try/catch，失败时输出 HOUSEKEEPING_WARNING 并继续，不阻断核心业务流程；heartbeat 保持不变（lock ownership ≠ housekeeping）；§9 协议表新增 HOUSEKEEPING_WARNING 登记 ③P3：逐个审查 v1.11 审计识别的 6 条 fatal path（L254/L320/L406/L412/L444/L529），结论为均不需要修改（均有明确错误状态输出，§9 表已将其判定为 failed） ④§9 协议表 RUNTIME_ERROR 阶段列扩展为"步骤 1/2/4/5" ⑤不扩展 SemVer / 不增加 API 请求 / 不扩大 review / 不重新设计 lock / 完全忽略 PS5.1。
+ - **v1.11（2026-09-09 唯一失败终态回归修复轮）**：①修复 v1.10 T38-stats-items P1：Step 4 `stats/items` 程序事实完整性失败分支在输出 `RUN_STATUS|failed|` 后补齐 `return`，阻止落入后续 JSON 校验路径 ②确保该失败路径只输出一次 `RUN_STATUS|failed|`，满足 constraint #13 的唯一最终终态要求 ③其余 v1.10 行为与生产路径保持不变。
+ - **v1.10（2026-09-09 review 失败终态闭环修复轮）**：①修复 v1.9 T38：Step 4 `result.review.tmp` 写入失败、临时 JSON 校验失败、原子替换失败及其他不可恢复 review 错误均在清理与锁处理后明确输出 `RUN_STATUS|failed|`，不再以裸 `return` 作为终态 ②补齐步骤 4 `result.json` 读取失败与 heartbeat 失败的最终失败状态输出 ③新增 invariant：任何不可恢复提前终止路径都必须产生唯一 `RUN_STATUS|failed|` 终态；其余 v1.9 行为与生产路径保持不变。
+ - **v1.9（2026-09-08 运行时异常清理与锁释放修复轮）**：①修复 v1.8 T38：Step 4 `result.review.tmp` 写入失败现在进入受保护异常分支，清理临时文件并尝试释放运行锁，最终不进入 Step 5 ②修复 v1.8 T23：Step 5 主 md 临时文件写入/读取失败现在清理临时文件、释放运行锁并输出 `RUN_STATUS|failed|`；主 md 原子替换失败同样清理临时文件并进入统一 failed 终态 ③将异常路径的 `tmp` 清理、lock release、最终失败状态形成显式闭环 ④保留 v1.8 的 `$commitSucceeded`、`.output` 状态路径、PS7 生产基准与其他核心能力不变。

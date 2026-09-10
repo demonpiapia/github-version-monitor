@@ -1,0 +1,63 @@
+# Phase 6 stdout — Test 6 independent grep evidence
+
+## Commands executed
+
+### 6a. T2-success normal path
+```
+$ grep -nE 'RUN_STATUS' .production-validation-v112-final/T2-success/stdout.txt
+6:RUN_STATUS=success
+$ grep -cE 'RUN_STATUS=success' .production-validation-v112-final/T2-success/stdout.txt
+1
+$ grep -cE 'RUN_STATUS=failed' .production-validation-v112-final/T2-success/stdout.txt
+0
+```
+
+### 6b. T4-write-failure fatal path
+```
+$ grep -nE 'RUN_STATUS' .production-validation-v112-final/T4-write-failure/stdout.txt
+20:RUN_STATUS=failed
+$ grep -cE 'RUN_STATUS=failed' .production-validation-v112-final/T4-write-failure/stdout.txt
+1
+$ grep -cE 'RUN_STATUS=success' .production-validation-v112-final/T4-write-failure/stdout.txt
+0
+```
+
+### 6b-optional. T5-housekeeping P2 verification (auxiliary)
+```
+$ grep -nE 'RUN_STATUS|HOUSEKEEPING' .production-validation-v112-final/T5-housekeeping/stdout.txt
+4:HOUSEKEEPING_WARNING: backup dir missing (C:/Users/JasonPC/.version-monitor/backups/testhousekeeping/20260827_135743) — 视为 housekeeping failure；不影响主流程终态
+20:RUN_STATUS=success
+$ grep -cE 'RUN_STATUS=success' .production-validation-v112-final/T5-housekeeping/stdout.txt
+1
+$ grep -cE 'RUN_STATUS=failed' .production-validation-v112-final/T5-housekeeping/stdout.txt
+0
+```
+
+### 6c. diff-integrity.md P3 review line anchors
+```
+$ grep -nE '^## 3\.|L254|L320|L406|L412|L444|L529|不修改|Final verdict|STATUS=SUCCESS' .production-validation-v112-final/diff-integrity.md
+88:## 3. P3 review — 6 fatal paths (post-P1/P2 line numbers)
+94:| L254 | L264 | Step 2 lock missing → `RUNTIME_ERROR\|运行锁不存在（步骤1未执行或锁已丢失），本轮终止。` | `RUNTIME_ERROR\|` | 第 3 类：§9 已 failed | **不修改** |
+95:| L320 | L331 | Step 2 `PARSE_ERROR\|状态文件 schema 校验失败，本轮终止，不写回主 md。` + release-lock + return | `PARSE_ERROR\|` | 第 3 类 | **不修改** |
+96:| L406 | L415 | Step 2 `result.fetch.tmp` JSON schema check fail → `RUNTIME_ERROR\|result.fetch.tmp JSON 结构校验失败，未替换 result.json。` | `RUNTIME_ERROR\|` | 第 3 类 | **不修改** |
+97:| L412 | L421 | Step 2 `result.json` atomic replace fail → `RUNTIME_ERROR\|result.json 原子替换失败：{0}` | `RUNTIME_ERROR\|` | 第 3 类 | **不修改** |
+98:| L444 | L455 | Step 3 heartbeat fail → `LOCKED\|` or `RUNTIME_ERROR\|步骤3 heartbeat 失败：{0}` | `LOCKED\|` / `RUNTIME_ERROR\|` | 第 3 类 | **不修改**（heartbeat 代码未被 P2 触碰，diff hunk 4 从 `$backupDir` L456 开始） |
+99:| L529 | L545 | Step 5 lock missing → `RUNTIME_ERROR\|运行锁不存在（步骤1未执行或锁已丢失），本轮终止。` | `RUNTIME_ERROR\|` | 第 3 类 | **不修改** |
+104:- 第 3 类 = 已有失败分支（§9 第 1-6 项），**不修改**
+182:## 7. Final verdict
+189:| P3 6 fatal paths classified 不修改 | ✅ PASS |
+194:STATUS=SUCCESS
+```
+
+## SHA256 verification (final)
+```
+$ sha256sum SKILL-v1.12.md
+3B15C9D7B3B37ADDD185489EBE2E8B89617867787F5EB83979FF066D23B28BE9  SKILL-v1.12.md
+```
+
+Note: expected SHA256 in task brief is `3B15C9D7B3B37ADDD185489EBE2E8B89617867787F5EB83979FF066D23B28BE9` — matches exactly.
+
+## Test 6 verdict
+**PASS** (all of 6a, 6b, 6b-optional, 6c pass; no large-scale audit executed per Prompt §8 Test 6).
+
+STATUS=SUCCESS

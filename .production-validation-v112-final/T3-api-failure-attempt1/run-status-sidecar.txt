@@ -1,0 +1,4 @@
+# run-status-sidecar.txt (harness-derived; NOT part of SKILL stdout)
+RAW_STDOUT_TOTAL_LINES=84
+RAW_STDOUT_RUN_STATUS_LINES=1
+RUN_STATUS_OBSERVED=RUN_STATUS|success|fetch + 必要 review + commit + lock release 完成。

@@ -1,0 +1,6 @@
+FIXTURE_WRITTEN=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T2-success\.output\GitHub更新监测列表.md
+FIXTURE_SHA256=2F03971663118E7348D87C29C965D2F70BE9FFC0459FF6FC0FB9858B4D2C3532
+FIXTURE_REPOS=microsoft/vscode,PowerShell/PowerShell
+FIXTURE_REPO_COUNT=2
+FIXTURE_TESTDIR=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T2-success
+FIXTURE_MONITOR_DIR_ABSENT=YES

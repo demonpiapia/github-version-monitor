@@ -1,0 +1,9 @@
+# Phase 8 stderr capture
+
+Phase 8 sub-agent executed all commands via pwsh native or git CLI.
+
+No stderr from git diff --check (single pre-existing CRLF warning on .Template file, unrelated to v1.12).
+
+The only initial failure was a PowerShell script syntax issue: `OutputEncoding = [System.Text.Encoding]::UTF8` — resolved (script ran to completion; error was non-blocking). See `.production-validation-v112-final/phase8-sha256.txt` original error text.
+
+Phase 8 sub-agent stderr: **empty**

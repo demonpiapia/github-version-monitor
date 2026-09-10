@@ -1,0 +1,41 @@
+# harness-aux.txt (Phase 5 Test 5 harness-side evidence; NOT SKILL stdout)
+# Written by lib/p5-run-T5.ps1. Do not confuse with stdout.txt.
+AUX_BEGIN=2026-09-10T16:33:57.885Z
+TEST_ID=T5-housekeeping
+TEST_BASE=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T5-housekeeping
+PS_VERSION=7.6.4
+GITHUB_TOKEN_SET=True
+PID=48164
+SCHEME=B (delete .monitor\backups between step2 and step3)
+FIXTURE_EXIT=
+FIXTURE_MONITOR_DIR_EXISTS=False
+MD_TARGET=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T5-housekeeping\.output\GitHub更新监测列表.md
+BEFORE_SNAPSHOT_OK
+SHA256_BEFORE=457D852E5AE1DD001B5016D3D271F639472A2C28E7C254F13F9838ED19E0E74F
+LOCK_BEFORE_EXISTS=False
+PRE_BACKUP_DIR_EXISTS=True
+PRE_BACKUP_CONTENT_COUNT=1
+STEP2_DONE_TS=2026-09-10T16:33:59.748Z
+DELETE_BEGIN_TS=2026-09-10T16:33:59.749Z
+DELETE_END_TS=2026-09-10T16:33:59.756Z
+DELETE_RESULT=True
+DELETE_POST_BACKUPS_ABSENT=True
+STEP3_BEGIN_TS=2026-09-10T16:33:59.781Z
+STEP3_END_TS=2026-09-10T16:33:59.801Z
+STEP3_TERMINATED_BY_EXCEPTION=False
+PIPELINE_EXIT=0 (in-process execution, no external pwsh spawn)
+PIPELINE_PID=48164
+PIPELINE_END_MARKER=harness recorded end at 2026-09-10T16:34:06.558Z
+AFTER_SNAPSHOT_OK
+SHA256_AFTER=3458F02697A8AEE698BA2E6493EB3FE368976E9F05E8DBA7625403DD224739CB
+LOCK_AFTER_EXISTS=False
+MD_CHANGED=True
+BACKUP_DIR_AFTER_EXISTS=False
+HOUSEKEEPING_WARNING_LINE_COUNT=1
+HOUSEKEEPING_WARNING_LINE=HOUSEKEEPING_WARNING|backup/trash cleanup failed: Cannot find path 'D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T5-housekeeping\.monitor\backups' because it does not exist.
+VALIDATION_WRITTEN=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T5-housekeeping\validation.json
+OVERALL=PASS
+PASS_COUNT=18
+FAIL_COUNT=0
+REPORT_WRITTEN=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T5-housekeeping\test-report.md
+AUX_END=2026-09-10T16:34:06.664Z

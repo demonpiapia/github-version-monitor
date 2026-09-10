@@ -1,0 +1,14 @@
+# Phase 1 stderr
+
+No stderr content captured during Phase 1 execution.
+
+Phase 1 operations completed:
+- Copy baseline SKILL-v1.11.md -> SKILL-v1.12.md
+- apply_diff operations (P1-a/b/c/d/e, P2-a/b, Changelog)
+- git diff --no-index -> v111-v112.diff, v111-v112.U0.diff
+- git diff --check --no-index (output captured in phase1-stdout.txt and git-diff-check.txt)
+- Get-FileHash -> v112.sha256
+
+The only stderr-adjacent output during git diff execution was two informational CRLF auto-conversion warnings emitted by git for both v1.11 and v1.12 (present in the baseline too, informational only). No error-level stderr was produced by any of the Phase 1 commands.
+
+STATUS=SUCCESS

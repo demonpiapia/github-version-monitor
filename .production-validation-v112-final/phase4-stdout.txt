@@ -1,0 +1,174 @@
+PHASE4_BEGIN
+
+-- T3-api-failure/stdout.txt (84 lines) --
+PIPELINE_START
+TESTDIR=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T3-api-failure
+GITHUB_VERSION_MONITOR_BASE=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T3-api-failure
+GITHUB_TOKEN_SET=
++
+True
+PID=23156
+--- step1 BEGIN (step1.ps1) ---
+BACKUP_OK|20260911-001937569
+--- step1 END ---
+--- step2 BEGIN (step2.ps1) ---
+FETCH_COMPLETE|apiOk=0 apiErr=2 total=2
+SUMMARY|total=2 apiOK=0 apiErr=2 synced=0 yes=0 uninstalled=1 pendingReview=2 newReleases=0 flips=0 token=set
+{
+  "stats": {
+    "total": 2,
+    "apiOk": 0,
+    "apiErr": 2,
+    "synced": 0,
+    "yes": 0,
+    "uninstalled": 1,
+    "pendingReview": 2,
+    "newReleases": 0,
+    "flips": 0,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "vscode",
+      "gitVer": "v1.0.0",
+      "gitDate": "2026-01-15",
+      "localVer": "v1.0.0",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "server_error",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "api_failure"
+      ],
+      "error": "Internal Server Error (mock 500)"
+    },
+    {
+      "repo": "PowerShell/PowerShell",
+      "name": "PowerShell",
+      "gitVer": "v1.0.0",
+      "gitDate": "2026-01-15",
+      "localVer": "未安装",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "",
+      "publishedUtc": "",
+      "status": "server_error",
+      "cmp": "",
+      "isNew": false,
+      "isFlip": false,
+      "versionJump": false,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "api_failure"
+      ],
+      "error": "Internal Server Error (mock 500)"
+    }
+  ]
+}
+--- step2 END ---
+--- step3 BEGIN (step3.ps1) ---
+--- step3 END ---
+--- step4 BEGIN (step4.ps1) ---
+REVIEW_WRITE_OK|复核完成：2 项；stats/items 保持不变。
+--- step4 END ---
+--- step5 BEGIN (step5-full.ps1) ---
+COMMIT_OK|已原子替换主 md（数据行 2，yes/no 校验通过，repo 集合一致）。
+RUN_STATUS|success|fetch + 必要 review + commit + lock release 完成。
+--- step5 END ---
+PIPELINE_END
+
+-- T4-write-failure/stdout.txt (83 lines) --
+PIPELINE_START
+TESTDIR=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T4-write-failure
+GITHUB_VERSION_MONITOR_BASE=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T4-write-failure
+GITHUB_TOKEN_SET=True
+PID=21964
+--- step1 BEGIN (step1.ps1) ---
+BACKUP_OK|20260911-001325873
+--- step1 END ---
+--- step2 BEGIN (step2.ps1) ---
+FETCH_COMPLETE|apiOk=2 apiErr=0 total=2
+SUMMARY|total=2 apiOK=2 apiErr=0 synced=0 yes=1 uninstalled=1 pendingReview=2 newReleases=2 flips=1 token=set
+{
+  "stats": {
+    "total": 2,
+    "apiOk": 2,
+    "apiErr": 0,
+    "synced": 0,
+    "yes": 1,
+    "uninstalled": 1,
+    "pendingReview": 2,
+    "newReleases": 2,
+    "flips": 1,
+    "token": "set"
+  },
+  "items": [
+    {
+      "repo": "microsoft/vscode",
+      "name": "vscode",
+      "gitVer": "1.137.0",
+      "gitDate": "2026-09-09",
+      "localVer": "v1.0.0",
+      "flag": "yes",
+      "prevFlag": "no",
+      "latest": "1.137.0",
+      "publishedUtc": "2026-09-09T15:32:58Z",
+      "status": "ok",
+      "cmp": "lt",
+      "isNew": true,
+      "isFlip": true,
+      "versionJump": true,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "version_jump"
+      ],
+      "error": ""
+    },
+    {
+      "repo": "PowerShell/PowerShell",
+      "name": "PowerShell",
+      "gitVer": "v7.6.6",
+      "gitDate": "2026-09-09",
+      "localVer": "未安装",
+      "flag": "no",
+      "prevFlag": "no",
+      "latest": "v7.6.6",
+      "publishedUtc": "2026-09-08T20:28:01Z",
+      "status": "ok",
+      "cmp": "",
+      "isNew": true,
+      "isFlip": false,
+      "versionJump": true,
+      "dateSuspicious": false,
+      "review": true,
+      "reviewReasons": [
+        "version_jump"
+      ],
+      "error": ""
+    }
+  ]
+}
+--- step2 END ---
+--- step3 BEGIN (step3.ps1) ---
+--- step3 END ---
+--- step4 BEGIN (step4.ps1) ---
+REVIEW_WRITE_OK|复核完成：2 项；stats/items 保持不变。
+--- step4 END ---
+--- step5 BEGIN (step5-full.ps1) ---
+--- step5 BEGIN (write-failure expected via external FileShare::Read lock) ---
+RUNTIME_ERROR|主 md 原子替换失败：当文件已存在时，无法创建该文件。
+RUN_STATUS|failed|主 md 未提交。
+--- step5 END ---
+PIPELINE_END
+
+PHASE4_END

@@ -1,0 +1,12 @@
+PHASE2_TOOL_RUN_LOG_STDERR
+==========================
+Phase: 2 - Code Extraction + Harness Tooling
+Executed: 2026-09-10 (Asia/Hong_Kong UTC+8)
+
+(No stderr output. All tool calls completed with exit code 0.)
+
+Note: The initial phase2-probe.ps1 attempted to use `OutputEncoding = ...` at
+script top, which is not a valid PowerShell identifier. This was corrected to
+`$PSDefaultParameterValues['*:Encoding'] = 'UTF8'` + `[Console]::OutputEncoding =
+[System.Text.Encoding]::UTF8` per PowerShell conventions. All final lib scripts
+use the corrected form and parse cleanly.

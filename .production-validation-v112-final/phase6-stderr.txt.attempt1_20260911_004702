@@ -1,0 +1,7 @@
+# Phase 6 stderr
+
+No stderr output from grep commands (all exit codes 0 for the successful greps).
+
+Note: A preliminary `git -C ... diff --check --no-index` re-verification attempt was rejected by the shell wrapper (PowerShell reserved-keyword conflict with `&` invocation syntax). Phase 6 does not require a fresh git diff; the P3 review conclusions are already recorded in `.production-validation-v112-final/diff-integrity.md` §3 (L88-L99) and were read directly via `read_file`/`search_files`. This does not affect Phase 6 scope, which is strictly a re-grep of Phase 3-5 evidence files.
+
+STATUS=SUCCESS

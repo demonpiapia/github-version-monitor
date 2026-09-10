@@ -1,0 +1,35 @@
+# harness-aux.txt (Phase 4 harness-side evidence; NOT SKILL stdout)
+# Written by lib/p4-run-T3.ps1. Do not confuse with stdout.txt.
+AUX_BEGIN=2026-09-10T16:03:58.060Z
+TEST_ID=T3-api-failure
+TEST_BASE=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T3-api-failure
+PS_VERSION=7.6.4
+GITHUB_TOKEN_SET=True
+MOCK_SCENARIO=server_500
+MOCK_SCENARIO_LIST=list-success
+MOCK_HTML_DECISION=200+fixed_html_body_with_title
+PID=41672
+MOCK_CONFIG_WRITTEN=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T3-api-failure\mock-config.txt
+FIXTURE_EXIT=
+FIXTURE_MONITOR_DIR_EXISTS=False
+BEFORE_SNAPSHOT_OK
+SHA256_BEFORE=B714CC47001313A7769D3349B0EDD964CE28413DD8F1C52570175B2B18280FF7
+LOCK_BEFORE_EXISTS=False
+RUN_MODE=Start-Process -RedirectStandardOutput/-RedirectStandardError
+CMD_TARGET=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\lib\run-full-pipeline-mock.ps1
+CMD_ARGS=-NoProfile -NonInteractive -File D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\lib\run-full-pipeline-mock.ps1 -TestDir D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T3-api-failure
+PIPELINE_EXIT=0
+PIPELINE_PID=52776
+PIPELINE_END_MARKER=harness recorded exit at 2026-09-10T16:03:59.105Z
+AFTER_SNAPSHOT_OK
+SHA256_AFTER=EFF6F5BBF291995EA0BDD0CE5E85AA5A3A8EF2012A2B3C9D0EE6E062F2DF331B
+LOCK_AFTER_EXISTS=False
+MD_CHANGED=True
+TMP_EXISTS_AFTER=False
+RUN_STATUS_SIDECAR_WRITTEN=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T3-api-failure\run-status-sidecar.txt
+VALIDATION_WRITTEN=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T3-api-failure\validation.json
+OVERALL=FAIL
+PASS_COUNT=33
+FAIL_COUNT=2
+REPORT_WRITTEN=D:\AI\Workspace\automatic\github-version-monitor\.production-validation-v112-final\T3-api-failure\test-report.md
+AUX_END=2026-09-10T16:03:59.292Z

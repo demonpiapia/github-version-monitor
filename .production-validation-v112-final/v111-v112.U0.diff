@@ -1,0 +1,45 @@
+diff --git a/SKILL-v1.11.md b/SKILL-v1.12.md
+index f544479..c5becd3 100644
+--- a/SKILL-v1.11.md
++++ b/SKILL-v1.12.md
+@@ -8,2 +8,2 @@ description: GitHub 项目版本监测（自动化版·纯 PowerShell）——
+-> 版本：v1.11
+-> 生产执行基准：PowerShell 7.x；PowerShell 5.1 仅作兼容性验证环境。
++> 版本：v1.12
++> 生产执行基准：PowerShell 7.x ONLY。禁止使用 Windows PowerShell 5.1。
+@@ -43,0 +44,6 @@ description: GitHub 项目版本监测（自动化版·纯 PowerShell）——
++- 生产执行必须使用 `pwsh.exe`（非 `powershell.exe`）。
++- 生产执行必须显式指定以下绝对路径：
++  - Repository: `D:\AI\Workspace\automatic\github-version-monitor`
++  - Skill: `D:\AI\Workspace\automatic\github-version-monitor\SKILL-v1.12.md`
++- Agent 不得根据当前 cwd、编辑器状态或默认 shell 推断路径。
++- 五个步骤代码块必须在同一 pwsh 7 会话中顺序执行。
+@@ -161,0 +168,5 @@ $ErrorActionPreference = 'Stop'
++# PowerShell 7.x 强制检查
++if ($PSVersionTable.PSVersion.Major -lt 7) {
++    Write-Output ("RUNTIME_ERROR|PowerShell 7.x required, current: {0}" -f $PSVersionTable.PSVersion.ToString())
++    return
++}
+@@ -447,5 +458,10 @@ $trashDir  = Join-Path $base '.monitor\trash'
+-New-Item -ItemType Directory -Force -Path $trashDir | Out-Null
+-Get-ChildItem $backupDir -Filter 'GitHub更新监测列表.backup.*.md' |
+-  Sort-Object Name -Descending | Select-Object -Skip 1 |
+-  Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-3) } |
+-  ForEach-Object { Move-Item $_.FullName (Join-Path $trashDir $_.Name) -Force }
++# housekeeping: backup/trash 清理 — 失败不阻断核心业务
++try {
++    New-Item -ItemType Directory -Force -Path $trashDir | Out-Null
++    Get-ChildItem $backupDir -Filter 'GitHub更新监测列表.backup.*.md' |
++      Sort-Object Name -Descending | Select-Object -Skip 1 |
++      Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-3) } |
++      ForEach-Object { Move-Item $_.FullName (Join-Path $trashDir $_.Name) -Force }
++} catch {
++    Write-Output ("HOUSEKEEPING_WARNING|backup/trash cleanup failed: {0}" -f $_.Exception.Message)
++}
+@@ -692 +708 @@ GitHub 监测完成：监测 N 项，本轮 M 项需更新、K 项未安装、E
+-| `RUNTIME_ERROR\|` | 步骤 2/4/5 | 未预期运行错误（锁丢失 / heartbeat 失败 / 锁 ownership 校验失败） | failed |
++| `RUNTIME_ERROR\|` | 步骤 1/2/4/5 | 未预期运行错误（锁丢失 / heartbeat 失败 / 锁 ownership 校验失败） | failed |
+@@ -698,0 +715 @@ GitHub 监测完成：监测 N 项，本轮 M 项需更新、K 项未安装、E
++| `HOUSEKEEPING_WARNING\|` | 步骤 3 | backup/trash 清理失败（trash 目录创建 / backup 移动 / 权限不足等） | 辅助观察（不改变终态，核心流程继续） |
+@@ -767,0 +785 @@ FETCH_COMPLETE
++- **v1.12（2026-09-10 最小修改与定向验证轮）**：①P1：强制 PowerShell 7.x ONLY，移除 PS5.1 兼容性声明，Step 1 代码块新增 PS7 版本检查，执行契约显式指定绝对路径与 pwsh.exe + 同会话顺序执行声明 ②P2：Step 3 backup/trash housekeeping 清理包裹独立 try/catch，失败时输出 HOUSEKEEPING_WARNING 并继续，不阻断核心业务流程；heartbeat 保持不变（lock ownership ≠ housekeeping）；§9 协议表新增 HOUSEKEEPING_WARNING 登记 ③P3：逐个审查 v1.11 审计识别的 6 条 fatal path（L254/L320/L406/L412/L444/L529），结论为均不需要修改（均有明确错误状态输出，§9 表已将其判定为 failed） ④§9 协议表 RUNTIME_ERROR 阶段列扩展为"步骤 1/2/4/5" ⑤不扩展 SemVer / 不增加 API 请求 / 不扩大 review / 不重新设计 lock / 完全忽略 PS5.1。

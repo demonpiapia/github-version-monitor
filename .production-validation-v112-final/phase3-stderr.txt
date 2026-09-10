@@ -1,0 +1,5 @@
+===== TEST T1-PS7 stderr BEGIN =====
+
+===== [END OF TEST] =====
+===== TEST T2-success stderr BEGIN =====
+
