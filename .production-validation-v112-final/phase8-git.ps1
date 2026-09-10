@@ -15,7 +15,7 @@ $files = @(
     '.exec-plan/exec-plan-v1.12-c-trae-review.md',
     '.exec-plan/exec-plan-v1.12-d.md',
     'production-validation-report-v112-final.md',
-    'audit-attempt1-fabricated'
+    '.production-validation-v112-final/audit-attempt1-fabricated'
 )
 
 # Explicit EXCLUSIONS (verify they remain untracked after add):

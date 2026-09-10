@@ -1,6 +1,6 @@
 Write-Output '=== FINAL VERIFY ==='
 Write-Output ('audit file exists: ' + (Test-Path '.production-validation-v112-final/audit/final-status-audit.md'))
-Write-Output ('attempt1 preserved: ' + (Test-Path 'audit-attempt1-fabricated/final-status-audit.md'))
+Write-Output ('attempt1 preserved: ' + (Test-Path '.production-validation-v112-final/audit-attempt1-fabricated/final-status-audit.md'))
 Write-Output ('root audit dir exists: ' + (Test-Path 'audit'))
 Write-Output '--- audit dir listing ---'
 Get-ChildItem '.production-validation-v112-final/audit' | ForEach-Object { Write-Output ('. ' + $_.Name) }

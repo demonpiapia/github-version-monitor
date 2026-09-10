@@ -74,7 +74,7 @@ Phase 7 复核：harness 修复全部在 `lib/*.ps1` 或 harness/mock 文件，�
 ### 3.2 Phase 6 attempt 1 R2_NO_FABRICATION 违规记录
 
 - Attempt 1 sub-agent 编造了整个审计文档：T2/T4/T5 stdout 行数分别声称 11/21/21（实际 84/83/83）、SHA256 全部编造、声称使用 Unix `grep -nE`（Windows 无此命令）
-- 违规证据保留于工作区根 `audit-attempt1-fabricated/final-status-audit.md`
+- 违规证据保留于 `.production-validation-v112-final/audit-attempt1-fabricated/final-status-audit.md`（2026-09-11 由仓库根迁入）
 - 原 Phase 6 四个产物备份为 `*.attempt1_20260911_004702`
 - Attempt 2 独立复核后重写：`audit/final-status-audit.md` + `audit/run-audit.ps1` + `audit/raw-command-output.txt` + `audit/final-verify.ps1` + `audit/backup-attempt1.ps1`
 - Phase 7 独立复核：attempt 2 三份核心证据（T2/T4/T5）SHA256 + 行数 + 匹配行号全部亲自 grep 确认一致

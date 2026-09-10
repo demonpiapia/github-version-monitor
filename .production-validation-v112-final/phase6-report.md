@@ -22,7 +22,7 @@ Attempt 1 sub-agent 违反 R2_NO_FABRICATION，编造整个审计文档。已核
 | T2/T4/T5 SHA256 | 全部编造 | 已重新计算并抄录 |
 
 处理:
-- 原 `audit-attempt1-fabricated/final-status-audit.md` **保留**（工作区根 `audit-attempt1-fabricated/` 下）作为违规证据
+- 原 `.production-validation-v112-final/audit-attempt1-fabricated/final-status-audit.md` **保留**（`.production-validation-v112-final/audit-attempt1-fabricated/` 下，2026-09-11 由仓库根迁入以统一 attempt 1 留存件分组）作为违规证据
 - 工作区根 `audit/` 目录（attempt 1 曾写入）**已删除**
 - 原 Phase 6 四个产物已备份：`*.attempt1_20260911_004702`（`.production-validation-v112-final/` 下）
 

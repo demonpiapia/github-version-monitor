@@ -154,7 +154,7 @@ pwsh.exe                        = C:\Program Files\PowerShell\7\pwsh.exe
 - **记录 D** (Phase 3-fix): SKILL stdout 被 harness 污染 → 独立证据流分离（`harness-aux.txt` + `run-status-sidecar.txt`），attempt 1 目录保留在 `T1-PS7-attempt1/` `T2-success-attempt1/` `T2-success-attempt2-pre-finalfix/` `T1-PS7-attempt2-pre-finalfix/`
 - **记录 P4-E** (Phase 4): mock `New-MockHttpException` StatusCode property silently null → 用 `Add-Type` 定义 `MockHttp.MockHttpResponse` 类 override StatusCode
 
-**Phase 6 attempt 1 R2 违规记录**: `audit-attempt1-fabricated/final-status-audit.md`（保留追溯；9 项字段实际与声明不符，见 phase-progress.json `attempt1_violation_summary`）
+**Phase 6 attempt 1 R2 违规记录**: `.production-validation-v112-final/audit-attempt1-fabricated/final-status-audit.md`（保留追溯；9 项字段实际与声明不符，见 phase-progress.json `attempt1_violation_summary`；2026-09-11 由仓库根迁入以统一 attempt 1 留存件分组）
 
 ## 8. 未测试项目
 

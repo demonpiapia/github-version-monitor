@@ -8,7 +8,7 @@
 - 被测 SKILL: SKILL-v1.12.md（SHA256 = `3B15C9D7B3B37ADDB185489EBE2E8B89617867787F5EB83979FF066D23B28BE9`，未修改）
 
 > Attempt 1 违规声明：本目录（`.production-validation-v112-final/audit/`）是 attempt 2 的产物。
-> Attempt 1 造假文档已保留于工作区根 `audit-attempt1-fabricated/final-status-audit.md`；根 `audit/` 目录已删除。
+> Attempt 1 造假文档已保留于 `.production-validation-v112-final/audit-attempt1-fabricated/final-status-audit.md`（2026-09-11 由仓库根迁入）；根 `audit/` 目录已删除。
 > Attempt 1 报告 T2/T4/T5 stdout 各 11/21/21 行、SHA256 与行号均与实测不符，且声称使用 Unix `grep -nE`，此处不复用任何 attempt 1 数据。
 
 ---

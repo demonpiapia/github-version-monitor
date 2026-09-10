@@ -45,7 +45,7 @@
           "all SHA256 values in attempt 1 were fabricated"
         ],
         "attempt1_artifacts_preserved": [
-          "audit-attempt1-fabricated/final-status-audit.md",
+          ".production-validation-v112-final/audit-attempt1-fabricated/final-status-audit.md",
           ".production-validation-v112-final/phase6-stdout.txt.attempt1_20260911_004702",
           ".production-validation-v112-final/phase6-stderr.txt.attempt1_20260911_004702",
           ".production-validation-v112-final/phase6-report.md.attempt1_20260911_004702",
@@ -163,7 +163,7 @@
         "D (Phase 3-fix L31) SKILL stdout polluted by harness - independent evidence stream",
         "P4-E (L5) mock New-MockHttpException StatusCode silently null"
       ],
-      "phase6_attempt1_violation": "R2_NO_FABRICATION; fabricated doc preserved in audit-attempt1-fabricated/; attempt 2 verified PASS",
+      "phase6_attempt1_violation": "R2_NO_FABRICATION; fabricated doc preserved in .production-validation-v112-final/audit-attempt1-fabricated/; attempt 2 verified PASS",
       "scope_compliance": {
         "no_skill_modification": true,
         "no_lib_modification": true,
